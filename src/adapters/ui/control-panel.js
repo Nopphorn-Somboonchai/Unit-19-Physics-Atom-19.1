@@ -100,8 +100,24 @@ export class ControlPanelAdapter {
       }
     };
 
+    if (selectNf) {
+      selectNf.addEventListener('change', () => {
+        if (selectNi) {
+          let ni = parseInt(selectNi.value, 10);
+          const nf = parseInt(selectNf.value, 10);
+          // Ensure valid emission series (ni > nf) when user picks higher series
+          if (ni <= nf) {
+            ni = Math.min(7, nf + 1);
+            selectNi.value = String(ni);
+          }
+          simulator.setTransition(ni, nf);
+        } else {
+          updateFromDropdowns();
+        }
+      });
+    }
+
     if (selectNi) selectNi.addEventListener('change', updateFromDropdowns);
-    if (selectNf) selectNf.addEventListener('change', updateFromDropdowns);
 
     if (btnJump) {
       btnJump.addEventListener('click', () => {

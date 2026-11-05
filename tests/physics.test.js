@@ -133,6 +133,18 @@ const paschen1 = getTransitionDetails(4, 3);
 assertCloseTo(paschen1.wavelengthNm, 1875, 10, 'Paschen transition wavelength ≈ 1875 nm (Infrared)');
 assert(paschen1.series.id === 'paschen', '4 -> 3 correctly identified as Paschen series');
 
+// Brackett line: 5 -> 4
+const brackett1 = getTransitionDetails(5, 4);
+assertCloseTo(brackett1.wavelengthNm, 4051, 15, 'Brackett transition wavelength ≈ 4051 nm (Infrared)');
+assert(brackett1.series.id === 'brackett', '5 -> 4 correctly identified as Brackett series');
+assert(brackett1.series.nameTh.includes('แบร์เก็ตต์'), 'Brackett series nameTh is อนุกรมแบร์เก็ตต์');
+
+// Pfund line: 6 -> 5
+const pfund1 = getTransitionDetails(6, 5);
+assertCloseTo(pfund1.wavelengthNm, 7458, 20, 'Pfund transition wavelength ≈ 7458 nm (Infrared)');
+assert(pfund1.series.id === 'pfund', '6 -> 5 correctly identified as Pfund series');
+assert(pfund1.series.nameTh.includes('ฟุนด์'), 'Pfund series nameTh is อนุกรมฟุนด์');
+
 // All series lookup
 const allSeries = getAllSpectralSeries();
 assert(allSeries.length === 5, '5 hydrogen spectral series defined (Lyman, Balmer, Paschen, Brackett, Pfund)');

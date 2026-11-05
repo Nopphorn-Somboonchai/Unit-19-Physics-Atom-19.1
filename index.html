@@ -328,6 +328,8 @@
                   <li>อนุกรมไลแมน (\(n_f = 1\)): ย่านอัลตราไวโอเลต (UV)</li>
                   <li>อนุกรมบัลเมอร์ (\(n_f = 2\)): ย่านแสงที่ตามองเห็น (Visible)</li>
                   <li>อนุกรมพาสเชน (\(n_f = 3\)): ย่านอินฟราเรด (IR)</li>
+                  <li>อนุกรมแบร์เก็ตต์ (\(n_f = 4\)): ย่านอินฟราเรด (IR)</li>
+                  <li>อนุกรมฟุนด์ (\(n_f = 5\)): ย่านอินฟราเรด (IR)</li>
                 </ul>
               </div>
             </div>
@@ -540,6 +542,8 @@
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-0.5">ระดับเริ่มต้น (\(n_i\)):</label>
                   <select id="select-spec-ni" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white cursor-pointer">
+                    <option value="7">n = 7</option>
+                    <option value="6">n = 6</option>
                     <option value="5">n = 5</option>
                     <option value="4">n = 4</option>
                     <option value="3" selected>n = 3</option>
@@ -553,6 +557,8 @@
                     <option value="1">n = 1 (อนุกรมไลแมน UV)</option>
                     <option value="2" selected>n = 2 (อนุกรมบัลเมอร์ Visible)</option>
                     <option value="3">n = 3 (อนุกรมพาสเชน IR)</option>
+                    <option value="4">n = 4 (อนุกรมแบร์เก็ตต์ IR)</option>
+                    <option value="5">n = 5 (อนุกรมฟุนด์ IR)</option>
                   </select>
                 </div>
                 <button id="btn-spec-jump" class="self-end px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold cursor-pointer transition flex items-center gap-1.5">
@@ -566,6 +572,7 @@
                 <button onclick="selectBalmerPreset(3, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer">Hα (656 nm)</button>
                 <button onclick="selectBalmerPreset(4, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-cyan-100 text-cyan-800 hover:bg-cyan-200 cursor-pointer">Hβ (486 nm)</button>
                 <button onclick="selectBalmerPreset(5, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-blue-100 text-blue-800 hover:bg-blue-200 cursor-pointer">Hγ (434 nm)</button>
+                <button onclick="selectBalmerPreset(6, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-purple-100 text-purple-800 hover:bg-purple-200 cursor-pointer">Hδ (410 nm)</button>
               </div>
             </div>
 
@@ -922,21 +929,28 @@
   <!-- ==========================================================================
        FOOTER
        ========================================================================== -->
-  <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-      <div>
-        <div class="font-bold text-slate-200 text-sm mb-1">
-          กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี โรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ
-        </div>
-        <p class="text-slate-500 text-[11px]">
-          ว33206 ฟิสิกส์ 6 มัธยมศึกษาปีที่ 6 | บทที่ 19 ฟิสิกส์อะตอม (19.1.1 - 19.1.2)
-        </p>
+  <footer class="bg-[#070b14] text-slate-400 py-10 border-t border-slate-800/80 mt-12 text-center">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col items-center space-y-2">
+      <div class="font-bold text-slate-100 text-xs sm:text-sm md:text-base tracking-wide">
+        รายวิชา ฟิสิกส์ 6 รหัสวิชา ว33206 โรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ
       </div>
-      <div class="flex items-center gap-3">
-        <span class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-cyan-400 border border-slate-700 font-mono">
-          Standard v1.13.0 Compliant
+      <p class="text-[11px] sm:text-xs md:text-sm text-slate-400">
+        บทที่ 19 ฟิสิกส์อะตอม (19.1 สมมติฐานของพลังค์และทฤษฎีอะตอมของโบร์) ตามหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน (ฉบับปรับปรุง พ.ศ. 2560) สสวท.
+      </p>
+      <div class="flex items-center justify-center flex-wrap gap-2 text-xs text-slate-400 pt-1">
+        <span class="text-cyan-400 font-mono font-bold">&lt;/&gt;</span>
+        <span class="font-mono text-slate-300">DEV: Nopphorn Somboonchai</span>
+        <span class="text-slate-600">·</span>
+        <span class="inline-flex items-center gap-1.5 text-cyan-400">
+          <svg class="w-4 h-4 inline-block text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L3.5 6.87v9.74L12 21.5l8.5-4.89V6.87L12 2zm0 2.24l6.5 3.73v7.46L12 19.16l-6.5-3.73V7.97L12 4.24z"/>
+          </svg>
+          <span class="text-slate-300 font-sans">Physics Standard v1.13.0</span>
         </span>
       </div>
+      <p class="text-[10px] sm:text-[11px] text-slate-500 pt-0.5">
+        © 2026 Interactive Physics Learning Portal. สงวนลิขสิทธิ์เพื่อการศึกษา
+      </p>
     </div>
   </footer>
 

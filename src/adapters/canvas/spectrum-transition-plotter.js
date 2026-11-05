@@ -51,10 +51,11 @@ export class SpectrumTransitionPlotter {
       ? Math.min(atomCenterX - 35, 78)
       : Math.min(atomCenterX - 35, atomCenterY - 45);
 
-    const getR = (lvl) => (maxAtomR / Math.pow(5, 1.25)) * Math.pow(lvl, 1.25);
+    const maxOrbitLevel = Math.max(5, transition.ni);
+    const getR = (lvl) => (maxAtomR / Math.pow(maxOrbitLevel, 1.25)) * Math.pow(lvl, 1.25);
 
-    // Draw orbits 1..5
-    for (let lvl = 1; lvl <= 5; lvl++) {
+    // Draw orbits 1..maxOrbitLevel
+    for (let lvl = 1; lvl <= maxOrbitLevel; lvl++) {
       const orR = getR(lvl);
       const isTarget = lvl === transition.nf;
       const isSource = lvl === transition.ni;
@@ -72,7 +73,7 @@ export class SpectrumTransitionPlotter {
       ctx.stroke();
       ctx.restore();
 
-      // Orbit label n=1..5 with enhanced readability
+      // Orbit label n=1..maxOrbitLevel with enhanced readability
       this.r.drawLabel(`n=${lvl}`, atomCenterX + orR + 5, atomCenterY, {
         font: isTarget || isSource ? 'bold 12px Fira Code, monospace' : '11px Fira Code, monospace',
         color: isTarget ? '#34d399' : isSource ? '#f87171' : '#64748b',
@@ -171,31 +172,65 @@ export class SpectrumTransitionPlotter {
     const ladderHeight = ladderBotY - ladderTopY;
 
     // Perceptually-calibrated strictly-decreasing energy spacing (Physics Standard)
-    // Guarantees dY(1->2) > dY(2->3) > dY(3->4) > dY(4->5) > dY(5->inf)
-    // with minimum gap >= 34px (desktop) or >= 28px (compact) so n=4 and n=5 NEVER collide.
-    const minGap = isCompact ? 28 : 34;
-    const excessHeight = Math.max(0, ladderHeight - 5 * minGap);
+    // Guarantees dY(1->2) > dY(2->3) > dY(3->4) > ... with strictly decreasing gaps
+    const maxLadderLevel = Math.max(5, transition.ni);
+    let levelGaps;
 
-    const levelGaps = [
-      minGap + 0.44 * excessHeight, // n=1 -> n=2
-      minGap + 0.28 * excessHeight, // n=2 -> n=3
-      minGap + 0.16 * excessHeight, // n=3 -> n=4
-      minGap + 0.08 * excessHeight, // n=4 -> n=5
-      minGap + 0.04 * excessHeight  // n=5 -> n=Infinity
-    ];
+    if (maxLadderLevel === 5) {
+      const minGap = isCompact ? 28 : 34;
+      const excessHeight = Math.max(0, ladderHeight - 5 * minGap);
+      levelGaps = [
+        minGap + 0.44 * excessHeight, // n=1 -> n=2
+        minGap + 0.28 * excessHeight, // n=2 -> n=3
+        minGap + 0.16 * excessHeight, // n=3 -> n=4
+        minGap + 0.08 * excessHeight, // n=4 -> n=5
+        minGap + 0.04 * excessHeight  // n=5 -> n=Infinity
+      ];
+    } else if (maxLadderLevel === 6) {
+      const minGap = isCompact ? 22 : 28;
+      const excessHeight = Math.max(0, ladderHeight - 6 * minGap);
+      levelGaps = [
+        minGap + 0.36 * excessHeight, // n=1 -> n=2
+        minGap + 0.24 * excessHeight, // n=2 -> n=3
+        minGap + 0.16 * excessHeight, // n=3 -> n=4
+        minGap + 0.11 * excessHeight, // n=4 -> n=5
+        minGap + 0.08 * excessHeight, // n=5 -> n=6
+        minGap + 0.05 * excessHeight  // n=6 -> n=Infinity
+      ];
+    } else {
+      const minGap = isCompact ? 19 : 24;
+      const excessHeight = Math.max(0, ladderHeight - 7 * minGap);
+      levelGaps = [
+        minGap + 0.32 * excessHeight, // n=1 -> n=2
+        minGap + 0.22 * excessHeight, // n=2 -> n=3
+        minGap + 0.16 * excessHeight, // n=3 -> n=4
+        minGap + 0.11 * excessHeight, // n=4 -> n=5
+        minGap + 0.08 * excessHeight, // n=5 -> n=6
+        minGap + 0.06 * excessHeight, // n=6 -> n=7
+        minGap + 0.05 * excessHeight  // n=7 -> n=Infinity
+      ];
+    }
 
     const levelYMap = { 1: ladderBotY };
     let accumY = ladderBotY;
     for (let i = 0; i < levelGaps.length; i++) {
       accumY -= levelGaps[i];
-      const lvlKey = i === 4 ? Infinity : (i + 2);
+      const lvlKey = i === levelGaps.length - 1 ? Infinity : (i + 2);
       levelYMap[lvlKey] = accumY;
     }
 
     const getEnergyY = (lvl) => levelYMap[lvl] ?? ladderTopY;
 
-    // Draw Energy Level Bars (n = 1..5)
-    const levelsToDraw = [1, 2, 3, 4, 5];
+    // Draw Energy Level Bars (n = 1..maxLadderLevel)
+    const levelsToDraw = [];
+    for (let l = 1; l <= maxLadderLevel; l++) {
+      levelsToDraw.push(l);
+    }
+
+    const labelFont = (maxLadderLevel >= 6 && isCompact)
+      ? 'bold 11px Fira Code, monospace'
+      : 'bold 13px Fira Code, monospace';
+
     for (const lvl of levelsToDraw) {
       const ly = getEnergyY(lvl);
       const isTarget = lvl === transition.nf;
@@ -213,14 +248,14 @@ export class SpectrumTransitionPlotter {
       // Energy Label on Left (En = -13.6 / n^2 eV)
       const evVal = (-13.6 / (lvl * lvl)).toFixed(2);
       this.r.drawLabel(`${evVal} eV`, ladderX1 - 8, ly, {
-        font: 'bold 13px Fira Code, monospace',
+        font: labelFont,
         color: isTarget ? '#34d399' : isSource ? '#f87171' : '#cbd5e1',
         align: 'right'
       });
 
-      // Quantum Number on Right (n = 1..5)
+      // Quantum Number on Right (n = 1..maxLadderLevel)
       this.r.drawLabel(`n = ${lvl}`, ladderX2 + 8, ly, {
-        font: 'bold 13px Fira Code, monospace',
+        font: labelFont,
         color: isTarget ? '#34d399' : isSource ? '#f87171' : '#cbd5e1',
         align: 'left'
       });

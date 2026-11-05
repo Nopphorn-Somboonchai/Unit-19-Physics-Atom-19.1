@@ -34,7 +34,7 @@ export class HydrogenSpectrumSimulator {
   }
 
   setTransition(ni, nf) {
-    this.ni = Math.max(1, Math.min(5, parseInt(ni, 10) || 1));
+    this.ni = Math.max(1, Math.min(7, parseInt(ni, 10) || 1));
     this.nf = Math.max(1, Math.min(5, parseInt(nf, 10) || 1));
     this.transition = getTransitionDetails(this.ni, this.nf);
     this.triggerJumpAnimation();

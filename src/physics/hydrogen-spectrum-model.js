@@ -37,7 +37,7 @@ export const SPECTRAL_SERIES = [
   },
   {
     id: 'brackett',
-    nameTh: 'อนุกรมแบรักเกต (Brackett Series)',
+    nameTh: 'อนุกรมแบร์เก็ตต์ (Brackett Series)',
     nameEn: 'Brackett Series',
     nf: 4,
     minNi: 5,
