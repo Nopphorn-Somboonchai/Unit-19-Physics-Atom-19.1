@@ -70,6 +70,15 @@ const q2_bohr = qmR1.generateQuestion(1, '19.1.2', 54321);
 assert(q2_bohr.topic.includes('19.1.2'), 'Topic 19.1.2 question generated');
 assert(q2_bohr.correctAnswer > 0, 'Bohr question answer is positive');
 
+// 19.1.3 Hydrogen spectrum topic test
+const q3_spectrum = qmR1.generateQuestion(2, '19.1.3', 67890);
+assert(q3_spectrum.topic.includes('19.1.3'), 'Topic 19.1.3 question generated');
+assert(q3_spectrum.correctAnswer > 0, 'Spectrum question answer is positive');
+
+// Standard mode test
+const q_std = qmR1.generateQuestion(0, '19.1.1', null, 'standard');
+assert(q_std.title.includes('มาตรฐาน สสวท.'), 'Standard mode question generated with standard textbook values');
+
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
 console.log(`=======================================================`);

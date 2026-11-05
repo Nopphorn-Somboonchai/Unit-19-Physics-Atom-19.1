@@ -607,10 +607,10 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-800">
-            ✏️ ฝึกทำโจทย์คำนวณแบบสุ่มตัวแปร (Dynamic RNG Practice)
+            🧠 ตะลุยโจทย์: ฟิสิกส์อะตอม (Atomic Physics)
           </h2>
           <p class="text-sm text-slate-500">
-            ระบบสุ่มโจทย์ตามเลขที่นักเรียน (1-40) พร้อมเฉลยวิธีทำทีละขั้นและตรวจคำตอบเกณฑ์ ±3%
+            ระบบสุ่มตัวแปรตามเลขที่และโจทย์มาตรฐาน อิงตามหนังสือเรียน สสวท. บทที่ 19 (19.1.1 - 19.1.3)
           </p>
         </div>
         <button onclick="showSection('home')"
@@ -619,68 +619,172 @@
         </button>
       </div>
 
-      <!-- Roll Number & Topic Filter -->
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-3 w-full md:w-auto">
-          <label class="text-xs font-bold text-slate-700 whitespace-nowrap">เลขที่ผู้เรียน (1 - 40):</label>
-          <input type="number" id="prac-student-roll" min="1" max="40" value="1"
-            class="w-20 px-3 py-2 border border-slate-300 rounded-xl text-center font-bold text-blue-600 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+      <!-- Stats Bar (4 Cards) -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Stat Card 1: Total Questions -->
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div class="w-11 h-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-blue-100 shadow-inner">
+            <i class="fa-solid fa-clipboard-question"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-xl md:text-2xl font-extrabold text-slate-800 font-mono tracking-tight leading-none mb-1">
+              <span>25</span> <span class="text-xs font-sans font-semibold text-slate-500">ข้อ</span>
+            </div>
+            <div class="text-xs font-bold text-slate-700 truncate">คลังข้อสอบทั้งหมด</div>
+            <div class="text-[10px] text-slate-400 font-medium truncate mt-0.5">บทที่ 19 อะตอม ม.6</div>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
-          <button onclick="startPracticeMode('19.1.1')" id="btn-prac-19-1-1"
-            class="px-4 py-2 rounded-xl text-xs font-bold transition border border-slate-200 hover:bg-blue-50 cursor-pointer whitespace-nowrap">
-            19.1.1 วัตถุดำ & พลังค์
-          </button>
-          <button onclick="startPracticeMode('19.1.2')" id="btn-prac-19-1-2"
-            class="px-4 py-2 rounded-xl text-xs font-bold transition border border-slate-200 hover:bg-blue-50 cursor-pointer whitespace-nowrap">
-            19.1.2 อะตอมโบร์ & สเปกตรัม
-          </button>
-          <button onclick="startPracticeMode('mixed')" id="btn-prac-mixed"
-            class="px-4 py-2 rounded-xl text-xs font-bold transition border border-slate-200 hover:bg-blue-50 cursor-pointer whitespace-nowrap">
-            รวมทุกหัวข้อ
-          </button>
+        <!-- Stat Card 2: Categories -->
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-cyan-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div class="w-11 h-11 bg-cyan-50 text-cyan-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-cyan-100 shadow-inner">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-xl md:text-2xl font-extrabold text-slate-800 font-mono tracking-tight leading-none mb-1">
+              3 <span class="text-xs font-sans font-semibold text-slate-500">หัวข้อ</span>
+            </div>
+            <div class="text-xs font-bold text-slate-700 truncate">หมวดหมู่เนื้อหา</div>
+            <div class="text-[10px] text-slate-400 font-medium truncate mt-0.5">19.1.1 - 19.1.3 สสวท.</div>
+          </div>
+        </div>
+
+        <!-- Stat Card 3: Modes -->
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div class="w-11 h-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-emerald-100 shadow-inner">
+            <i class="fa-solid fa-shuffle"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-xl md:text-2xl font-extrabold text-slate-800 font-mono tracking-tight leading-none mb-1">
+              2 <span class="text-xs font-sans font-semibold text-slate-500">รูปแบบ</span>
+            </div>
+            <div class="text-xs font-bold text-slate-700 truncate">รูปแบบการฝึกฝน</div>
+            <div class="text-[10px] text-slate-400 font-medium truncate mt-0.5">ปกติ / สุ่มตัวเลข</div>
+          </div>
+        </div>
+
+        <!-- Stat Card 4: Solutions -->
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div class="w-11 h-11 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-lg shrink-0 border border-amber-100 shadow-inner">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-xl md:text-2xl font-extrabold text-slate-800 font-mono tracking-tight leading-none mb-1">
+              100%
+            </div>
+            <div class="text-xs font-bold text-slate-700 truncate">เฉลยวิธีทำละเอียด</div>
+            <div class="text-[10px] text-slate-400 font-medium truncate mt-0.5">Step-by-Step KaTeX</div>
+          </div>
         </div>
       </div>
 
-      <!-- Question Card -->
-      <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-          <h3 id="prac-question-title" class="font-bold text-sm md:text-base text-slate-800">
-            ข้อคำถาม:
-          </h3>
-          <button onclick="regeneratePractice()" class="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 cursor-pointer">
-            <i class="fa-solid fa-arrows-rotate"></i> สุ่มโจทย์ข้อใหม่
-          </button>
-        </div>
-
-        <p id="prac-question-text" class="text-sm md:text-base text-slate-700 leading-relaxed math-font">
-          กำลังโหลดโจทย์...
-        </p>
-
-        <!-- Numeric Input Zone -->
-        <div id="prac-numeric-zone" class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center gap-3">
-          <label id="lbl-prac-input-1" class="text-xs font-bold text-slate-700 whitespace-nowrap">
-            คำตอบ (ตัวเลข):
-          </label>
-          <input type="number" step="any" id="prac-input-val1" placeholder="กรอกตัวเลขคำตอบที่นี่..."
-            class="flex-1 w-full sm:w-auto px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-          <button onclick="checkPracticeAnswer()"
-            class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition shadow cursor-pointer">
-            ตรวจคำตอบ
-          </button>
-        </div>
-
-        <!-- Feedback Box -->
-        <div id="prac-feedback" class="hidden"></div>
-
-        <!-- Detailed Solution Step Box -->
-        <div id="prac-explanation-box" class="hidden bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
-          <div class="font-bold text-sm text-blue-600 flex items-center gap-2">
-            <i class="fa-solid fa-lightbulb"></i> วิธีทำอย่างละเอียด (Step-by-Step Solution):
+      <!-- 3 Topic Selector Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <button onclick="startPracticeMode('19.1.1')" id="btn-prac-19-1-1"
+          class="p-4 bg-white hover:bg-blue-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
+          <div class="w-10 h-10 shrink-0 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xs font-bold">
+            19.1.1
           </div>
-          <ol id="prac-explanation-list" class="list-decimal pl-5 space-y-1.5 text-xs text-slate-700 math-font leading-relaxed">
-          </ol>
+          <div>
+            <h4 class="font-bold text-xs whitespace-nowrap">การแผ่รังสีของวัตถุดำและพลังค์</h4>
+            <p class="text-[10px] text-slate-500">คำนวณ \( E = nhf \) และกฎของวีน</p>
+          </div>
+        </button>
+
+        <button onclick="startPracticeMode('19.1.2')" id="btn-prac-19-1-2"
+          class="p-4 bg-white hover:bg-cyan-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
+          <div class="w-10 h-10 shrink-0 bg-cyan-100 rounded-lg flex items-center justify-center text-cyan-600 text-xs font-bold">
+            19.1.2
+          </div>
+          <div>
+            <h4 class="font-bold text-xs whitespace-nowrap">ทฤษฎีแบบจำลองอะตอมของโบร์</h4>
+            <p class="text-[10px] text-slate-500">คำนวณ \( r_n = n^2 r_1 \) และ \( E_n \)</p>
+          </div>
+        </button>
+
+        <button onclick="startPracticeMode('19.1.3')" id="btn-prac-19-1-3"
+          class="p-4 bg-white hover:bg-amber-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
+          <div class="w-10 h-10 shrink-0 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 text-xs font-bold">
+            19.1.3
+          </div>
+          <div>
+            <h4 class="font-bold text-xs whitespace-nowrap">สเปกตรัมของไฮโดรเจน</h4>
+            <p class="text-[10px] text-slate-500">คำนวณ \( \frac{1}{\lambda} = R_H(\frac{1}{n_f^2} - \frac{1}{n_i^2}) \)</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Practice Arena Card -->
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-6">
+        <!-- Control Bar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-600">เลขที่ของคุณ:</span>
+            <input type="number" id="prac-student-roll" min="1" max="40" value="1"
+              class="w-16 px-2.5 py-1 text-center font-mono font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <span class="text-xs text-slate-400 font-mono">(R = 1-40)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="prac-mode-select"
+              class="text-xs font-bold border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="standard" selected>โจทย์ตัวเลขคงที่ (ตามคู่มือเรียน)</option>
+              <option value="random">โจทย์สุ่มตัวเลข (RNG ตามเลขที่)</option>
+            </select>
+            <button onclick="regeneratePractice()"
+              class="text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 px-3 py-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-rotate"></i> ข้อต่อไป
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Display -->
+        <div class="bg-slate-50 p-5 md:p-8 rounded-2xl border border-slate-200">
+          <span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-3"
+            id="prac-question-title">📋 ข้อคำถาม:</span>
+          <p id="prac-question-text"
+            class="text-base md:text-lg text-slate-800 font-medium leading-relaxed math-font">
+            - กำลังสร้างโจทย์ -
+          </p>
+        </div>
+
+        <!-- User Answer Form -->
+        <div class="space-y-4 max-w-2xl mx-auto">
+          <h4 class="font-bold text-sm text-slate-700 text-center mb-4">✍️ ระบุคำตอบของคุณ</h4>
+
+          <!-- Choice Zone -->
+          <div id="prac-choice-zone" class="grid grid-cols-1 gap-3 hidden"></div>
+
+          <!-- Numeric Zone -->
+          <div id="prac-numeric-zone" class="space-y-4 max-w-md mx-auto flex flex-col items-center">
+            <div class="w-full">
+              <label id="lbl-prac-input-1"
+                class="block text-xs font-bold text-slate-600 mb-1.5 text-center">คำตอบ:</label>
+              <input type="text" autocomplete="off" id="prac-input-val1" placeholder="ระบุตัวเลขคำตอบ"
+                class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10 text-center font-mono text-lg transition" />
+            </div>
+
+            <div class="flex gap-3 w-full">
+              <button id="btn-prac-skip" onclick="regeneratePractice()"
+                class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition border border-slate-200 cursor-pointer">
+                ข้ามข้อนี้
+              </button>
+              <button id="btn-prac-check" onclick="checkPracticeAnswer()"
+                class="flex-1 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-check"></i> ตรวจคำตอบ
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback & Explanation -->
+        <div id="prac-feedback" class="hidden p-5 rounded-2xl border transition-all duration-300"></div>
+        <div id="prac-explanation-box"
+          class="hidden space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
+          <h5 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-lightbulb text-blue-600"></i> เฉลยและวิธีทำละเอียด:
+          </h5>
+          <div id="prac-explanation-text" class="text-sm text-slate-700 space-y-3 math-font leading-relaxed">
+          </div>
         </div>
       </div>
     </section>
