@@ -1,0 +1,238 @@
+/* ==========================================================================
+   main.css — Interactive Physics Portal: Unit 19 (Planck & Bohr Atom)
+   Engineering Grid Design System (U-17 / U-18 Reference Standard)
+   ========================================================================== */
+
+@import "tailwindcss";
+@source "../../index.html";
+@source "../../src/**/*.js";
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & Root Theme Variables
+   -------------------------------------------------------------------------- */
+:root {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --paper: rgba(255, 255, 255, 0.95);
+  --line: rgba(148, 163, 184, 0.12);
+  --primary-blue: #2563eb;
+  --cyan-accent: #06b6d4;
+  --purple-accent: #8b5cf6;
+  --coral-accent: #f43f5e;
+  --emerald-accent: #10b981;
+  --amber-accent: #f59e0b;
+
+  /* Typography */
+  --font-main: 'Prompt', 'Sarabun', -apple-system, sans-serif;
+  --font-math: 'Sarabun', 'Lora', serif;
+  --font-mono: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   2. Base Styles & Global Engineering Grid Layout
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  color: var(--ink);
+  /* Cool Quantum & Atomic Grid Theme */
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 35%),
+    linear-gradient(225deg, rgba(139, 92, 246, 0.06), transparent 35%),
+    repeating-linear-gradient(0deg, rgba(148, 163, 184, 0.03) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.03) 0 1px, transparent 1px 24px),
+    #f8fafc;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+html.exam-locked,
+body.exam-locked {
+  overscroll-behavior-y: none;
+}
+
+.math-font {
+  font-family: var(--font-math);
+}
+
+header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  transition: all 150ms ease;
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   3. Formula Reference Box (.sim-formula-box)
+   -------------------------------------------------------------------------- */
+.sim-formula-box {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border: 1px solid #334155 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.sim-formula-title {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.sim-formula-item {
+  background-color: #020617 !important;
+  border: 1px solid #334155 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.sim-formula-label {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+}
+
+.sim-formula-math {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.sim-formula-math-accent {
+  color: #4ade80 !important;
+  font-weight: 700 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.sim-formula-math-purple {
+  color: #c084fc !important;
+  font-weight: 700 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.sim-formula-math-amber {
+  color: #fbbf24 !important;
+  font-weight: 700 !important;
+  font-family: var(--font-mono) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. High-Contrast Anti-Cheat Warning Toast
+   -------------------------------------------------------------------------- */
+#cheat-warning-banner,
+.cheat-warning-toast {
+  position: fixed !important;
+  top: 5rem !important;
+  right: 1.25rem !important;
+  z-index: 99999 !important;
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+  border: 2px solid #fca5a5 !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(220, 38, 38, 0.45) !important;
+  padding: 1rem 1.25rem !important;
+  color: #ffffff !important;
+  max-width: 24rem !important;
+  min-width: 18rem !important;
+  box-sizing: border-box !important;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#cheat-warning-banner.hidden {
+  display: none !important;
+}
+
+.cheat-warning-badge {
+  background-color: #fef08a !important;
+  color: #7f1d1d !important;
+  font-weight: 800 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 0.15rem 0.65rem !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+.cheat-warning-icon-box {
+  width: 2.6rem !important;
+  height: 2.6rem !important;
+  background-color: #ffffff !important;
+  color: #991b1b !important;
+  border-radius: 9999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+  flex-shrink: 0 !important;
+}
+
+.cheat-warning-msg {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.4 !important;
+  margin-top: 0.35rem !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+@keyframes cheatShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.cheat-shake {
+  animation: cheatShake 0.4s ease-in-out;
+}
+
+/* --------------------------------------------------------------------------
+   5. KaTeX Math Display
+   -------------------------------------------------------------------------- */
+.katex-display {
+  margin: 0.5rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+.katex {
+  font-size: 1.05em !important;
+}
+

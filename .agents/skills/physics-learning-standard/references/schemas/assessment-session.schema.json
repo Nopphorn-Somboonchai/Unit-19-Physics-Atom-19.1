@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Nopphorn-Somboonchai/physics-learning-standard/schemas/assessment-session.schema.json",
+  "title": "Physics Learning Assessment Session",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "exam",
+    "learner",
+    "startedAt",
+    "answers",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "exam": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "questionCount",
+        "totalScore"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grade": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "contentScope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "questionCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pointsPerQuestion": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "totalScore": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "timeLimitSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "numericalAnswerRule": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxDecimalPlaces": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tolerance": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unitRequired": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "learner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fullName"
+      ],
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grade": {
+          "type": "string"
+        },
+        "classroom": {
+          "type": "string"
+        },
+        "room": {
+          "type": "string"
+        },
+        "studentNumber": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "externalId": {
+          "type": "string"
+        }
+      }
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "questionId",
+          "value"
+        ],
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "array",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "answeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxScore": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "isCorrect": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0
+    },
+    "maxScore": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in-progress",
+        "submitted",
+        "auto-submitted",
+        "locked"
+      ]
+    },
+    "syncStatus": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "local-only",
+        "pending-export",
+        "exported",
+        "pending-sync",
+        "synced",
+        "sync-failed",
+        "conflict-review"
+      ]
+    },
+    "lockReason": {
+      "type": "string",
+      "enum": [
+        "refresh",
+        "tab-switch",
+        "focus-loss",
+        "timeout",
+        "manual-lock",
+        "not-applicable"
+      ]
+    },
+    "savedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recoveredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "syncedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recoveryAction": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "resume",
+        "submit-expired",
+        "discard",
+        "teacher-reset"
+      ]
+    },
+    "clientClockWarning": {
+      "type": "string"
+    },
+    "durationSeconds": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

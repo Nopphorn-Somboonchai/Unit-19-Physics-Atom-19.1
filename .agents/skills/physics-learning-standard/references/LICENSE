@@ -1,0 +1,51 @@
+# License
+
+Copyright (c) 2026 Nopphorn Somboonchai
+
+The original documentation, standards, templates, guidelines, and repository governance materials in this repository are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You may share, copy, redistribute, adapt, and build upon the original materials in this repository for any purpose, provided that appropriate credit is given.
+
+Attribution should include:
+
+- Project: Physics Learning Standard
+- Author: Nopphorn Somboonchai
+- Year: 2026
+- License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+- License URL: https://creativecommons.org/licenses/by/4.0/
+
+## Scope of This License
+
+This license applies only to original materials created for this repository, including:
+
+- Engineering standards
+- Architecture guidelines
+- Repository templates
+- Documentation conventions
+- AI agent rules
+- Accessibility, UI, Canvas, formula, naming, and coding guidelines
+
+This license does not apply to third-party educational content or externally sourced materials.
+
+Third-party materials include, but are not limited to:
+
+- Textbook content
+- Curriculum content
+- Problem statements
+- Images, figures, diagrams, or media from external sources
+- Materials from สสวท. or other educational publishers
+- Any content owned by another copyright holder
+
+Third-party materials remain the property of their respective copyright holders and must be used only under their own licenses, permissions, or applicable legal exceptions.
+
+## Educational References
+
+Repositories in the Physics Learning Ecosystem may reference textbooks, curricula, or other educational sources for learning alignment.
+
+Such references do not mean that those third-party materials are licensed under CC BY 4.0 by this repository.
+
+## License Text
+
+The full license text for Creative Commons Attribution 4.0 International is available at:
+
+https://creativecommons.org/licenses/by/4.0/legalcode

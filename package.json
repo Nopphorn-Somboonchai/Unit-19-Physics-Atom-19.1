@@ -1,0 +1,30 @@
+{
+  "name": "unit-19-physics-atom-19.1",
+  "version": "1.0.0",
+  "description": "Interactive Physics Learning Portal สำหรับบทที่ 19 ฟิสิกส์อะตอม (19.1 สมมติฐานของพลังค์และทฤษฎีอะตอมของโบร์) ม.6 โรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ",
+  "main": "src/main.js",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./assets/styles/main.css -o ./assets/styles/style.css",
+    "build:js": "npx esbuild src/main.js --bundle --outfile=dist/bundle.js",
+    "build": "npm run build:css && npm run build:js",
+    "serve": "npx serve . -p 8080",
+    "dev": "npx @tailwindcss/cli -i ./assets/styles/main.css -o ./assets/styles/style.css --watch",
+    "test": "node tests/physics.test.js && node tests/quiz.test.js && node tests/exam.test.js && node tests/integration.test.js && node tests/viewport-geometry.test.js && node tests/simulator-loader.test.js"
+  },
+  "keywords": [
+    "physics",
+    "planck-hypothesis",
+    "bohr-atom",
+    "hydrogen-spectrum",
+    "blackbody-radiation"
+  ],
+  "author": "Nopphorn Somboonchai",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "katex": "^0.18.1",
+    "tailwindcss": "^4.3.3"
+  }
+}
+
