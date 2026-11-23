@@ -9,6 +9,7 @@
     "build": "npm run build:css && npm run build:js",
     "serve": "npx serve . -p 8080",
     "dev": "npx @tailwindcss/cli -i ./assets/styles/main.css -o ./assets/styles/style.css --watch",
+    "test": "node tests/physics.test.js && node tests/quiz.test.js && node tests/exam.test.js && node tests/integration.test.js && node tests/viewport-geometry.test.js && node tests/simulator-loader.test.js",
     "test:e2e": "e2e run"
   },
   "keywords": [

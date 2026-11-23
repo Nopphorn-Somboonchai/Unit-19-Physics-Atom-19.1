@@ -124,6 +124,65 @@ for (let slot = 0; slot < 5; slot++) {
   assert(!repeated, `19.1.1 Q${slot + 1} random mode has 0% repeat across ${iterations} consecutive draws`);
 }
 
+// Topic 19.1.2 5-question bank tests (standard + zero-repeat random)
+console.log('\n--- Test Suite 6: Topic 19.1.2 Bohr Model 5-Question Bank & 0% Repeat ---');
+const b1 = qmStd.generateQuestion(0, '19.1.2', null, 'standard');
+assert(b1.unit === 'Å' && b1.correctAnswer === 4.76, `19.1.2 Standard Q1 (n=3 radius) = 4.76 Å (got ${b1.correctAnswer})`);
+const b2 = qmStd.generateQuestion(1, '19.1.2', null, 'standard');
+assert(b2.unit === '× 10⁶ m/s' && b2.correctAnswer === 1.09, `19.1.2 Standard Q2 (n=2 velocity) = 1.09 × 10⁶ m/s (got ${b2.correctAnswer})`);
+const b3 = qmStd.generateQuestion(2, '19.1.2', null, 'standard');
+assert(b3.unit === '× 10⁻³⁴ J·s' && b3.correctAnswer === 3.16, `19.1.2 Standard Q3 (n=3 angular momentum) = 3.16 × 10⁻³⁴ J·s (got ${b3.correctAnswer})`);
+const b4 = qmStd.generateQuestion(3, '19.1.2', null, 'standard');
+assert(b4.unit === 'eV' && b4.correctAnswer === 3.4, `19.1.2 Standard Q4 (n=2 ionization) = 3.40 eV (got ${b4.correctAnswer})`);
+const b5 = qmStd.generateQuestion(4, '19.1.2', null, 'standard');
+assert(b5.type === 'multi-numeric' && b5.inputs[0].correctAnswer === 8.46 && b5.inputs[1].correctAnswer === 0.85, `19.1.2 Standard Q5 (n=4 multi) = [8.46 Å, 0.85 eV] (got [${b5.inputs[0].correctAnswer}, ${b5.inputs[1].correctAnswer}])`);
+assert(qmStd.evaluateMultiAnswer([8.46, 0.85]).isCorrect === true, '19.1.2 Q5 multi-numeric accepts both correct answers');
+
+const bStdVals = [3, 2, 3, 2, 4];
+for (let slot = 0; slot < 5; slot++) {
+  const seen = new Set();
+  let repeated = false;
+  let hitStd = false;
+  for (let i = 0; i < 8; i++) {
+    const q = qmUnique.generateQuestion(slot, '19.1.2', null, 'random');
+    if (q.generatedParam === bStdVals[slot]) hitStd = true;
+    if (seen.has(q.generatedParam)) repeated = true;
+    seen.add(q.generatedParam);
+  }
+  assert(!hitStd, `19.1.2 Q${slot + 1} random mode never repeats standard n=${bStdVals[slot]}`);
+  assert(!repeated, `19.1.2 Q${slot + 1} random mode has 0% repeat across full 8 non-standard levels`);
+}
+
+// Topic 19.1.3 5-question bank tests (standard + zero-repeat random)
+console.log('\n--- Test Suite 7: Topic 19.1.3 Hydrogen Spectra 5-Question Bank & 0% Repeat ---');
+const s1 = qmStd.generateQuestion(0, '19.1.3', null, 'standard');
+assert(s1.unit === 'nm' && s1.correctAnswer === 656.3, `19.1.3 Standard Q1 (3->2 λ) = 656.3 nm (got ${s1.correctAnswer})`);
+const s2 = qmStd.generateQuestion(1, '19.1.3', null, 'standard');
+assert(s2.unit === 'eV' && s2.correctAnswer === 10.2, `19.1.3 Standard Q2 (2->1 ΔE) = 10.20 eV (got ${s2.correctAnswer})`);
+const s3 = qmStd.generateQuestion(2, '19.1.3', null, 'standard');
+assert(s3.unit === '× 10¹⁴ Hz' && s3.correctAnswer === 4.57, `19.1.3 Standard Q3 (3->2 f) = 4.57 × 10¹⁴ Hz (got ${s3.correctAnswer})`);
+const s4 = qmStd.generateQuestion(3, '19.1.3', null, 'standard');
+assert(s4.unit === 'nm' && s4.correctAnswer === 364.6, `19.1.3 Standard Q4 (Balmer limit) = 364.6 nm (got ${s4.correctAnswer})`);
+const s5 = qmStd.generateQuestion(4, '19.1.3', null, 'standard');
+assert(s5.type === 'multi-numeric' && s5.inputs[0].correctAnswer === 2.55 && s5.inputs[1].correctAnswer === 486.2, `19.1.3 Standard Q5 (4->2 multi) = [2.55 eV, 486.2 nm] (got [${s5.inputs[0].correctAnswer}, ${s5.inputs[1].correctAnswer}])`);
+assert(qmStd.evaluateMultiAnswer([2.55, 486.2]).isCorrect === true, '19.1.3 Q5 multi-numeric accepts both correct answers');
+
+const sStdVals = ['3->2', '2->1', '3->2', 2, '4->2'];
+const sDrawCounts = [19, 19, 13, 5, 19];
+for (let slot = 0; slot < 5; slot++) {
+  const seen = new Set();
+  let repeated = false;
+  let hitStd = false;
+  for (let i = 0; i < sDrawCounts[slot]; i++) {
+    const q = qmUnique.generateQuestion(slot, '19.1.3', null, 'random');
+    if (q.generatedParam === sStdVals[slot]) hitStd = true;
+    if (seen.has(q.generatedParam)) repeated = true;
+    seen.add(q.generatedParam);
+  }
+  assert(!hitStd, `19.1.3 Q${slot + 1} random mode never repeats standard (${sStdVals[slot]})`);
+  assert(!repeated, `19.1.3 Q${slot + 1} random mode has 0% repeat across all ${sDrawCounts[slot]} non-standard items`);
+}
+
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
 console.log(`=======================================================`);
