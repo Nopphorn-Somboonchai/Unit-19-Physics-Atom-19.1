@@ -55,8 +55,7 @@
         </div>
       </div>
       <div class="hidden md:flex items-center gap-2">
-        <span
-          class="bg-black/40 text-cyan-300 px-3 py-1.5 rounded-full text-xs font-semibold border border-white/10">
+        <span class="bg-black/40 text-cyan-300 px-3 py-1.5 rounded-full text-xs font-semibold border border-white/10">
           <i class="fa-solid fa-graduation-cap mr-1"></i> มัธยมศึกษาปีที่ 6
         </span>
         <button onclick="showSection('home')"
@@ -70,8 +69,7 @@
           มัธยมศึกษาปีที่ 6
         </span>
         <button onclick="toggleMobileMenu()"
-          class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-lg text-sm transition"
-          aria-label="Toggle menu">
+          class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-lg text-sm transition" aria-label="Toggle menu">
           <i class="fa-solid fa-bars"></i>
         </button>
       </div>
@@ -103,7 +101,8 @@
       <div
         class="bg-gradient-to-br from-indigo-950/90 via-slate-900/95 to-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
         <div class="space-y-4 max-w-2xl relative z-10">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-cyan-300 border border-indigo-400/30 text-xs font-semibold">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-cyan-300 border border-indigo-400/30 text-xs font-semibold">
             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
             ว33206 ฟิสิกส์ 6 | ภาคเรียนที่ 2
           </div>
@@ -114,10 +113,12 @@
             </span>
           </h2>
           <p class="text-slate-300 text-sm md:text-base leading-relaxed">
-            สำรวจการแผ่รังสีของวัตถุดำและควอนตัมของพลังงาน (\(E = nhf\)), ทดลองปรับวงโคจรอิเล็กตรอนตามแบบจำลองของโบร์ (\(r_n = n^2 r_1\), \(E_n = -\frac{13.6}{n^2}\text{ eV}\)), 
+            สำรวจการแผ่รังสีของวัตถุดำและควอนตัมของพลังงาน (\(E = nhf\)), ทดลองปรับวงโคจรอิเล็กตรอนตามแบบจำลองของโบร์
+            (\(r_n = n^2 r_1\), \(E_n = -\frac{13.6}{n^2}\text{ eV}\)),
             และศึกษาการเกิดเส้นสเปกตรัมของไฮโดรเจนตามสูตรของริดเบิร์ก
           </p>
-          <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 w-fit">
+          <div
+            class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 w-fit">
             <div class="flex items-center gap-2 text-xs md:text-sm text-slate-200">
               <i class="fa-solid fa-clipboard-check text-cyan-400 text-lg"></i>
               <span>ผลสอบล่าสุดของคุณ: <strong id="lbl-last-score" class="text-white">-</strong></span>
@@ -144,7 +145,8 @@
 
             <!-- Central Nucleus (+e Proton) -->
             <circle cx="120" cy="95" r="14" fill="url(#nucGrad)" />
-            <text x="120" y="98" fill="#0f172a" font-size="9" font-weight="bold" font-family="Prompt" text-anchor="middle">+e</text>
+            <text x="120" y="98" fill="#0f172a" font-size="9" font-weight="bold" font-family="Prompt"
+              text-anchor="middle">+e</text>
 
             <!-- Electron Transition Path (n=3 to n=2) -->
             <path d="M 120 15 Q 145 25 120 40" stroke="#ef4444" stroke-width="2" stroke-dasharray="2,2" fill="none" />
@@ -156,22 +158,27 @@
             <text x="132" y="18" fill="#e0f2fe" font-size="9" font-weight="bold" font-family="Prompt">e⁻</text>
 
             <!-- Emitted Photon Wave Packet (h*f, λ = 656 nm H-alpha) -->
-            <path d="M 120 40 Q 130 50 140 40 Q 150 30 160 40 Q 170 50 180 40" stroke="#ef4444" stroke-width="2.5" fill="none" />
+            <path d="M 120 40 Q 130 50 140 40 Q 150 30 160 40 Q 170 50 180 40" stroke="#ef4444" stroke-width="2.5"
+              fill="none" />
             <polygon points="186,40 177,35 177,45" fill="#ef4444" />
 
             <!-- Photon Label Badge -->
             <rect x="145" y="16" width="65" height="18" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1" />
-            <text x="177" y="29" fill="#fca5a5" font-size="8.5" font-weight="bold" font-family="Fira Code" text-anchor="middle">hν (656 nm)</text>
+            <text x="177" y="29" fill="#fca5a5" font-size="8.5" font-weight="bold" font-family="Fira Code"
+              text-anchor="middle">hν (656 nm)</text>
 
             <!-- Formula Annotations -->
             <rect x="15" y="152" width="95" height="24" rx="6" fill="#0f172a" stroke="#334155" />
-            <text x="62" y="168" fill="#38bdf8" font-size="9.5" font-weight="bold" font-family="Fira Code" text-anchor="middle">r_n = n² r₁</text>
+            <text x="62" y="168" fill="#38bdf8" font-size="9.5" font-weight="bold" font-family="Fira Code"
+              text-anchor="middle">r_n = n² r₁</text>
 
             <rect x="125" y="152" width="100" height="24" rx="6" fill="#0f172a" stroke="#334155" />
-            <text x="175" y="168" fill="#4ade80" font-size="9.5" font-weight="bold" font-family="Fira Code" text-anchor="middle">ΔE = hf = hc/λ</text>
+            <text x="175" y="168" fill="#4ade80" font-size="9.5" font-weight="bold" font-family="Fira Code"
+              text-anchor="middle">ΔE = hf = hc/λ</text>
 
             <defs>
-              <radialGradient id="nucGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(118 93) scale(14)">
+              <radialGradient id="nucGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                gradientTransform="translate(118 93) scale(14)">
                 <stop stop-color="#FEF08A" />
                 <stop offset="0.6" stop-color="#F59E0B" />
                 <stop offset="1" stop-color="#B45309" />
@@ -244,28 +251,31 @@
       </div>
 
       <!-- ======================================================================
-           3 QUICK CONCEPT SUMMARY CARDS (19.1.1, 19.1.2A, 19.1.2B)
+           4 QUICK CONCEPT SUMMARY CARDS (19.1.1, 19.1.2A, 19.1.2B, J to eV)
            ====================================================================== -->
-      <div class="bg-gradient-to-r from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800 text-white shadow-lg space-y-4">
+      <div
+        class="bg-gradient-to-r from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800 text-white shadow-lg space-y-4">
         <div class="border-b border-slate-800 pb-3 flex items-center justify-between flex-wrap gap-2">
           <h4 class="text-base font-bold text-slate-200 flex items-center gap-2">
             <i class="fa-solid fa-atom text-cyan-400"></i> สรุปแก่นทฤษฎีและสูตรสำคัญประจำบทที่ 19.1 (สสวท.)
           </h4>
-          <span class="text-xs text-slate-400 font-mono">ว33206 (ม.6) 19.1.1 - 19.1.2</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Card 1: 19.1.1 Blackbody & Planck's Hypothesis -->
-          <div class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-cyan-500/50 transition flex flex-col justify-between">
+          <div
+            class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-cyan-500/50 transition flex flex-col justify-between">
             <div>
               <div class="text-cyan-400 font-bold text-xs mb-1 uppercase tracking-wider flex items-center gap-1.5">
                 <i class="fa-solid fa-fire"></i> 19.1.1 การแผ่รังสีของวัตถุดำ
               </div>
               <h5 class="font-bold text-sm mb-2 text-slate-100">สมมติฐานของพลังค์ (Planck’s Hypothesis)</h5>
               <p class="text-xs text-slate-300 leading-relaxed mb-2">
-                พลังงานของคลื่นแม่เหล็กไฟฟ้าที่วัตถุดำดูดกลืนหรือแผ่ออกมามีค่าเฉพาะบางค่าที่เป็นจำนวนเต็มเท่าของ \(hf\) (ควอนตัม)
+                พลังงานของคลื่นแม่เหล็กไฟฟ้าที่วัตถุดำดูดกลืนหรือแผ่ออกมามีค่าเฉพาะบางค่าที่เป็นจำนวนเต็มเท่าของ \(hf\)
+                (ควอนตัม)
               </p>
-              <div class="text-xs font-mono text-cyan-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
+              <div
+                class="text-xs font-mono text-cyan-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
                 \( E = nhf = nh\frac{c}{\lambda} \)
               </div>
               <div class="bg-cyan-950/40 border border-cyan-500/25 rounded-lg p-2.5 text-xs text-slate-200 space-y-1.5">
@@ -282,7 +292,8 @@
           </div>
 
           <!-- Card 2: 19.1.2 Bohr's Atomic Model -->
-          <div class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-blue-500/50 transition flex flex-col justify-between">
+          <div
+            class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-blue-500/50 transition flex flex-col justify-between">
             <div>
               <div class="text-blue-400 font-bold text-xs mb-1 uppercase tracking-wider flex items-center gap-1.5">
                 <i class="fa-solid fa-circle-dot"></i> 19.1.2 ทฤษฎีอะตอมของโบร์
@@ -291,7 +302,8 @@
               <p class="text-xs text-slate-300 leading-relaxed mb-2">
                 อิเล็กตรอนโคจรรอบนิวเคลียสโดยไม่แผ่คลื่นแม่เหล็กไฟฟ้าในวงโคจรที่มีโมเมนตัมเชิงมุม \(L = n\hbar\)
               </p>
-              <div class="text-xs font-mono text-cyan-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
+              <div
+                class="text-xs font-mono text-cyan-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
                 \( r_n = n^2 r_1 \quad | \quad E_n = -\frac{13.6}{n^2} \text{ eV} \)
               </div>
               <div class="bg-blue-950/40 border border-blue-500/25 rounded-lg p-2.5 text-xs text-slate-200 space-y-1.5">
@@ -308,19 +320,23 @@
           </div>
 
           <!-- Card 3: 19.1.2 Hydrogen Spectra & Rydberg -->
-          <div class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-purple-500/50 transition flex flex-col justify-between">
+          <div
+            class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-purple-500/50 transition flex flex-col justify-between">
             <div>
               <div class="text-purple-400 font-bold text-xs mb-1 uppercase tracking-wider flex items-center gap-1.5">
                 <i class="fa-solid fa-rainbow"></i> 19.1.2 เส้นสเปกตรัมไฮโดรเจน
               </div>
               <h5 class="font-bold text-sm mb-2 text-slate-100">การเปลี่ยนระดับพลังงาน & ริดเบิร์ก</h5>
               <p class="text-xs text-slate-300 leading-relaxed mb-2">
-                เมื่ออิเล็กตรอนเปลี่ยนระดับพลังงานจะปล่อยหรือดูดกลืนโฟตอนที่มีพลังงาน \(\Delta E = hf = \frac{hc}{\lambda}\)
+                เมื่ออิเล็กตรอนเปลี่ยนระดับพลังงานจะปล่อยหรือดูดกลืนโฟตอนที่มีพลังงาน \(\Delta E = hf =
+                \frac{hc}{\lambda}\)
               </p>
-              <div class="text-xs font-mono text-purple-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
+              <div
+                class="text-xs font-mono text-purple-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
                 \( \frac{1}{\lambda} = R_H \left( \frac{1}{n_f^2} - \frac{1}{n_i^2} \right) \)
               </div>
-              <div class="bg-purple-950/40 border border-purple-500/25 rounded-lg p-2.5 text-xs text-slate-200 space-y-1.5">
+              <div
+                class="bg-purple-950/40 border border-purple-500/25 rounded-lg p-2.5 text-xs text-slate-200 space-y-1.5">
                 <div class="font-bold text-purple-300 border-b border-purple-500/20 pb-1 flex items-center gap-1">
                   <i class="fa-solid fa-sliders text-xs"></i> <span>ชุดอนุกรมสเปกตรัม:</span>
                 </div>
@@ -330,6 +346,95 @@
                   <li>อนุกรมพาสเชน (\(n_f = 3\)): ย่านอินฟราเรด (IR)</li>
                   <li>อนุกรมแบร์เก็ตต์ (\(n_f = 4\)): ย่านอินฟราเรด (IR)</li>
                   <li>อนุกรมฟุนด์ (\(n_f = 5\)): ย่านอินฟราเรด (IR)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Unit Conversion (J to eV) -->
+          <div
+            class="bg-black/30 p-4 rounded-xl border border-white/10 hover:border-emerald-500/50 transition flex flex-col justify-between">
+            <div>
+              <div class="text-emerald-400 font-bold text-xs mb-1 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-right-left"></i> หน่วยพลังงานอะตอม (J ↔ eV)
+              </div>
+              <h5 class="font-bold text-sm mb-2 text-slate-100">การเปลี่ยนหน่วยจาก J เป็น eV (J to eV)</h5>
+              <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                พลังงานในระดับอะตอมมีค่าน้อยมาก จึงนิยมแปลงจากจูล (\(\text{J}\)) เป็นอิเล็กตรอนโวลต์ (\(\text{eV}\))
+                ด้วยประจุอิเล็กตรอน \(1.60 \times 10^{-19}\text{ C}\)
+              </p>
+              <div
+                class="text-xs font-mono text-emerald-300 bg-black/40 p-2 rounded text-center border border-white/5 mb-3">
+                \( E(\text{eV}) = \frac{E(\text{J})}{1.60 \times 10^{-19}} \)
+              </div>
+
+              <!-- Themed Inline SVG Diagram (J <-> eV Conversion) -->
+              <div class="bg-slate-950/70 border border-emerald-500/20 rounded-lg p-2 mb-3 flex justify-center">
+                <svg class="w-full max-w-[320px] h-24" viewBox="0 0 320 96" fill="none"
+                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="แผนภาพการเปลี่ยนหน่วยจาก J เป็น eV">
+                  <defs>
+                    <linearGradient id="jCapsuleGlow" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#0f172a" />
+                      <stop offset="100%" stop-color="#082f49" />
+                    </linearGradient>
+                    <linearGradient id="evCapsuleGlow" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#0f172a" />
+                      <stop offset="100%" stop-color="#064e3b" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Top Conversion Pill & Arrow (J -> eV) -->
+                  <rect x="106" y="2" width="108" height="17" rx="8.5" fill="#022c22" stroke="#10b981"
+                    stroke-width="1" />
+                  <text x="160" y="13.5" fill="#6ee7b7" font-size="9.5" font-weight="bold" font-family="Fira Code"
+                    text-anchor="middle">÷ 1.60 × 10⁻¹⁹</text>
+                  <path d="M 92 36 Q 160 20 225 36" stroke="#10b981" stroke-width="2" fill="none" />
+                  <polygon points="231,37 222,32 224,40" fill="#10b981" />
+
+                  <!-- Left Unit Capsule: Joule (J) -->
+                  <rect x="10" y="22" width="76" height="52" rx="12" fill="url(#jCapsuleGlow)" stroke="#38bdf8"
+                    stroke-width="1.5" />
+                  <text x="48" y="46" fill="#38bdf8" font-size="16" font-weight="bold" font-family="Fira Code"
+                    text-anchor="middle">J</text>
+                  <text x="48" y="62" fill="#94a3b8" font-size="8.5" font-family="Prompt" text-anchor="middle">จูล
+                    (SI)</text>
+
+                  <!-- Center Equivalence Label -->
+                  <text x="160" y="51" fill="#cbd5e1" font-size="8.5" font-weight="500" font-family="Fira Code"
+                    text-anchor="middle">1 eV = 1.60×10⁻¹⁹ J</text>
+
+                  <!-- Right Unit Capsule: Electron-volt (eV) -->
+                  <rect x="234" y="22" width="76" height="52" rx="12" fill="url(#evCapsuleGlow)" stroke="#10b981"
+                    stroke-width="1.5" />
+                  <text x="272" y="46" fill="#34d399" font-size="16" font-weight="bold" font-family="Fira Code"
+                    text-anchor="middle">eV</text>
+                  <text x="272" y="62" fill="#94a3b8" font-size="7.5" font-family="Prompt"
+                    text-anchor="middle">อิเล็กตรอนโวลต์</text>
+
+                  <!-- Bottom Conversion Arrow & Pill (eV -> J) -->
+                  <path d="M 228 60 Q 160 76 95 60" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3"
+                    fill="none" />
+                  <polygon points="89,59 98,64 96,56" fill="#38bdf8" />
+                  <rect x="106" y="77" width="108" height="17" rx="8.5" fill="#0f172a" stroke="#38bdf8"
+                    stroke-width="1" />
+                  <text x="160" y="88.5" fill="#7dd3fc" font-size="9.5" font-weight="bold" font-family="Fira Code"
+                    text-anchor="middle">× 1.60 × 10⁻¹⁹</text>
+                </svg>
+              </div>
+
+              <div
+                class="bg-emerald-950/40 border border-emerald-500/25 rounded-lg p-2.5 text-xs text-slate-200 space-y-1.5">
+                <div class="font-bold text-emerald-300 border-b border-emerald-500/20 pb-1 flex items-center gap-1">
+                  <i class="fa-solid fa-calculator text-xs"></i> <span>หลักการแปลงหน่วย (ทศนิยม 2 ตำแหน่ง):</span>
+                </div>
+                <ul class="space-y-1 text-[11px] text-slate-300 list-disc pl-4 leading-normal">
+                  <li>ค่าเทียบหน่วย: \(1\text{ eV} = 1.60 \times 10^{-19}\text{ J}\) หรือ \(1\text{ J} \approx 6.24
+                    \times 10^{18}\text{ eV}\)</li>
+                  <li>หลักจำง่าย: \(\text{J} \to \text{eV}\) <strong>หารด้วย</strong> \(1.60 \times 10^{-19}\) |
+                    \(\text{eV} \to \text{J}\) <strong>คูณด้วย</strong> \(1.60 \times 10^{-19}\)</li>
+                  <li>ตัวอย่าง: \(3.20 \times 10^{-19}\text{ J} = \frac{3.20 \times 10^{-19}}{1.60 \times 10^{-19}} =
+                    2.00\text{ eV}\)</li>
+                  <li>สถานะพื้นไฮโดรเจน: \(E_1 = -2.18 \times 10^{-18}\text{ J} \approx -13.60\text{ eV}\)</li>
                 </ul>
               </div>
             </div>
@@ -378,7 +483,8 @@
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 text-cyan-600">
-              <i class="fa-solid fa-fire"></i> Simulator 1: กราฟสเปกตรัมการแผ่รังสีของวัตถุดำ (Planck Curve & Wien's Law)
+              <i class="fa-solid fa-fire"></i> Simulator 1: กราฟสเปกตรัมการแผ่รังสีของวัตถุดำ (Planck Curve & Wien's
+              Law)
             </h3>
             <span class="text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
               \( \lambda_{\max} T = 2.898 \times 10^{-3} \text{ m}\cdot\text{K} \)
@@ -390,7 +496,8 @@
             <div id="loader-blackbody"
               class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center transition-opacity duration-300">
               <div class="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin mb-3"></div>
-              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบกราฟการแผ่รังสี (<span id="loader-blackbody-pct">0</span>%)</div>
+              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบกราฟการแผ่รังสี (<span
+                  id="loader-blackbody-pct">0</span>%)</div>
               <p id="loader-blackbody-status" class="text-xs text-slate-400">กำลังเตรียมพิกัด...</p>
               <div class="w-48 bg-slate-800 h-1.5 rounded-full overflow-hidden mt-2">
                 <div id="loader-blackbody-bar" class="bg-cyan-500 h-full w-0 transition-all duration-150"></div>
@@ -451,7 +558,8 @@
             <div id="loader-bohr"
               class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center transition-opacity duration-300">
               <div class="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-3"></div>
-              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบแบบจำลองโบร์ (<span id="loader-bohr-pct">0</span>%)</div>
+              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบแบบจำลองโบร์ (<span
+                  id="loader-bohr-pct">0</span>%)</div>
               <p id="loader-bohr-status" class="text-xs text-slate-400">กำลังเตรียมวงโคจร...</p>
               <div class="w-48 bg-slate-800 h-1.5 rounded-full overflow-hidden mt-2">
                 <div id="loader-bohr-bar" class="bg-blue-500 h-full w-0 transition-all duration-150"></div>
@@ -467,11 +575,16 @@
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-slate-700">เลือกระดับชั้นพลังงาน (\(n\)):</span>
                 <div class="flex gap-1.5">
-                  <button onclick="setBohrOrbitLevel(1)" id="btn-bohr-n-1" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-slate-950 cursor-pointer">n=1</button>
-                  <button onclick="setBohrOrbitLevel(2)" id="btn-bohr-n-2" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=2</button>
-                  <button onclick="setBohrOrbitLevel(3)" id="btn-bohr-n-3" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=3</button>
-                  <button onclick="setBohrOrbitLevel(4)" id="btn-bohr-n-4" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=4</button>
-                  <button onclick="setBohrOrbitLevel(5)" id="btn-bohr-n-5" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=5</button>
+                  <button onclick="setBohrOrbitLevel(1)" id="btn-bohr-n-1"
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-slate-950 cursor-pointer">n=1</button>
+                  <button onclick="setBohrOrbitLevel(2)" id="btn-bohr-n-2"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=2</button>
+                  <button onclick="setBohrOrbitLevel(3)" id="btn-bohr-n-3"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=3</button>
+                  <button onclick="setBohrOrbitLevel(4)" id="btn-bohr-n-4"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=4</button>
+                  <button onclick="setBohrOrbitLevel(5)" id="btn-bohr-n-5"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">n=5</button>
                 </div>
               </div>
 
@@ -480,7 +593,8 @@
                   <input type="checkbox" id="cb-bohr-vectors" checked class="accent-blue-600 rounded" />
                   <span>แสดงเวกเตอร์ความเร็ว (\(\vec{v}_n\))</span>
                 </label>
-                <button id="btn-bohr-play" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold cursor-pointer transition">
+                <button id="btn-bohr-play"
+                  class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold cursor-pointer transition">
                   <i class="fa-solid fa-pause mr-1"></i> พักการหมุน
                 </button>
               </div>
@@ -524,8 +638,10 @@
           <div class="relative bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
             <div id="loader-spectrum"
               class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center transition-opacity duration-300">
-              <div class="w-10 h-10 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mb-3"></div>
-              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบเส้นสเปกตรัม (<span id="loader-spectrum-pct">0</span>%)</div>
+              <div class="w-10 h-10 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mb-3">
+              </div>
+              <div class="text-sm font-bold text-white mb-1">กำลังปรับเทียบเส้นสเปกตรัม (<span
+                  id="loader-spectrum-pct">0</span>%)</div>
               <p id="loader-spectrum-status" class="text-xs text-slate-400">กำลังเตรียมสูตรริดเบิร์ก...</p>
               <div class="w-48 bg-slate-800 h-1.5 rounded-full overflow-hidden mt-2">
                 <div id="loader-spectrum-bar" class="bg-purple-500 h-full w-0 transition-all duration-150"></div>
@@ -541,7 +657,8 @@
               <div class="flex items-center gap-3">
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-0.5">ระดับเริ่มต้น (\(n_i\)):</label>
-                  <select id="select-spec-ni" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white cursor-pointer">
+                  <select id="select-spec-ni"
+                    class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white cursor-pointer">
                     <option value="7">n = 7</option>
                     <option value="6">n = 6</option>
                     <option value="5">n = 5</option>
@@ -553,7 +670,8 @@
                 <div class="text-slate-400 self-end pb-1.5">➔</div>
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-0.5">ระดับสิ้นสุด (\(n_f\)):</label>
-                  <select id="select-spec-nf" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white cursor-pointer">
+                  <select id="select-spec-nf"
+                    class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white cursor-pointer">
                     <option value="1">n = 1 (อนุกรมไลแมน UV)</option>
                     <option value="2" selected>n = 2 (อนุกรมบัลเมอร์ Visible)</option>
                     <option value="3">n = 3 (อนุกรมพาสเชน IR)</option>
@@ -561,7 +679,8 @@
                     <option value="5">n = 5 (อนุกรมฟุนด์ IR)</option>
                   </select>
                 </div>
-                <button id="btn-spec-jump" class="self-end px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold cursor-pointer transition flex items-center gap-1.5">
+                <button id="btn-spec-jump"
+                  class="self-end px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold cursor-pointer transition flex items-center gap-1.5">
                   <i class="fa-solid fa-bolt"></i> จำลองการกระโดด
                 </button>
               </div>
@@ -569,10 +688,18 @@
               <!-- Quick Balmer Presets -->
               <div class="flex items-center gap-1.5 text-xs">
                 <span class="text-slate-600 font-medium">เส้นเด่นบัลเมอร์:</span>
-                <button onclick="selectBalmerPreset(3, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer">Hα (656 nm)</button>
-                <button onclick="selectBalmerPreset(4, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-cyan-100 text-cyan-800 hover:bg-cyan-200 cursor-pointer">Hβ (486 nm)</button>
-                <button onclick="selectBalmerPreset(5, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-blue-100 text-blue-800 hover:bg-blue-200 cursor-pointer">Hγ (434 nm)</button>
-                <button onclick="selectBalmerPreset(6, 2)" class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-purple-100 text-purple-800 hover:bg-purple-200 cursor-pointer">Hδ (410 nm)</button>
+                <button onclick="selectBalmerPreset(3, 2)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer">Hα
+                  (656 nm)</button>
+                <button onclick="selectBalmerPreset(4, 2)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-cyan-100 text-cyan-800 hover:bg-cyan-200 cursor-pointer">Hβ
+                  (486 nm)</button>
+                <button onclick="selectBalmerPreset(5, 2)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-blue-100 text-blue-800 hover:bg-blue-200 cursor-pointer">Hγ
+                  (434 nm)</button>
+                <button onclick="selectBalmerPreset(6, 2)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-purple-100 text-purple-800 hover:bg-purple-200 cursor-pointer">Hδ
+                  (410 nm)</button>
               </div>
             </div>
 
@@ -622,8 +749,10 @@
       <!-- Stats Bar (4 Cards) -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Stat Card 1: Total Questions -->
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
-          <div class="w-11 h-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-blue-100 shadow-inner">
+        <div
+          class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div
+            class="w-11 h-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-blue-100 shadow-inner">
             <i class="fa-solid fa-clipboard-question"></i>
           </div>
           <div class="min-w-0">
@@ -636,8 +765,10 @@
         </div>
 
         <!-- Stat Card 2: Categories -->
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-cyan-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
-          <div class="w-11 h-11 bg-cyan-50 text-cyan-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-cyan-100 shadow-inner">
+        <div
+          class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-cyan-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div
+            class="w-11 h-11 bg-cyan-50 text-cyan-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-cyan-100 shadow-inner">
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <div class="min-w-0">
@@ -650,8 +781,10 @@
         </div>
 
         <!-- Stat Card 3: Modes -->
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
-          <div class="w-11 h-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-emerald-100 shadow-inner">
+        <div
+          class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div
+            class="w-11 h-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg shrink-0 border border-emerald-100 shadow-inner">
             <i class="fa-solid fa-shuffle"></i>
           </div>
           <div class="min-w-0">
@@ -664,8 +797,10 @@
         </div>
 
         <!-- Stat Card 4: Solutions -->
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
-          <div class="w-11 h-11 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-lg shrink-0 border border-amber-100 shadow-inner">
+        <div
+          class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-center gap-3.5 relative overflow-hidden">
+          <div
+            class="w-11 h-11 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-lg shrink-0 border border-amber-100 shadow-inner">
             <i class="fa-solid fa-lightbulb"></i>
           </div>
           <div class="min-w-0">
@@ -682,18 +817,20 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <button onclick="startPracticeMode('19.1.1')" id="btn-prac-19-1-1"
           class="p-4 bg-white hover:bg-blue-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
-          <div class="w-10 h-10 shrink-0 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xs font-bold">
+          <div
+            class="w-10 h-10 shrink-0 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xs font-bold">
             19.1.1
           </div>
           <div>
             <h4 class="font-bold text-xs whitespace-nowrap">การแผ่รังสีของวัตถุดำและพลังค์</h4>
-            <p class="text-[10px] text-slate-500">คำนวณ \( E = nhf \) และกฎของวีน</p>
+            <p class="text-[10px] text-slate-500">คำนวณควอนตัมของพลังงาน \( E = nhf = \frac{hc}{\lambda} \)</p>
           </div>
         </button>
 
         <button onclick="startPracticeMode('19.1.2')" id="btn-prac-19-1-2"
           class="p-4 bg-white hover:bg-cyan-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
-          <div class="w-10 h-10 shrink-0 bg-cyan-100 rounded-lg flex items-center justify-center text-cyan-600 text-xs font-bold">
+          <div
+            class="w-10 h-10 shrink-0 bg-cyan-100 rounded-lg flex items-center justify-center text-cyan-600 text-xs font-bold">
             19.1.2
           </div>
           <div>
@@ -704,12 +841,14 @@
 
         <button onclick="startPracticeMode('19.1.3')" id="btn-prac-19-1-3"
           class="p-4 bg-white hover:bg-amber-50 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-3 transition text-left shadow-sm hover:shadow cursor-pointer">
-          <div class="w-10 h-10 shrink-0 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 text-xs font-bold">
+          <div
+            class="w-10 h-10 shrink-0 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 text-xs font-bold">
             19.1.3
           </div>
           <div>
             <h4 class="font-bold text-xs whitespace-nowrap">สเปกตรัมของไฮโดรเจน</h4>
-            <p class="text-[10px] text-slate-500">คำนวณ \( \frac{1}{\lambda} = R_H(\frac{1}{n_f^2} - \frac{1}{n_i^2}) \)</p>
+            <p class="text-[10px] text-slate-500">คำนวณ \( \frac{1}{\lambda} = R_H(\frac{1}{n_f^2} - \frac{1}{n_i^2}) \)
+            </p>
           </div>
         </button>
       </div>
@@ -741,8 +880,7 @@
         <div class="bg-slate-50 p-5 md:p-8 rounded-2xl border border-slate-200">
           <span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-3"
             id="prac-question-title">📋 ข้อคำถาม:</span>
-          <p id="prac-question-text"
-            class="text-base md:text-lg text-slate-800 font-medium leading-relaxed math-font">
+          <p id="prac-question-text" class="text-base md:text-lg text-slate-800 font-medium leading-relaxed math-font">
             - กำลังสร้างโจทย์ -
           </p>
         </div>
@@ -754,39 +892,79 @@
           <!-- Choice Zone -->
           <div id="prac-choice-zone" class="grid grid-cols-1 gap-3 hidden"></div>
 
-          <!-- Numeric Zone -->
-          <div id="prac-numeric-zone" class="space-y-4 max-w-md mx-auto flex flex-col items-center">
-            <div class="w-full">
-              <label id="lbl-prac-input-1"
-                class="block text-xs font-bold text-slate-600 mb-1.5 text-center">คำตอบ:</label>
-              <input type="text" autocomplete="off" id="prac-input-val1" placeholder="ระบุตัวเลขคำตอบ"
-                class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10 text-center font-mono text-lg transition" />
-            </div>
+                <div id="prac-numeric-zone" class="space-y-4 max-w-lg mx-auto flex flex-col items-center">
+                  <!-- Single Numeric Input -->
+                  <div id="prac-single-input-wrap" class="w-full max-w-md">
+                    <label id="lbl-prac-input-1" for="prac-input-val1"
+                      class="block text-xs font-bold text-slate-600 mb-1.5 text-center">คำตอบ:</label>
+                    <div
+                      class="flex items-stretch rounded-xl border-2 border-slate-200 focus-within:border-slate-500 focus-within:ring-4 focus-within:ring-slate-500/10 bg-white overflow-hidden transition">
+                      <input type="text" inputmode="decimal" autocomplete="off" id="prac-input-val1"
+                        placeholder="ระบุตัวเลขคำตอบ"
+                        class="flex-1 min-w-0 px-4 py-3 text-center font-mono text-lg focus:outline-none bg-transparent" />
+                      <span id="prac-unit-badge-1"
+                        class="px-3.5 py-3 bg-slate-100 border-l border-slate-200 text-slate-700 font-mono font-bold text-sm flex items-center justify-center shrink-0 whitespace-nowrap">
+                        -
+                      </span>
+                    </div>
+                  </div>
 
-            <div class="flex gap-3 w-full">
-              <button id="btn-prac-skip" onclick="regeneratePractice()"
-                class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition border border-slate-200 cursor-pointer">
-                ข้ามข้อนี้
-              </button>
-              <button id="btn-prac-check" onclick="checkPracticeAnswer()"
-                class="flex-1 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-check"></i> ตรวจคำตอบ
-              </button>
-            </div>
-          </div>
-        </div>
+                    <!-- Multi-Numeric Input (for 2-part questions such as n=2 and n=3) -->
+                    <div id="prac-multi-numeric-zone" class="hidden w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200">
+                        <label id="lbl-prac-multi-1" for="prac-multi-input-1"
+                          class="block text-xs font-bold text-slate-700 mb-2 text-center">คำตอบที่ 1:</label>
+                        <div
+                          class="flex items-stretch rounded-xl border-2 border-slate-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 bg-white overflow-hidden transition">
+                          <input type="text" inputmode="decimal" autocomplete="off" id="prac-multi-input-1"
+                            placeholder="ตัวเลขคำตอบที่ 1"
+                            class="flex-1 min-w-0 px-3 py-2.5 text-center font-mono text-base focus:outline-none bg-transparent" />
+                          <span id="prac-multi-unit-1"
+                            class="px-3 py-2.5 bg-slate-100 border-l border-slate-200 text-slate-700 font-mono font-bold text-xs flex items-center justify-center shrink-0 whitespace-nowrap">
+                            × 10⁻¹⁹ J
+                          </span>
+                        </div>
+                      </div>
+                      <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200">
+                        <label id="lbl-prac-multi-2" for="prac-multi-input-2"
+                          class="block text-xs font-bold text-slate-700 mb-2 text-center">คำตอบที่ 2:</label>
+                        <div
+                          class="flex items-stretch rounded-xl border-2 border-slate-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 bg-white overflow-hidden transition">
+                          <input type="text" inputmode="decimal" autocomplete="off" id="prac-multi-input-2"
+                            placeholder="ตัวเลขคำตอบที่ 2"
+                            class="flex-1 min-w-0 px-3 py-2.5 text-center font-mono text-base focus:outline-none bg-transparent" />
+                          <span id="prac-multi-unit-2"
+                            class="px-3 py-2.5 bg-slate-100 border-l border-slate-200 text-slate-700 font-mono font-bold text-xs flex items-center justify-center shrink-0 whitespace-nowrap">
+                            × 10⁻¹⁹ J
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
-        <!-- Feedback & Explanation -->
-        <div id="prac-feedback" class="hidden p-5 rounded-2xl border transition-all duration-300"></div>
-        <div id="prac-explanation-box"
-          class="hidden space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
-          <h5 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 flex items-center gap-2">
-            <i class="fa-solid fa-lightbulb text-blue-600"></i> เฉลยและวิธีทำละเอียด:
-          </h5>
-          <div id="prac-explanation-text" class="text-sm text-slate-700 space-y-3 math-font leading-relaxed">
-          </div>
-        </div>
-      </div>
+                    <div class="flex gap-3 w-full max-w-md">
+                      <button id="btn-prac-skip" onclick="regeneratePractice()"
+                        class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition border border-slate-200 cursor-pointer">
+                        ข้ามข้อนี้
+                      </button>
+                      <button id="btn-prac-check" onclick="checkPracticeAnswer()"
+                        class="flex-1 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-check"></i> ตรวจคำตอบ
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Feedback & Explanation -->
+                <div id="prac-feedback" class="hidden p-5 rounded-2xl border transition-all duration-300"></div>
+                <div id="prac-explanation-box"
+                  class="hidden space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
+                  <h5 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-blue-600"></i> เฉลยและวิธีทำละเอียด:
+                  </h5>
+                  <div id="prac-explanation-text" class="text-sm text-slate-700 space-y-3 math-font leading-relaxed">
+                  </div>
+                </div>
+            </div>
     </section>
 
     <!-- ========================================================================
@@ -795,7 +973,8 @@
     <section id="sec-exam-start" class="hidden max-w-xl mx-auto space-y-6 animate-[fadeIn_0.3s_ease-out]">
       <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
         <div class="text-center space-y-2">
-          <div class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-2">
+          <div
+            class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-2">
             <i class="fa-solid fa-stopwatch"></i>
           </div>
           <h2 class="text-xl md:text-2xl font-extrabold text-slate-900">
@@ -849,7 +1028,8 @@
         </form>
 
         <div class="text-center pt-2">
-          <button onclick="showSection('home')" class="text-xs text-slate-500 hover:text-slate-800 transition cursor-pointer">
+          <button onclick="showSection('home')"
+            class="text-xs text-slate-500 hover:text-slate-800 transition cursor-pointer">
             <i class="fa-solid fa-chevron-left mr-1"></i> ยกเลิกและกลับหน้าแรก
           </button>
         </div>
@@ -861,7 +1041,8 @@
          ======================================================================== -->
     <section id="sec-exam-live" class="hidden space-y-6 relative animate-[fadeIn_0.2s_ease-out]">
       <!-- Sticky Live Exam Top Bar -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-20 z-30">
+      <div
+        class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-20 z-30">
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
           <span id="exam-live-student-info" class="font-bold text-xs md:text-sm text-slate-800">
@@ -954,10 +1135,12 @@
           </div>
 
           <div class="flex items-center justify-center gap-2 pt-1">
-            <span id="res-badge-grade" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+            <span id="res-badge-grade"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
               ผ่านเกณฑ์
             </span>
-            <span id="res-tab-switches" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            <span id="res-tab-switches"
+              class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
               ความโปร่งใส 100%
             </span>
           </div>
@@ -1014,8 +1197,10 @@
   </div>
 
   <!-- Latest Result Modal -->
-  <div id="latest-result-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white max-w-sm w-full rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4 animate-[fadeIn_0.2s_ease-out]">
+  <div id="latest-result-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div
+      class="bg-white max-w-sm w-full rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4 animate-[fadeIn_0.2s_ease-out]">
       <div class="flex items-center justify-between border-b border-slate-100 pb-2">
         <h3 class="font-bold text-sm text-slate-800">ผลสอบล่าสุดของคุณ</h3>
         <button onclick="closeLatestResultModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer">
@@ -1024,7 +1209,8 @@
       </div>
       <div id="modal-latest-result-content" class="space-y-3">
       </div>
-      <button onclick="closeLatestResultModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
+      <button onclick="closeLatestResultModal()"
+        class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
         ปิดหน้าต่าง
       </button>
     </div>
@@ -1039,7 +1225,8 @@
         รายวิชา ฟิสิกส์ 6 รหัสวิชา ว33206 โรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ
       </div>
       <p class="text-[11px] sm:text-xs md:text-sm text-slate-400">
-        บทที่ 19 ฟิสิกส์อะตอม (19.1 สมมติฐานของพลังค์และทฤษฎีอะตอมของโบร์) ตามหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน (ฉบับปรับปรุง พ.ศ. 2560) สสวท.
+        บทที่ 19 ฟิสิกส์อะตอม (19.1 สมมติฐานของพลังค์และทฤษฎีอะตอมของโบร์) ตามหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน
+        (ฉบับปรับปรุง พ.ศ. 2560) สสวท.
       </p>
       <div class="flex items-center justify-center flex-wrap gap-2 text-xs text-slate-400 pt-1">
         <span class="text-cyan-400 font-mono font-bold">&lt;/&gt;</span>
@@ -1047,7 +1234,8 @@
         <span class="text-slate-600">·</span>
         <span class="inline-flex items-center gap-1.5 text-cyan-400">
           <svg class="w-4 h-4 inline-block text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L3.5 6.87v9.74L12 21.5l8.5-4.89V6.87L12 2zm0 2.24l6.5 3.73v7.46L12 19.16l-6.5-3.73V7.97L12 4.24z"/>
+            <path
+              d="M12 2L3.5 6.87v9.74L12 21.5l8.5-4.89V6.87L12 2zm0 2.24l6.5 3.73v7.46L12 19.16l-6.5-3.73V7.97L12 4.24z" />
           </svg>
           <span class="text-slate-300 font-sans">Physics Standard v1.13.0</span>
         </span>
@@ -1063,4 +1251,3 @@
 </body>
 
 </html>
-

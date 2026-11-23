@@ -75,9 +75,54 @@ const q3_spectrum = qmR1.generateQuestion(2, '19.1.3', 67890);
 assert(q3_spectrum.topic.includes('19.1.3'), 'Topic 19.1.3 question generated');
 assert(q3_spectrum.correctAnswer > 0, 'Spectrum question answer is positive');
 
-// Standard mode test
-const q_std = qmR1.generateQuestion(0, '19.1.1', null, 'standard');
-assert(q_std.title.includes('มาตรฐาน สสวท.'), 'Standard mode question generated with standard textbook values');
+// Standard mode tests for all 5 IPST 19.1.1 questions
+console.log('\n--- Test Suite 4: Topic 19.1.1 IPST 5-Question Bank (Standard Mode) ---');
+const qmStd = new QuizManager(1);
+const std1 = qmStd.generateQuestion(0, '19.1.1', null, 'standard');
+assert(std1.title.includes('มาตรฐาน สสวท.'), 'Standard Q1 has IPST standard title');
+assert(std1.unit === 'eV' && std1.correctAnswer === 2.69, `Standard Q1 (6.50e14 Hz) = 2.69 eV (got ${std1.correctAnswer})`);
+
+const std2 = qmStd.generateQuestion(1, '19.1.1', null, 'standard');
+assert(std2.unit === '× 10¹⁴ Hz' && std2.correctAnswer === 6.04, `Standard Q2 (2.50 eV) = 6.04 × 10¹⁴ Hz (got ${std2.correctAnswer})`);
+
+const std3 = qmStd.generateQuestion(2, '19.1.1', null, 'standard');
+assert(std3.type === 'multi-numeric' && std3.inputs.length === 2, 'Standard Q3 is 2-part multi-numeric question');
+assert(std3.inputs[0].correctAnswer === 43.52 && std3.inputs[1].correctAnswer === 65.28, `Standard Q3 (n=2,3) = [43.52, 65.28] (got [${std3.inputs[0].correctAnswer}, ${std3.inputs[1].correctAnswer}])`);
+assert(qmStd.evaluateMultiAnswer([43.52, 65.28]).isCorrect === true, 'Multi-numeric accepts both correct answers');
+assert(qmStd.evaluateMultiAnswer([43.52, 99.99]).isCorrect === false, 'Multi-numeric rejects when one sub-answer is wrong');
+
+const std4 = qmStd.generateQuestion(3, '19.1.1', null, 'standard');
+assert(std4.unit === 'eV' && std4.correctAnswer === 2.07, `Standard Q4 (5.0e14 Hz) = 2.07 eV (got ${std4.correctAnswer})`);
+assert(!std4.problemText.includes('2.1 eV'), 'Standard Q4 does not leak answer hint in problem text');
+assert(qmStd.evaluateAnswer(2.1).isCorrect === true, 'Standard Q4 accepts textbook rounded answer 2.1 eV within ±3%');
+
+const std5 = qmStd.generateQuestion(4, '19.1.1', null, 'standard');
+assert(std5.type === 'numeric' && std5.unit === 'nm' && std5.correctAnswer === 549.1, `Standard Q5 (3.62e-19 J) = 549.1 nm (got ${std5.correctAnswer})`);
+assert(!std5.problemText.includes('สีอะไร'), 'Standard Q5 asks wavelength in nm without color question');
+assert(qmStd.evaluateAnswer(549).isCorrect === true, 'Standard Q5 accepts rounded 549 nm within ±3%');
+
+// Zero-repeat RNG test for 19.1.1 random mode
+console.log('\n--- Test Suite 5: Topic 19.1.1 Zero-Repeat RNG Guarantee (0% Repeat) ---');
+const qmUnique = new QuizManager(12);
+const stdValues = [6.50, 2.50, 21.76, 5.0, 3.62];
+for (let slot = 0; slot < 5; slot++) {
+  const seen = new Set();
+  const iterations = slot === 3 ? 40 : 60;
+  let repeated = false;
+  let hitStandard = false;
+  for (let i = 0; i < iterations; i++) {
+    const q = qmUnique.generateQuestion(slot, '19.1.1', null, 'random');
+    if (Math.abs(q.generatedParam - stdValues[slot]) < 1e-9) {
+      hitStandard = true;
+    }
+    if (seen.has(q.generatedParam)) {
+      repeated = true;
+    }
+    seen.add(q.generatedParam);
+  }
+  assert(!hitStandard, `19.1.1 Q${slot + 1} random mode never repeats standard value (${stdValues[slot]}) across ${iterations} draws`);
+  assert(!repeated, `19.1.1 Q${slot + 1} random mode has 0% repeat across ${iterations} consecutive draws`);
+}
 
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
