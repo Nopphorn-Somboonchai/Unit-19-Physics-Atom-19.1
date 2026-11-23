@@ -127,6 +127,29 @@ assert(freshEm.timeRemaining <= 780 && freshEm.timeRemaining >= 779, 'Refresh ke
 freshEm.submitExam(false);
 assert(LocalStorageAdapter.loadExamSession() === null, 'Active exam session cleared from LocalStorage upon submission');
 
+// --- 5. IPST Scope (No Wien), Clean Titles, Auto-Submit & Result Contract ---
+console.log('\n--- Test Suite 5: IPST Scope (No Wien), Clean Titles & Expiry Auto-Submit ---');
+const scopeEm = new ExamManager(18);
+scopeEm.setIdentity('ทดสอบ มาตรฐาน', 'ม.6/1', 18);
+const scopeQs = scopeEm.startExam(2026);
+assert(scopeQs.every(q => !q.topic.includes('Wien') && !q.problemText.includes('วีน')), 'Exam paper contains zero Wien Law questions');
+assert(scopeQs.every(q => !/^ข้อที่\s*\d+:/.test(q.title)), 'Question titles do not embed duplicate "ข้อที่ X:" prefix');
+scopeEm._stopTimer();
+
+// Verify expired session auto-submits immediately upon resume
+const expiredSession = LocalStorageAdapter.loadExamSession();
+expiredSession.endTime = Date.now() - 5000;
+const expiredEm = new ExamManager(1);
+let autoSubCallbackCalled = false;
+expiredEm.onAutoSubmitted = () => { autoSubCallbackCalled = true; };
+const resumedExpired = expiredEm.resumeExamSession(expiredSession);
+assert(resumedExpired === false, 'Expired session returns false from resumeExamSession');
+assert(expiredEm.state === EXAM_STATES.SUBMITTED, 'Expired session transitions immediately to SUBMITTED');
+assert(expiredEm.examResult !== null && expiredEm.examResult.isAutoSubmit === true, 'Expired session produces auto-submitted examResult');
+assert(expiredEm.examResult.submissionStatus === 'auto-submitted', 'Result contract sets submissionStatus = auto-submitted');
+assert(expiredEm.examResult.autoSubmitReason === 'timeout-on-recovery', 'Result contract records autoSubmitReason = timeout-on-recovery');
+assert(LocalStorageAdapter.loadExamSession() === null, 'Expired session cleared from LocalStorage after recovery auto-submit');
+
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
 console.log(`=======================================================`);

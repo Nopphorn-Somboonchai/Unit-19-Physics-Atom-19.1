@@ -57,18 +57,18 @@ document.addEventListener('DOMContentLoaded', () => {
       ControlPanelAdapter.bindSpectrumControls(spectrumSim);
     }
 
-    // 4. Initialize Practice & Dynamic RNG Quiz System
-    const quizUI = new QuizUIAdapter();
-
-    // 5. Initialize Timed Exam System & Anti-Cheat Manager
-    const examUI = new ExamUIAdapter();
-
-    // 6. Initialize Section & Tab Navigation Adapter
+    // 4. Initialize Section & Tab Navigation Adapter before ExamUIAdapter so recovery routing persists
     TabNavigatorAdapter.init({
       blackbodySim,
       bohrSim,
       spectrumSim
     });
+
+    // 5. Initialize Practice & Dynamic RNG Quiz System
+    const quizUI = new QuizUIAdapter();
+
+    // 6. Initialize Timed Exam System & Anti-Cheat Manager
+    const examUI = new ExamUIAdapter();
 
     // 7. Render All Mathematical Notation across Document
     renderAllMathFormulas();

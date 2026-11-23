@@ -15,6 +15,9 @@ export class ExamUIAdapter {
   constructor() {
     this.examManager = new ExamManager(1);
     this.currentQuestionIdx = 0;
+    this._isAwayFromExam = false;
+    this._suppressAntiCheat = false;
+    this._isUnloading = false;
 
     this.init();
   }
@@ -42,15 +45,16 @@ export class ExamUIAdapter {
       this.updateTimerDisplay(timeRemaining, timerStr);
     };
 
-    this.examManager.onTimeExpired = () => {
-      alert('⏰ หมดเวลาการสอบ 15 นาที ระบบกำลังส่งกระดาษคำตอบอัตโนมัติ');
+    this.examManager.onAutoSubmitted = (result) => {
+      this.handleAutoSubmitted(result);
     };
 
     this.examManager.onCheatDetected = (switchCount) => {
       this.showCheatWarning(switchCount);
     };
 
-    // Anti-cheat window blur & visibility listeners
+    // Setup start screen validation & anti-cheat listeners
+    this.setupStartFormValidation();
     this.setupAntiCheatListeners();
 
     // Check last result for home banner
@@ -59,41 +63,116 @@ export class ExamUIAdapter {
       this.updateHomeLastScore(lastResult.totalScore);
     }
 
-    // Check for active session recovery
+    // Check for active or expired session recovery
     this.checkSessionRecovery();
+  }
+
+  setupStartFormValidation() {
+    const nameInput = document.getElementById('exam-input-name');
+    const classInput = document.getElementById('exam-input-class');
+    const rollInput = document.getElementById('exam-input-roll');
+    const startBtn = document.getElementById('btn-exam-start-submit');
+    const nameErr = document.getElementById('exam-err-name');
+    const rollErr = document.getElementById('exam-err-roll');
+
+    const validateForm = (showMessages = false) => {
+      const nameVal = nameInput ? nameInput.value.trim() : '';
+      const classVal = classInput ? classInput.value.trim() : '';
+      const rollRaw = rollInput ? rollInput.value.trim() : '';
+      const rollNum = Number(rollRaw);
+
+      const isNameValid = nameVal.length > 0;
+      const isClassValid = classVal.length > 0;
+      const isRollValid = Number.isInteger(rollNum) && rollNum >= 1 && rollNum <= 40;
+
+      if (nameErr) {
+        nameErr.classList.toggle('hidden', !showMessages || isNameValid);
+      }
+      if (rollErr) {
+        rollErr.classList.toggle('hidden', !showMessages || isRollValid);
+      }
+      if (startBtn) {
+        startBtn.disabled = !(isNameValid && isClassValid && isRollValid);
+      }
+      return isNameValid && isClassValid && isRollValid;
+    };
+
+    [nameInput, classInput, rollInput].forEach((el) => {
+      if (el) {
+        el.addEventListener('input', () => validateForm(true));
+        el.addEventListener('blur', () => validateForm(true));
+      }
+    });
+
+    validateForm(false);
   }
 
   setupAntiCheatListeners() {
     if (typeof document === 'undefined') return;
 
+    const handleLeave = () => {
+      if (this.examManager.state !== EXAM_STATES.IN_PROGRESS) return;
+      if (this._isUnloading || this._suppressAntiCheat || this._isAwayFromExam) return;
+
+      this._isAwayFromExam = true;
+      this.examManager.recordTabSwitch();
+    };
+
+    const handleReturn = () => {
+      if (typeof document !== 'undefined' && document.hidden) return;
+      this._isAwayFromExam = false;
+    };
+
+    window.addEventListener('beforeunload', () => {
+      this._isUnloading = true;
+    });
+
+    window.addEventListener('pagehide', () => {
+      this._isUnloading = true;
+    });
+
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && this.examManager.state === EXAM_STATES.IN_PROGRESS) {
-        this.examManager.recordTabSwitch();
+      if (document.hidden) {
+        handleLeave();
+      } else {
+        handleReturn();
       }
     });
 
-    window.addEventListener('blur', () => {
-      if (this.examManager.state === EXAM_STATES.IN_PROGRESS) {
-        this.examManager.recordTabSwitch();
-      }
-    });
+    window.addEventListener('blur', handleLeave);
+    window.addEventListener('focus', handleReturn);
   }
 
   checkSessionRecovery() {
     const savedSession = LocalStorageAdapter.loadExamSession();
-    if (savedSession && savedSession.endTime > Date.now()) {
-      const confirmResume = confirm(
-        `พบเซสชันการสอบที่ค้างอยู่ของ ${savedSession.fullName} (เลขที่ ${savedSession.rollNumber})\nต้องการทำข้อสอบต่อหรือไม่?`
-      );
-      if (confirmResume) {
-        this.examManager.resumeExamSession(savedSession);
-        TabNavigatorAdapter.setExamInProgress(true);
-        TabNavigatorAdapter.showSection('exam-live');
-        this.renderLiveExamScreen();
-        this.goToQuestion(this.examManager.restoredActiveQuestionIdx || 0);
-      } else {
-        LocalStorageAdapter.clearExamSession();
+    if (!savedSession || !savedSession.endTime) return;
+
+    if (savedSession.endTime <= Date.now()) {
+      // Session already expired before reload -> force auto-submit immediately
+      this.examManager.resumeExamSession(savedSession);
+      const result = this.examManager.examResult;
+      TabNavigatorAdapter.setExamInProgress(false);
+      if (result) {
+        TabNavigatorAdapter.showSection('exam-result');
+        this.renderResultScreen(result);
+        this.updateHomeLastScore(result.totalScore);
       }
+      return;
+    }
+
+    const confirmResume = confirm(
+      `พบเซสชันการสอบที่ค้างอยู่ของ ${savedSession.fullName} (เลขที่ ${savedSession.rollNumber})\nต้องการทำข้อสอบต่อหรือไม่?`
+    );
+    if (confirmResume) {
+      this._isAwayFromExam = false;
+      this.examManager.resumeExamSession(savedSession);
+      TabNavigatorAdapter.setExamInProgress(true);
+      TabNavigatorAdapter.showSection('exam-live');
+      this.renderLiveExamScreen();
+      this.updateTimerDisplay(this.examManager.timeRemaining, this.examManager.formatTimerString());
+      this.goToQuestion(this.examManager.restoredActiveQuestionIdx || 0);
+    } else {
+      LocalStorageAdapter.clearExamSession();
     }
   }
 
@@ -104,13 +183,24 @@ export class ExamUIAdapter {
 
     const fullName = nameInput ? nameInput.value.trim() : '';
     const className = classInput ? classInput.value.trim() : '';
-    const rollNumber = rollInput ? parseInt(rollInput.value, 10) : 1;
+    const rollNumber = rollInput ? Number(rollInput.value) : 1;
 
     if (!fullName) {
-      alert('กรุณากรอกชื่อ-นามสกุลของผู้เข้าสอบ');
+      const nameErr = document.getElementById('exam-err-name');
+      if (nameErr) nameErr.classList.remove('hidden');
       if (nameInput) nameInput.focus();
       return;
     }
+
+    if (!Number.isInteger(rollNumber) || rollNumber < 1 || rollNumber > 40) {
+      const rollErr = document.getElementById('exam-err-roll');
+      if (rollErr) rollErr.classList.remove('hidden');
+      if (rollInput) rollInput.focus();
+      return;
+    }
+
+    this._isAwayFromExam = false;
+    this._isUnloading = false;
 
     this.examManager.setIdentity(fullName, className, rollNumber);
     this.examManager.startExam();
@@ -120,6 +210,7 @@ export class ExamUIAdapter {
 
     this.currentQuestionIdx = 0;
     this.renderLiveExamScreen();
+    this.updateTimerDisplay(this.examManager.timeRemaining, this.examManager.formatTimerString());
     this.goToQuestion(0);
   }
 
@@ -158,6 +249,7 @@ export class ExamUIAdapter {
   goToQuestion(idx) {
     if (idx < 0 || idx >= this.examManager.questions.length) return;
     this.currentQuestionIdx = idx;
+    this.examManager.setActiveQuestion(idx);
 
     const q = this.examManager.questions[idx];
     const titleEl = document.getElementById('exam-q-title');
@@ -168,7 +260,7 @@ export class ExamUIAdapter {
     const btnNext = document.getElementById('btn-exam-next');
 
     if (titleEl) {
-      titleEl.textContent = `${q.title} (${q.score} คะแนน)`;
+      titleEl.textContent = `ข้อที่ ${idx + 1}: ${q.title} (${q.score} คะแนน)`;
     }
 
     if (textEl) {
@@ -215,7 +307,9 @@ export class ExamUIAdapter {
         numericZone.classList.remove('hidden');
         const numInput = document.getElementById('exam-input-numeric');
         const unitLabel = document.getElementById('exam-lbl-numeric-unit');
+        const unitBadge = document.getElementById('exam-unit-badge');
         if (unitLabel) unitLabel.textContent = q.unit || 'ตัวเลข';
+        if (unitBadge) unitBadge.textContent = q.unit || '-';
         if (numInput) {
           numInput.value = this.examManager.userAnswers[idx] ?? '';
           numInput.oninput = (e) => this.recordNumericInput(e.target.value);
@@ -277,18 +371,61 @@ export class ExamUIAdapter {
       msg = `คุณยังไม่ได้ตอบอีก ${unanswered} ข้อ ต้องการยืนยันส่งกระดาษคำตอบหรือไม่?`;
     }
 
-    if (confirm(msg)) {
-      this.submitExam();
+    this._suppressAntiCheat = true;
+    try {
+      if (confirm(msg)) {
+        this.submitExam();
+      }
+    } finally {
+      this._suppressAntiCheat = false;
+      this._isAwayFromExam = false;
     }
   }
 
   submitExam() {
     const result = this.examManager.submitExam(false);
+    this._isAwayFromExam = false;
     TabNavigatorAdapter.setExamInProgress(false);
     TabNavigatorAdapter.showSection('exam-result');
 
     this.renderResultScreen(result);
     this.updateHomeLastScore(result.totalScore);
+  }
+
+  handleAutoSubmitted(result) {
+    this._isAwayFromExam = false;
+    TabNavigatorAdapter.setExamInProgress(false);
+    TabNavigatorAdapter.showSection('exam-result');
+
+    if (result) {
+      this.renderResultScreen(result);
+      this.updateHomeLastScore(result.totalScore);
+    }
+  }
+
+  formatStudentAnswer(q) {
+    if (q.type === 'choice') {
+      if (q.userAnswer === null || q.userAnswer === undefined || q.userAnswer === '') {
+        return 'ไม่ได้ตอบ';
+      }
+      const idx = Number(q.userAnswer);
+      const choiceText = Array.isArray(q.choices) && q.choices[idx] ? q.choices[idx] : null;
+      return choiceText ? `${String.fromCharCode(65 + idx)}. ${choiceText}` : 'ไม่ได้ตอบ';
+    }
+
+    if (q.userAnswer === null || q.userAnswer === undefined || q.userAnswer === '') {
+      return 'ไม่ได้ตอบ';
+    }
+    return `${q.userAnswer} ${q.unit || ''}`.trim();
+  }
+
+  formatCorrectAnswer(q) {
+    if (q.type === 'choice') {
+      const idx = Number(q.correctChoiceIndex);
+      const choiceText = Array.isArray(q.choices) && q.choices[idx] ? q.choices[idx] : '-';
+      return `${String.fromCharCode(65 + idx)}. ${choiceText}`;
+    }
+    return `${q.correctAnswer} ${q.unit || ''}`.trim();
   }
 
   renderResultScreen(res) {
@@ -297,6 +434,7 @@ export class ExamUIAdapter {
     const badgeGrade = document.getElementById('res-badge-grade');
     const studentInfo = document.getElementById('res-student-info');
     const tabSwitchBadge = document.getElementById('res-tab-switches');
+    const autoBanner = document.getElementById('res-auto-submit-banner');
     const breakdownList = document.getElementById('res-breakdown-list');
 
     if (scoreVal) scoreVal.textContent = `${res.totalScore} / ${res.maxScore}`;
@@ -316,22 +454,33 @@ export class ExamUIAdapter {
       tabSwitchBadge.textContent = res.tabSwitchCount > 0 ? `สลับจอ ${res.tabSwitchCount} ครั้ง` : 'ความโปร่งใส 100%';
     }
 
+    if (autoBanner) {
+      if (res.isAutoSubmit) {
+        autoBanner.classList.remove('hidden');
+        autoBanner.textContent = res.autoSubmitReason === 'timeout-on-recovery'
+          ? '⏰ หมดเวลาการสอบขณะออกจากหน้าจอ ระบบตรวจคำตอบที่บันทึกไว้ล่าสุดให้อัตโนมัติแล้ว'
+          : '⏰ หมดเวลาการสอบ 15 นาที ระบบบังคับส่งกระดาษคำตอบและคำนวณคะแนนอัตโนมัติแล้ว';
+      } else {
+        autoBanner.classList.add('hidden');
+      }
+    }
+
     if (breakdownList) {
       breakdownList.innerHTML = res.gradedQuestions
         .map((q, idx) => `
           <div class="p-4 rounded-xl border ${q.isCorrect ? 'border-emerald-200 bg-emerald-50/40' : 'border-red-200 bg-red-50/40'} space-y-3">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-2">
               <span class="font-bold text-xs ${q.isCorrect ? 'text-emerald-700' : 'text-red-700'}">
                 ข้อที่ ${idx + 1}: ${q.title}
               </span>
-              <span class="text-xs font-bold px-2 py-0.5 rounded-full ${q.isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900'}">
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${q.isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900'}">
                 ${q.earnedScore} / ${q.score} คะแนน
               </span>
             </div>
             <p class="text-xs text-slate-700">${q.problemText}</p>
             <div class="text-xs space-y-1">
-              <div><strong class="text-slate-600">คำตอบของคุณ:</strong> <span class="${q.isCorrect ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}">${q.userAnswer ?? '-'}</span></div>
-              <div><strong class="text-slate-600">เฉลย:</strong> <span class="text-emerald-700 font-bold">${q.type === 'choice' ? q.choices[q.correctChoiceIndex] : `${q.correctAnswer} ${q.unit}`}</span></div>
+              <div><strong class="text-slate-600">คำตอบของคุณ:</strong> <span class="${q.isCorrect ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}">${this.formatStudentAnswer(q)}</span></div>
+              <div><strong class="text-slate-600">เฉลย:</strong> <span class="text-emerald-700 font-bold">${this.formatCorrectAnswer(q)}</span></div>
               <div class="text-[11px] text-slate-500 mt-1 bg-white/70 p-2 rounded-lg border border-slate-200">${q.explanation}</div>
             </div>
           </div>

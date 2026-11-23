@@ -226,7 +226,7 @@
               class="fa-solid fa-arrow-right text-sm text-cyan-500 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
           </h3>
           <p class="text-sm text-slate-500 leading-relaxed relative z-10">
-            ระบบสุ่มโจทย์คำนวณตามเลขที่นักเรียน เรื่อง \(E = nhf\), กฎของวีน, รัศมีวงโคจร \(r_n\) และสูตรของริดเบิร์ก
+            ระบบสุ่มโจทย์คำนวณตามเลขที่นักเรียน เรื่องควอนตัมของพลังงาน (\(E = nhf = \frac{hc}{\lambda}\)), รัศมีวงโคจร \(r_n\) และสูตรของริดเบิร์ก
           </p>
         </button>
 
@@ -985,42 +985,45 @@
           </p>
         </div>
 
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2 text-xs text-slate-600">
-          <div class="font-bold text-slate-800 border-b border-slate-200 pb-1.5 flex items-center gap-1.5">
-            <i class="fa-solid fa-circle-info text-blue-600"></i> ข้อกำหนดและกติกาการสอบ:
+        <div class="bg-red-50 p-4 rounded-2xl border border-red-200 space-y-2 text-xs text-red-900">
+          <div class="font-bold text-red-800 border-b border-red-200 pb-1.5 flex items-center gap-1.5">
+            <i class="fa-solid fa-triangle-exclamation text-red-600"></i> กติกาการสอบ (อ่านก่อนเริ่ม):
           </div>
           <ul class="list-disc pl-4 space-y-1">
-            <li>เวลาในการทำข้อสอบทั้งหมด <strong>15:00 นาที</strong></li>
-            <li>จำนวนข้อสอบทั้งหมด 5 ข้อ รวม 10 คะแนน (เกณฑ์ผ่าน 6 คะแนนขึ้นไป)</li>
-            <li>โจทย์คำนวณอนุญาตให้คลาดเคลื่อนได้ไม่เกิน <strong>±3%</strong></li>
-            <li>ระบบจะบันทึกสถานะไว้ตลอด หากรีเฟรชหน้าจอสามารถสอบต่อได้ในเวลาที่เหลือ</li>
-            <li>ระบบจะบันทึกและแจ้งเตือนเมื่อมีการสลับแท็บหรือสลับหน้าต่าง</li>
+            <li>มีข้อสอบทั้งหมด <strong>5 ข้อ ข้อละ 2 คะแนน</strong> (คะแนนเต็ม 10 คะแนน, เกณฑ์ผ่าน 6 คะแนนขึ้นไป)</li>
+            <li>ขอบเขตเนื้อหา: <strong>19.1.1 สมมติฐานของพลังค์, 19.1.2 ทฤษฎีอะตอมของโบร์ และ 19.1.3 เส้นสเปกตรัมของไฮโดรเจน</strong></li>
+            <li>มีระยะเวลาจำกัดในการทำข้อสอบ <strong>15:00 นาที</strong> (เมื่อหมดเวลา ระบบจะบังคับส่งข้อสอบทันที)</li>
+            <li>การตอบคำถามประเภทคำนวณตัวเลข ให้ป้อนคำตอบเป็นทศนิยมไม่เกิน 2 ตำแหน่ง (อนุญาตความคลาดเคลื่อนไม่เกิน <strong>±3%</strong>)</li>
+            <li>ระบบบันทึกสถานะไว้ตลอด หากรีเฟรชหน้าจอสามารถสอบต่อในเวลาที่เหลือได้ (แต่หากหมดเวลาแล้ว ระบบจะตรวจให้คะแนนอัตโนมัติ)</li>
+            <li>ระบบจะบันทึกและแจ้งเตือนเมื่อมีการสลับแท็บหรือสลับหน้าต่างระหว่างทำข้อสอบ</li>
           </ul>
         </div>
 
         <form onsubmit="event.preventDefault(); startLiveExam();" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อ - นามสกุล ผู้เข้าสอบ:</label>
+            <label for="exam-input-name" class="block text-xs font-bold text-slate-700 mb-1">ชื่อ - นามสกุล ผู้เข้าสอบ:</label>
             <input type="text" id="exam-input-name" required placeholder="เช่น นายสมชาย ใจดี"
               class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <p id="exam-err-name" class="hidden text-[11px] text-red-600 mt-1">กรุณากรอกชื่อ-นามสกุลผู้เข้าสอบ</p>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">ชั้นเรียน / ห้อง:</label>
+              <label for="exam-input-class" class="block text-xs font-bold text-slate-700 mb-1">ชั้นเรียน / ห้อง:</label>
               <input type="text" id="exam-input-class" required placeholder="เช่น ม.6/1" value="ม.6/1"
                 class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">เลขที่ (1 - 40):</label>
+              <label for="exam-input-roll" class="block text-xs font-bold text-slate-700 mb-1">เลขที่ (1 - 40):</label>
               <input type="number" id="exam-input-roll" min="1" max="40" required value="1"
                 class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+              <p id="exam-err-roll" class="hidden text-[11px] text-red-600 mt-1">กรุณาระบุเลขที่ 1 ถึง 40</p>
             </div>
           </div>
 
           <div class="pt-3">
-            <button type="submit"
-              class="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold rounded-2xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer">
+            <button type="submit" id="btn-exam-start-submit" disabled
+              class="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer">
               <span>เริ่มทำข้อสอบ</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -1081,13 +1084,19 @@
 
         <!-- Q2-Q5 Numeric Input Zone -->
         <div id="exam-zone-numeric" class="hidden bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
-          <label class="block text-xs font-bold text-slate-700">
+          <label for="exam-input-numeric" class="block text-xs font-bold text-slate-700">
             กรอกตัวเลขคำตอบของคุณ (หน่วย: <span id="exam-lbl-numeric-unit" class="text-blue-600 font-bold">-</span>):
           </label>
-          <input type="number" step="any" id="exam-input-numeric" placeholder="ตัวอย่าง: 500 หรือ 1.89"
-            class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-base font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-          <p class="text-[11px] text-slate-400">
-            * เกณฑ์การตรวจอนุญาตความคลาดเคลื่อนได้ไม่เกิน ±3%
+          <div class="flex items-stretch rounded-xl border border-slate-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 bg-white overflow-hidden transition">
+            <input type="number" step="any" id="exam-input-numeric" placeholder="ตัวอย่าง: 2.69 หรือ 656.3"
+              class="flex-1 min-w-0 px-4 py-3 bg-transparent text-base font-mono focus:outline-none" />
+            <span id="exam-unit-badge"
+              class="px-4 py-3 bg-slate-100 border-l border-slate-200 text-slate-700 font-mono font-bold text-sm flex items-center justify-center shrink-0 whitespace-nowrap">
+              -
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            * ป้อนทศนิยมไม่เกิน 2 ตำแหน่ง (เกณฑ์การตรวจอนุญาตความคลาดเคลื่อนไม่เกิน ±3%)
           </p>
         </div>
 
@@ -1143,6 +1152,10 @@
               class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
               ความโปร่งใส 100%
             </span>
+          </div>
+
+          <div id="res-auto-submit-banner"
+            class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold">
           </div>
         </div>
 
