@@ -37,7 +37,6 @@ export class ExamUIAdapter {
       window.toggleExamSolutionBox = () => this.toggleExamSolutionBox();
       window.showLatestResultModal = () => this.showLatestResultModal();
       window.closeLatestResultModal = () => this.closeLatestResultModal();
-      window.printCertificate = () => window.print();
     }
 
     // Connect Exam Manager callbacks

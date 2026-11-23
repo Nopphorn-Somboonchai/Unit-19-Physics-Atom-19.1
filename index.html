@@ -1115,7 +1115,7 @@
     </section>
 
     <!-- ========================================================================
-         SECTION 6: EXAM RESULT & CERTIFICATE (sec-exam-result)
+         SECTION 6: EXAM RESULT (sec-exam-result)
          ======================================================================== -->
     <section id="sec-exam-result" class="hidden max-w-4xl mx-auto space-y-6 animate-[fadeIn_0.5s_ease-out]">
       <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
@@ -1175,16 +1175,10 @@
             <i class="fa-solid fa-arrow-rotate-left"></i> <span>สอบใหม่อีกครั้ง</span>
           </button>
 
-          <div class="flex items-center gap-2 w-full sm:w-auto">
-            <button onclick="printCertificate()"
-              class="flex-1 sm:flex-initial px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow cursor-pointer flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-print"></i> <span>พิมพ์เกียรติบัตร</span>
-            </button>
-            <button onclick="showSection('home')"
-              class="flex-1 sm:flex-initial px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow cursor-pointer flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-house"></i> <span>กลับหน้าแรก</span>
-            </button>
-          </div>
+          <button onclick="showSection('home')"
+            class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow cursor-pointer flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-house"></i> <span>กลับหน้าแรก</span>
+          </button>
         </div>
       </div>
     </section>
