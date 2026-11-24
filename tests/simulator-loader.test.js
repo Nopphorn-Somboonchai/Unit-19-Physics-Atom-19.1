@@ -11,11 +11,13 @@ console.log('=============== 🧪 RUNNING SIMULATOR LOADER TESTS ===============
 // Test Suite 1: Initial State & Prefix Mapping
 console.log('--- Test Suite 1: Initial State & Mapping ---');
 SimulatorLoader.reset();
+assert.strictEqual(SimulatorLoader.isLoaded('19-0-gas-spectrum-lab'), false);
 assert.strictEqual(SimulatorLoader.isLoaded('19-1-blackbody'), false);
 assert.strictEqual(SimulatorLoader.isLoaded('19-2-bohr'), false);
 assert.strictEqual(SimulatorLoader.isLoaded('19-3-spectrum'), false);
 console.log('✅ [PASS] All simulators initially not loaded');
 
+assert.strictEqual(SimulatorLoader.prefixMap['19-0-gas-spectrum-lab'], 'gas-spectrum-lab');
 assert.strictEqual(SimulatorLoader.prefixMap['19-1-blackbody'], 'blackbody');
 assert.strictEqual(SimulatorLoader.prefixMap['19-2-bohr'], 'bohr');
 assert.strictEqual(SimulatorLoader.prefixMap['19-3-spectrum'], 'spectrum');
@@ -23,6 +25,15 @@ console.log('✅ [PASS] Prefix mapping correct for DOM IDs');
 
 // Test Suite 2: Calibration Stages & Physics Status Text
 console.log('\n--- Test Suite 2: Calibration Stages & Status Text ---');
+
+// Activity 19.1 Gas Spectrum Lab stages
+const s0_0 = SimulatorLoader.getStatusText('19-0-gas-spectrum-lab', 15);
+assert(s0_0.includes('ชุดสเปกตรัม'), `Expected spectrum setup text, got: ${s0_0}`);
+const s0_50 = SimulatorLoader.getStatusText('19-0-gas-spectrum-lab', 50);
+assert(s0_50.includes('ไม้เมตร'), `Expected meter stick text, got: ${s0_50}`);
+const s0_100 = SimulatorLoader.getStatusText('19-0-gas-spectrum-lab', 100);
+assert(s0_100.includes('เสร็จสมบูรณ์'), `Expected completed text, got: ${s0_100}`);
+console.log('✅ [PASS] Activity 19.1 Gas Spectrum Lab calibration stage messages validated');
 
 // 19.1.1 Blackbody stages
 const s1_0 = SimulatorLoader.getStatusText('19-1-blackbody', 15);

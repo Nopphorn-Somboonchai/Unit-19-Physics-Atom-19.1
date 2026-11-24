@@ -207,7 +207,7 @@
               class="fa-solid fa-arrow-right text-sm text-blue-500 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
           </h3>
           <p class="text-sm text-slate-500 leading-relaxed relative z-10">
-            สเปกตรัมการแผ่รังสีวัตถุดำ, แบบจำลองวงโคจรอิเล็กตรอนตามโบร์ และการทดลองปล่อยโฟตอนเส้นสเปกตรัมไฮโดรเจน
+            กิจกรรม 19.1 ห้องทดลองสเปกตรัมแก๊สร้อนเสมือนจริง, สเปกตรัมการแผ่รังสีวัตถุดำ, แบบจำลองวงโคจรโบร์ และเส้นสเปกตรัมไฮโดรเจน
           </p>
         </button>
 
@@ -453,7 +453,7 @@
             📖 ทบทวนบทเรียนและเครื่องมือจำลองฟิสิกส์เสมือนจริง
           </h2>
           <p class="text-sm text-slate-500">
-            จำลองสเปกตรัมการแผ่รังสีของวัตถุดำ, แบบจำลองวงโคจรโบร์ และการเกิดเส้นสเปกตรัมไฮโดรเจน
+            กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อนเสมือนจริง, สเปกตรัมการแผ่รังสีวัตถุดำ, แบบจำลองโบร์ และเส้นสเปกตรัมไฮโดรเจน
           </p>
         </div>
         <button onclick="showSection('home')"
@@ -464,22 +464,346 @@
 
       <!-- Sub-Tab Navigation Pills -->
       <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200 overflow-x-auto">
+        <button onclick="switchReviewTab('19-0-gas-spectrum-lab')" id="btn-tab-19-0-gas-spectrum-lab"
+          class="flex-1 min-w-[175px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer">
+          1. กิจกรรม 19.1 สเปกตรัมแก๊สร้อน (Lab)
+        </button>
         <button onclick="switchReviewTab('19-1-blackbody')" id="btn-tab-19-1-blackbody"
-          class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer">
-          1. การแผ่รังสีวัตถุดำ (19.1.1)
+          class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
+          2. การแผ่รังสีวัตถุดำ (19.1.1)
         </button>
         <button onclick="switchReviewTab('19-2-bohr')" id="btn-tab-19-2-bohr"
           class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
-          2. แบบจำลองอะตอมของโบร์ (19.1.2)
+          3. แบบจำลองอะตอมของโบร์ (19.1.2)
         </button>
         <button onclick="switchReviewTab('19-3-spectrum')" id="btn-tab-19-3-spectrum"
           class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
-          3. เส้นสเปกตรัมของไฮโดรเจน (19.1.2)
+          4. เส้นสเปกตรัมของไฮโดรเจน (19.1.2)
         </button>
       </div>
 
-      <!-- TAB 1: 19.1.1 แบบจำลองการแผ่รังสีของวัตถุดำ -->
-      <div id="review-tab-19-1-blackbody" class="space-y-6">
+      <!-- TAB 1: กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อน (Virtual Lab Simulator) -->
+      <div id="review-tab-19-0-gas-spectrum-lab" class="space-y-6">
+        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 space-y-5">
+          <!-- Header & View Mode Switcher -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-bold text-indigo-700 flex items-center gap-2">
+                <i class="fa-solid fa-flask-vial"></i> กิจกรรม 19.1: การศึกษาสเปกตรัมของแก๊สร้อน (Virtual Lab)
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                จำลองการตั้งชุดสเปกตรัม หลอดบรรจุแก๊ส ไม้เมตร และเกรตติง เสมือนจริงตามหนังสือเรียน สสวท. ฟิสิกส์ ม.6
+              </p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                \( \lambda = d \sin\theta \quad | \quad d = \frac{1}{N} \)
+              </span>
+              <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl">
+                <button type="button" id="btn-lab19-view-split"
+                  class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 text-white shadow-sm cursor-pointer transition">
+                  มุมมองคู่
+                </button>
+                <button type="button" id="btn-lab19-view-setup"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition">
+                  โต๊ะทดลอง & ด้านบน
+                </button>
+                <button type="button" id="btn-lab19-view-eyepiece"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition">
+                  มองผ่านเกรตติง
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety Banner (Activity 19.1 Safety Notes) -->
+          <div id="lab19-safety-banner"
+            class="rounded-xl px-4 py-2.5 text-xs font-semibold border bg-emerald-50 border-emerald-300 text-emerald-900 flex flex-wrap items-center justify-between gap-2">
+            <span>✅ สวิตช์ไฟแรงสูงปิดอยู่ — เลือกหลอดบรรจุแก๊สที่ต้องการ จากนั้นกด <strong>"เปิดสวิตช์ไฟแรงสูง"</strong> เพื่อสังเกตสเปกตรัม (ห้ามแตะขั้วหลอดขณะเปิดสวิตช์)</span>
+          </div>
+
+          <!-- Interactive Dual-View Canvas Viewport -->
+          <div class="relative bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+            <div id="loader-gas-spectrum-lab"
+              class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center transition-opacity duration-300">
+              <div class="w-10 h-10 border-4 border-indigo-500/20 border-t-indigo-400 rounded-full animate-spin mb-3"></div>
+              <div class="text-sm font-bold text-white mb-1">กำลังจัดตั้งโต๊ะทดลองสเปกตรัม (<span
+                  id="loader-gas-spectrum-lab-pct">0</span>%)</div>
+              <p id="loader-gas-spectrum-lab-status" class="text-xs text-slate-400">กำลังติดตั้งชุดสเปกตรัมและไม้เมตร...</p>
+              <div class="w-48 bg-slate-800 h-1.5 rounded-full overflow-hidden mt-2">
+                <div id="loader-gas-spectrum-lab-bar" class="bg-indigo-400 h-full w-0 transition-all duration-150"></div>
+              </div>
+            </div>
+
+            <canvas id="canvas-gas-spectrum-lab" class="w-full h-[520px] md:h-[560px] block touch-none"></canvas>
+          </div>
+
+          <!-- Primary Equipment Control Panel -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+            <!-- Row 1: High-Voltage Switch & Light Source Tubes -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+              <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" id="btn-lab19-power"
+                  class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer transition flex items-center gap-2">
+                  <i class="fa-solid fa-power-off"></i> เปิดสวิตช์ไฟแรงสูง (OFF)
+                </button>
+                <span class="text-xs font-bold text-slate-600 ml-1">หลอดทดลอง:</span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <button type="button" id="btn-lab19-src-hydrogen"
+                    class="px-3 py-2 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm border border-indigo-500 cursor-pointer transition">
+                    ไฮโดรเจน (H₂)
+                  </button>
+                  <button type="button" id="btn-lab19-src-neon"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                    นีออน (Ne)
+                  </button>
+                  <button type="button" id="btn-lab19-src-incandescent"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                    หลอดไฟฟ้าทั่วไป
+                  </button>
+                  <button type="button" id="btn-lab19-src-helium"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                    ฮีเลียม (He) <span class="text-[10px] text-amber-600">เสริม</span>
+                  </button>
+                  <button type="button" id="btn-lab19-src-mercury"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                    ไอปรอท (Hg) <span class="text-[10px] text-amber-600">เสริม</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p id="lab19-source-desc" class="text-xs text-slate-600 bg-white px-3 py-2 rounded-lg border border-slate-200">
+              ให้สเปกตรัมแบบเส้น (อนุกรมบัลเมอร์) เด่นชัด 3 เส้น (แดง ฟ้า น้ำเงิน) และสีม่วงจาง ๆ ที่ต้องปิดไฟห้องจึงเห็นชัด
+            </p>
+
+            <!-- Row 2: Grating N, Distance D, Ambient Room Light & Black Screen -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- Grating Density N -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5">
+                <label for="select-lab19-grating" class="block text-xs font-bold text-slate-700">
+                  เกรตติง (\(N\)):
+                </label>
+                <select id="select-lab19-grating"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-slate-50 cursor-pointer">
+                  <option value="5300" selected>5,300 เส้น/ซม. (มาตรฐาน สสวท.)</option>
+                  <option value="6000">6,000 เส้น/ซม.</option>
+                  <option value="10000">10,000 เส้น/ซม. (ความละเอียดสูง)</option>
+                </select>
+                <div class="text-[11px] text-slate-500 font-mono">
+                  ระยะช่อง \(d = 1/N =\) <strong id="lab19-val-d" class="text-indigo-600">1.887 × 10⁻⁴ cm</strong>
+                </div>
+              </div>
+
+              <!-- Distance D -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5">
+                <label for="slider-lab19-distance" class="block text-xs font-bold text-slate-700">
+                  ระยะไม้เมตร–เกรตติง (\(D\)): <span id="lab19-val-distance" class="text-cyan-700 font-mono">100 cm</span>
+                </label>
+                <input type="range" id="slider-lab19-distance" min="50" max="120" step="5" value="100"
+                  class="w-full accent-cyan-600 cursor-pointer" />
+                <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>50 cm</span>
+                  <span>100 cm (สสวท.)</span>
+                  <span>120 cm</span>
+                </div>
+              </div>
+
+              <!-- Room Brightness & Black Cardboard Backdrop -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                <label for="slider-lab19-ambient" class="block text-xs font-bold text-slate-700">
+                  ความสว่างห้อง: <span id="lab19-val-ambient" class="text-amber-700">15% — ห้องมืด (เห็นชัดที่สุด)</span>
+                </label>
+                <input type="range" id="slider-lab19-ambient" min="0" max="1" step="0.05" value="0.15"
+                  class="w-full accent-amber-500 cursor-pointer" />
+                <div class="flex items-center justify-between gap-2 flex-wrap pt-0.5">
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-semibold text-slate-700">
+                    <input type="checkbox" id="cb-lab19-backdrop" checked class="accent-slate-900 rounded" />
+                    <span>กั้นฉากกระดาษดำ</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-semibold text-slate-700"
+                    title="จำลองความคลาดเคลื่อนเล็กน้อยจากการเล็งด้วยสายตา (±0.5 cm) คล้ายผลการทดลองจริง">
+                    <input type="checkbox" id="cb-lab19-noise" class="accent-indigo-600 rounded" />
+                    <span>ความคลาดเคลื่อนจริง (±0.5 cm)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Quick-Aim Helper & Live Measurement Bar -->
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-crosshairs text-amber-500 mr-1"></i> ตัวช่วยเล็งเส้นสี (หรือคลิกวัดเองบนไม้เมตร):</span>
+                  <div id="lab19-quick-aim-wrap" class="flex items-center gap-1.5 flex-wrap"></div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" id="btn-lab19-clear-pins"
+                    class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer transition">
+                    ล้างหมุดเล็ง
+                  </button>
+                  <button type="button" id="btn-lab19-record"
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm cursor-pointer transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-table-list"></i> บันทึกค่าลงตาราง
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live 4-Card Measurement Readouts -->
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+                <div class="p-2 rounded-lg bg-amber-50/70 border border-amber-200">
+                  <div class="text-[10px] text-amber-700 font-semibold">ตำแหน่งทางขวา (\(p_R\))</div>
+                  <div id="lab19-meas-right" class="font-bold text-slate-800 font-mono">ยังไม่วัด (คลิกฝั่งขวา)</div>
+                </div>
+                <div class="p-2 rounded-lg bg-sky-50/70 border border-sky-200">
+                  <div class="text-[10px] text-sky-700 font-semibold">ตำแหน่งทางซ้าย (\(p_L\))</div>
+                  <div id="lab19-meas-left" class="font-bold text-slate-800 font-mono">ยังไม่วัด (คลิกฝั่งซ้าย)</div>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200">
+                  <div class="text-[10px] text-slate-500 font-semibold">ระยะเฉลี่ย (\(\bar{x}\))</div>
+                  <div id="lab19-meas-xavg" class="font-bold text-slate-800 font-mono">-</div>
+                </div>
+                <div class="p-2 rounded-lg bg-emerald-50/70 border border-emerald-200">
+                  <div class="text-[10px] text-emerald-700 font-semibold">ความยาวคลื่น (\(\lambda = d\sin\theta\))</div>
+                  <div id="lab19-meas-lambda" class="font-bold text-emerald-700 font-mono">-</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IPST 8-Column Data Recording Table (Auto & Manual Practice Modes) -->
+          <div class="space-y-3 pt-2">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <h4 class="text-sm md:text-base font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-table text-teal-600"></i> ตารางบันทึกผลการทำกิจกรรม 19.1 (ตามคู่มือ สสวท.)
+                </h4>
+                <p class="text-[11px] text-slate-500">
+                  จัดอุปกรณ์ให้แถบสว่างกึ่งกลางอยู่ที่ระยะ 50.0 cm | เลือกโหมดคำนวณอัตโนมัติ หรือโหมดฝึกคำนวณด้วยตนเองพร้อมตรวจคำตอบ
+                </p>
+              </div>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <button type="button" id="btn-lab19-tmode-auto"
+                  class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm cursor-pointer transition">
+                  โหมดคำนวณอัตโนมัติ
+                </button>
+                <button type="button" id="btn-lab19-tmode-manual"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                  โหมดฝึกคำนวณเอง (ตรวจคำตอบ)
+                </button>
+                <button type="button" id="btn-lab19-load-sample"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 cursor-pointer transition">
+                  <i class="fa-solid fa-book-bookmark mr-1"></i> โหลดตัวอย่างผล สสวท.
+                </button>
+                <button type="button" id="btn-lab19-export-csv"
+                  class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer transition">
+                  <i class="fa-solid fa-file-csv mr-1"></i> CSV
+                </button>
+                <button type="button" id="btn-lab19-clear-table"
+                  class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 cursor-pointer transition">
+                  ล้างตาราง
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-teal-200 shadow-xs">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-teal-50 text-teal-950 text-[11px] font-bold border-b-2 border-teal-500">
+                  <tr>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">แหล่งกำเนิด</th>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">สีของเส้นสเปกตรัม</th>
+                    <th colspan="2" class="px-2 py-1.5 border-r border-b border-teal-200 text-center">เส้นสเปกตรัมทางขวา</th>
+                    <th colspan="2" class="px-2 py-1.5 border-r border-b border-teal-200 text-center">เส้นสเปกตรัมทางซ้าย</th>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">ระยะเฉลี่ย<br />\(\bar{x}\) (cm)</th>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">\(\sqrt{D^2+\bar{x}^2}\)<br />(cm)</th>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">\(\sin\theta = \frac{\bar{x}}{\sqrt{D^2+\bar{x}^2}}\)</th>
+                    <th rowspan="2" class="px-2 py-2 border-r border-teal-200 text-center">\(\lambda = d\sin\theta\)<br />(cm / nm)</th>
+                    <th rowspan="2" class="px-2 py-2 text-center">ลบ</th>
+                  </tr>
+                  <tr class="bg-teal-50/70">
+                    <th class="px-2 py-1 border-r border-teal-200 text-center font-semibold">ตำแหน่ง (cm)</th>
+                    <th class="px-2 py-1 border-r border-teal-200 text-center font-semibold">ระยะ \(x\) (cm)</th>
+                    <th class="px-2 py-1 border-r border-teal-200 text-center font-semibold">ตำแหน่ง (cm)</th>
+                    <th class="px-2 py-1 border-r border-teal-200 text-center font-semibold">ระยะ \(x\) (cm)</th>
+                  </tr>
+                </thead>
+                <tbody id="lab19-table-body" class="bg-white divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+            <p class="text-[11px] text-slate-500">
+              *หมายเหตุ: แสงสีม่วง (\(H_\delta \approx 410\text{ nm}\)) สำหรับแก๊สไฮโดรเจนมีความสว่างน้อย ลองปรับความสว่างห้องให้มืดลงและเปิดฉากกระดาษดำเพื่อสังเกตให้ชัดเจน
+            </p>
+          </div>
+
+          <!-- Post-Lab Discussion Questions & Bohr Model Bridge (IPST Images 3-5) -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-3 border-t border-slate-200">
+            <div class="lg:col-span-2 bg-teal-50/50 rounded-xl p-4 border border-teal-200 space-y-3">
+              <h4 class="text-sm font-bold text-teal-900 flex items-center gap-2">
+                <i class="fa-solid fa-circle-question text-teal-600"></i> คำถามท้ายกิจกรรม 19.1 (คลิกดูแนวคำตอบ)
+              </h4>
+
+              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
+                <summary class="font-bold text-slate-800 cursor-pointer">
+                  1. สเปกตรัมจากหลอดบรรจุแก๊สมีลักษณะเหมือนกับสเปกตรัมจากหลอดไฟฟ้าทั่วไปหรือไม่ อย่างไร?
+                </summary>
+                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                  <strong class="text-teal-700">แนวคำตอบ:</strong> แตกต่างกัน โดยสเปกตรัมจากหลอดบรรจุแก๊สเป็น
+                  <strong>สเปกตรัมแบบเส้น (Line Spectrum)</strong> แยกออกจากกันเป็นเส้นชัดเจน แต่สเปกตรัมจากหลอดไฟฟ้าทั่วไป (หลอดไส้) เป็น
+                  <strong>สเปกตรัมต่อเนื่อง (Continuous Spectrum)</strong> เรียงแถบสีติดกัน
+                </p>
+              </details>
+
+              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
+                <summary class="font-bold text-slate-800 cursor-pointer">
+                  2. สเปกตรัมจากหลอดบรรจุแก๊สแต่ละชนิดมีลักษณะเหมือนและต่างกันอย่างไร?
+                </summary>
+                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                  <strong class="text-teal-700">แนวคำตอบ:</strong> สเปกตรัมของแสงจากหลอดบรรจุแก๊สไฮโดรเจนกับนีออน (รวมถึงฮีเลียมและปรอท)
+                  มีลักษณะเป็นสเปกตรัมแบบเส้นเหมือนกัน แต่แตกต่างกันที่ <strong>จำนวนเส้น แสงสี และระยะห่าง \(x\) จากหลอดแก๊ส</strong>
+                  ซึ่งเป็นสมบัติเฉพาะตัวของธาตุแต่ละชนิด (เช่น ไฮโดรเจนเห็นแดง ฟ้า น้ำเงิน นีออนเห็นแดง ส้ม เหลือง)
+                </p>
+              </details>
+
+              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
+                <summary class="font-bold text-slate-800 cursor-pointer">
+                  3. สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจน ประกอบด้วยแสงที่มีความยาวคลื่นเท่าใดบ้าง?
+                </summary>
+                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                  <strong class="text-teal-700">แนวคำตอบ:</strong> สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจนประกอบด้วยแสงที่มีความยาวคลื่นประมาณ
+                  <strong>430, 490 และ 660 นาโนเมตร</strong> (ค่าทฤษฎีบัลเมอร์คือ 434.0, 486.1, 656.3 nm และเส้นสีม่วงจาง ๆ ที่ 410.2 nm)
+                </p>
+              </details>
+            </div>
+
+            <!-- Bridge to Bohr Atomic Model -->
+            <div class="bg-gradient-to-br from-indigo-950 to-slate-900 text-white rounded-xl p-4 border border-indigo-500/40 flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="text-cyan-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-atom"></i> เชื่อมโยงสู่ทฤษฎีอะตอมของโบร์
+                </div>
+                <p class="text-xs text-slate-200 leading-relaxed">
+                  การที่แก๊สร้อนปล่อยสเปกตรัมแบบเส้นเฉพาะบางความยาวคลื่น นำไปสู่คำถามสำคัญของนีลส์ โบร์ ว่า
+                  <em>"เหตุใดอะตอมของไฮโดรเจนจึงปล่อยพลังงานคลื่นแม่เหล็กไฟฟ้าเฉพาะบางค่า?"</em>
+                  ซึ่งอธิบายได้จากการที่อิเล็กตรอนเปลี่ยนระดับพลังงาน \(E_n\) เป็นชั้น ๆ
+                </p>
+              </div>
+              <div class="flex flex-col gap-2">
+                <button type="button" onclick="switchReviewTab('19-2-bohr')"
+                  class="w-full py-2 px-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs cursor-pointer transition flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-circle-dot"></i> สำรวจแบบจำลองอะตอมของโบร์ (Tab 3)
+                </button>
+                <button type="button" onclick="switchReviewTab('19-3-spectrum')"
+                  class="w-full py-2 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/15 cursor-pointer transition flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-rainbow"></i> คำนวณการเปลี่ยนระดับพลังงาน & ริดเบิร์ก (Tab 4)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: 19.1.1 แบบจำลองการแผ่รังสีของวัตถุดำ -->
+      <div id="review-tab-19-1-blackbody" class="hidden space-y-6">
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 text-cyan-600">

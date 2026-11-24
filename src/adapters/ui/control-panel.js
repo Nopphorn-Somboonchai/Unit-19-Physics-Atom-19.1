@@ -6,6 +6,109 @@
 
 export class ControlPanelAdapter {
   /**
+   * Bind controls for Activity 19.1 Virtual Lab (Hot Gas Spectrum Experiment)
+   * @param {Object} simulator - GasSpectrumLabSimulator instance
+   */
+  static bindGasSpectrumLabControls(simulator) {
+    const btnPower = document.getElementById('btn-lab19-power');
+    const selectGrating = document.getElementById('select-lab19-grating');
+    const sliderDistance = document.getElementById('slider-lab19-distance');
+    const sliderAmbient = document.getElementById('slider-lab19-ambient');
+    const cbBackdrop = document.getElementById('cb-lab19-backdrop');
+    const cbNoise = document.getElementById('cb-lab19-noise');
+    const btnClearPins = document.getElementById('btn-lab19-clear-pins');
+    const btnRecord = document.getElementById('btn-lab19-record');
+    const btnLoadSample = document.getElementById('btn-lab19-load-sample');
+    const btnExportCsv = document.getElementById('btn-lab19-export-csv');
+    const btnClearTable = document.getElementById('btn-lab19-clear-table');
+
+    if (btnPower) {
+      btnPower.addEventListener('click', () => simulator.togglePower());
+    }
+
+    ['hydrogen', 'neon', 'incandescent', 'helium', 'mercury'].forEach((srcId) => {
+      const btn = document.getElementById(`btn-lab19-src-${srcId}`);
+      if (btn) {
+        btn.addEventListener('click', () => simulator.selectLightSource(srcId, false));
+      }
+    });
+
+    ['split', 'setup', 'eyepiece'].forEach((mode) => {
+      const btn = document.getElementById(`btn-lab19-view-${mode}`);
+      if (btn) {
+        btn.addEventListener('click', () => simulator.setViewMode(mode));
+      }
+    });
+
+    ['auto', 'manual'].forEach((tmode) => {
+      const btn = document.getElementById(`btn-lab19-tmode-${tmode}`);
+      if (btn) {
+        btn.addEventListener('click', () => simulator.setTableMode(tmode));
+      }
+    });
+
+    if (selectGrating) {
+      selectGrating.addEventListener('change', (e) => {
+        simulator.setGratingLinesPerCm(parseInt(e.target.value, 10));
+      });
+    }
+
+    if (sliderDistance) {
+      sliderDistance.addEventListener('input', (e) => {
+        simulator.setDistanceCm(parseFloat(e.target.value));
+      });
+    }
+
+    if (sliderAmbient) {
+      sliderAmbient.addEventListener('input', (e) => {
+        simulator.setAmbientLight(parseFloat(e.target.value));
+      });
+    }
+
+    if (cbBackdrop) {
+      cbBackdrop.addEventListener('change', (e) => {
+        simulator.setUseBlackBackdrop(e.target.checked);
+      });
+    }
+
+    if (cbNoise) {
+      cbNoise.addEventListener('change', (e) => {
+        simulator.setRealisticNoise(e.target.checked);
+      });
+    }
+
+    if (btnClearPins) {
+      btnClearPins.addEventListener('click', () => simulator.clearMeasurementPins());
+    }
+
+    if (btnRecord) {
+      btnRecord.addEventListener('click', () => simulator.recordCurrentMeasurement());
+    }
+
+    if (btnLoadSample) {
+      btnLoadSample.addEventListener('click', () => simulator.loadIPSTSampleData());
+    }
+
+    if (btnExportCsv) {
+      btnExportCsv.addEventListener('click', () => simulator.exportCSV());
+    }
+
+    if (btnClearTable) {
+      btnClearTable.addEventListener('click', () => simulator.clearRecordedTable());
+    }
+
+    if (typeof window !== 'undefined') {
+      window.forceSwapLabTube = (srcId) => simulator.selectLightSource(srcId, true);
+      window.aimLabSpectralLine = (lineId) => simulator.aimAtSpectralLine(lineId);
+      window.deleteLabRecordedRow = (rowId) => simulator.deleteRecordedRow(rowId);
+      window.updateLabManualInput = (rowId, field, value) =>
+        simulator.updateManualRowInput(rowId, field, value);
+      window.checkLabManualRow = (rowId) => simulator.checkManualRow(rowId);
+      window.revealLabManualRow = (rowId) => simulator.revealManualRow(rowId);
+    }
+  }
+
+  /**
    * Bind controls for Simulator 19.1.1 (Blackbody Radiation)
    * @param {Object} simulator - BlackbodySimulator instance
    */

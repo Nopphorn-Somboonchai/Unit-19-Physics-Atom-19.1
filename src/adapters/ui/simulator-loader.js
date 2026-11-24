@@ -6,18 +6,26 @@
 
 export class SimulatorLoader {
   static loadedState = {
+    '19-0-gas-spectrum-lab': false,
     '19-1-blackbody': false,
     '19-2-bohr': false,
     '19-3-spectrum': false
   };
 
   static prefixMap = {
+    '19-0-gas-spectrum-lab': 'gas-spectrum-lab',
     '19-1-blackbody': 'blackbody',
     '19-2-bohr': 'bohr',
     '19-3-spectrum': 'spectrum'
   };
 
   static calibrationStages = {
+    '19-0-gas-spectrum-lab': [
+      { maxPct: 25, status: 'กำลังติดตั้งชุดสเปกตรัมและหลอดบรรจุแก๊ส...' },
+      { maxPct: 60, status: 'จัดแนวไม้เมตร 50.0 cm และปรับเทียบเกรตติง...' },
+      { maxPct: 90, status: 'คำนวณตำแหน่งเส้นสเปกตรัมตามสมการ λ = d sin θ...' },
+      { maxPct: 100, status: 'ห้องปฏิบัติการสเปกตรัมแก๊สร้อนพร้อมใช้งานเสร็จสมบูรณ์ 100%' }
+    ],
     '19-1-blackbody': [
       { maxPct: 25, status: 'กำลังเตรียมพิกัดกราฟสเปกตรัม...' },
       { maxPct: 60, status: 'คำนวณการกระจายรังสีของพลังค์...' },

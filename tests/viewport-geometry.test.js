@@ -75,8 +75,24 @@ for (const vp of viewports) {
     `[19.1.2B] Monotonic decreasing physical gap violated for ${vp.name}`
   );
 
+  // --- 4. Activity 19.1: GasSpectrumLabPlotter Geometry Audit ---
+  const isCompact4 = w < 720;
+  const h4 = w < 768 ? 520 : 560;
+  const setupH4 = Math.round(h4 * (isCompact4 ? 0.52 : 0.56));
+  const eyeH4 = h4 - setupH4;
+  const leftW4 = Math.round(w * (isCompact4 ? 0.56 : 0.55));
+  const rightW4 = w - leftW4;
+  const padX4 = w < 640 ? 20 : 38;
+  const meterW4 = Math.max(200, w - padX4 * 2);
+
+  assert(setupH4 >= 260, `[19.0-Lab] Setup composite height too small for ${vp.name} (${setupH4}px)`);
+  assert(eyeH4 >= 220, `[19.0-Lab] Eyepiece measurement height too small for ${vp.name} (${eyeH4}px)`);
+  assert(leftW4 >= 190, `[19.0-Lab] 3D setup panel width too narrow for ${vp.name} (${leftW4}px)`);
+  assert(rightW4 >= 140, `[19.0-Lab] Top-down ray panel width too narrow for ${vp.name} (${rightW4}px)`);
+  assert(meterW4 >= 300, `[19.0-Lab] Meter stick scale width too narrow for ${vp.name} (${meterW4}px)`);
+
   console.log(
-    `✅ [PASS] ${vp.name}: 19.1.1 plotW=${plotW1}px, 19.1.2A maxR=${rMaxPx.toFixed(1)}px, ` +
+    `✅ [PASS] ${vp.name}: 19.0-Lab meterW=${meterW4}px, 19.1.1 plotW=${plotW1}px, 19.1.2A maxR=${rMaxPx.toFixed(1)}px, ` +
     `19.1.2B ladderW=${ladderX2 - ladderX1}px, gap(4->5)=${levelGaps[3].toFixed(1)}px`
   );
 }

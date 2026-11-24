@@ -10,7 +10,7 @@ import { SimulatorLoader } from './simulator-loader.js';
 
 export class TabNavigatorAdapter {
   static currentSection = 'home';
-  static currentReviewTab = '19-1-blackbody';
+  static currentReviewTab = '19-0-gas-spectrum-lab';
   static isExamInProgress = false;
   static simulators = {};
 
@@ -62,22 +62,23 @@ export class TabNavigatorAdapter {
   }
 
   /**
-   * Switch between Review sub-tabs (19.1.1 Blackbody, 19.1.2A Bohr, 19.1.2B Spectrum)
-   * @param {'19-1-blackbody'|'19-2-bohr'|'19-3-spectrum'} tabId
+   * Switch between Review sub-tabs (Activity 19.1 Gas Spectrum Lab, 19.1.1 Blackbody, 19.1.2A Bohr, 19.1.2B Spectrum)
+   * @param {'19-0-gas-spectrum-lab'|'19-1-blackbody'|'19-2-bohr'|'19-3-spectrum'} tabId
    */
   static switchReviewTab(tabId) {
     this.currentReviewTab = tabId;
-    const tabKeys = ['19-1-blackbody', '19-2-bohr', '19-3-spectrum'];
+    const tabKeys = ['19-0-gas-spectrum-lab', '19-1-blackbody', '19-2-bohr', '19-3-spectrum'];
 
     tabKeys.forEach((key) => {
       const btn = document.getElementById(`btn-tab-${key}`);
       const content = document.getElementById(`review-tab-${key}`);
 
       if (btn) {
+        const minWidthClass = key === '19-0-gas-spectrum-lab' ? 'min-w-[175px]' : 'min-w-[160px]';
         if (key === tabId) {
-          btn.className = 'flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer';
+          btn.className = `flex-1 ${minWidthClass} text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer`;
         } else {
-          btn.className = 'flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer';
+          btn.className = `flex-1 ${minWidthClass} text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer`;
         }
       }
 
@@ -105,9 +106,22 @@ export class TabNavigatorAdapter {
    * @param {string} tabId
    */
   static handleSimulatorLifecycle(tabId) {
-    const { blackbodySim, bohrSim, spectrumSim } = this.simulators;
+    const { gasSpectrumLabSim, blackbodySim, bohrSim, spectrumSim } = this.simulators;
 
     SimulatorLoader.load(tabId, { duration: 600 });
+
+    if (gasSpectrumLabSim && tabId !== '19-0-gas-spectrum-lab') {
+      gasSpectrumLabSim.stopAnimationLoop();
+    }
+
+    if (tabId === '19-0-gas-spectrum-lab' && gasSpectrumLabSim) {
+      gasSpectrumLabSim.renderer.resize();
+      gasSpectrumLabSim.render();
+      gasSpectrumLabSim.updateReadouts();
+      if (gasSpectrumLabSim.state.powerOn) {
+        gasSpectrumLabSim.startAnimationLoop();
+      }
+    }
 
     if (tabId === '19-1-blackbody' && blackbodySim) {
       blackbodySim.renderer.resize();

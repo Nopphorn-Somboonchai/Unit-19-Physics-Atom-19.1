@@ -31,6 +31,19 @@ import {
   wavelengthToRGB
 } from '../src/physics/hydrogen-spectrum-solver.js';
 
+import {
+  getAllGasLightSources,
+  IPST_SAMPLE_OBSERVATIONS
+} from '../src/physics/gas-spectrum-lab-model.js';
+import {
+  calculateGratingSpacing,
+  calculateSpectralLinePosition,
+  calculateLineVisibility,
+  computeLabSpectrumState,
+  calculateWavelengthFromMeasurement,
+  validateManualRowCalculation
+} from '../src/physics/gas-spectrum-lab-solver.js';
+
 let passed = 0;
 let failed = 0;
 
@@ -155,6 +168,65 @@ assert(redColor.isVisible === true && redColor.rgb.includes('rgb'), '656 nm prod
 
 const uvColor = wavelengthToRGB(200);
 assert(uvColor.isVisible === false, '200 nm correctly flagged as non-visible');
+
+// --- 4. Activity 19.1 Hot Gas Spectrum Diffraction Grating Lab Tests ---
+console.log('\n--- Test Suite 4: Activity 19.1 Hot Gas Spectrum Virtual Lab ---');
+const allSources = getAllGasLightSources();
+assert(allSources.length === 5, '5 lab light sources defined (H2, Ne, Incandescent, He, Hg)');
+
+// Grating spacing d = 1 / 5300 cm ≈ 1.8868e-4 cm (IPST reference: 1.886e-4 cm)
+const sp5300 = calculateGratingSpacing(5300);
+assertCloseTo(sp5300.dCm, 1.8868e-4, 1e-7, 'Grating 5300 lines/cm -> d ≈ 1.8868e-4 cm');
+assertCloseTo(sp5300.dMeters, 1.8868e-6, 1e-9, 'Grating 5300 lines/cm -> d ≈ 1.8868e-6 m (SI)');
+
+// Hydrogen H-alpha (656.3 nm) at D = 100 cm, N = 5300 lines/cm -> x ≈ 37.1 cm (IPST table: 37.0 cm)
+const hRedPos = calculateSpectralLinePosition(656.3, 5300, 100, 1, 50.0);
+assert(hRedPos.isPhysical && hRedPos.isOnMeterStick, 'H-alpha 656.3 nm lies physically on 0-100 cm meter stick');
+assertCloseTo(hRedPos.displacementCm, 37.09, 0.2, 'H-alpha displacement x ≈ 37.1 cm at D=100 cm');
+assertCloseTo(hRedPos.rightPosCm - 50, 50 - hRedPos.leftPosCm, 1e-6, 'Left and right spectral positions are symmetric around 50 cm');
+
+// Hydrogen H-beta (486.1 nm) -> x ≈ 26.7 cm (IPST table: 27.0 cm)
+const hCyanPos = calculateSpectralLinePosition(486.1, 5300, 100, 1, 50.0);
+assertCloseTo(hCyanPos.displacementCm, 26.66, 0.2, 'H-beta displacement x ≈ 26.7 cm at D=100 cm');
+
+// Boundary case: unphysical sin(theta) >= 1 (e.g., 2500 nm with 5300 lines/cm)
+const invalidOrder = calculateSpectralLinePosition(2500, 5300, 100, 1, 50.0);
+assert(invalidOrder.isPhysical === false, 'Unphysical wavelength (sin θ >= 1) safely flagged non-physical');
+
+// Inverse IPST Table calculation check (Textbook Row 1: H2 Red, right=88.0, left=14.0 -> x_bar=37.0, L=106.6, sin=0.347, lambda≈6.55e-5 cm)
+const ipstRow1 = calculateWavelengthFromMeasurement({
+  rightPosCm: IPST_SAMPLE_OBSERVATIONS[0].rightPosCm,
+  leftPosCm: IPST_SAMPLE_OBSERVATIONS[0].leftPosCm,
+  distanceCm: 100,
+  linesPerCm: 5300,
+  expectedNm: 656.3
+});
+assertCloseTo(ipstRow1.xAvgCm, 37.0, 0.01, 'IPST sample H2 Red average displacement x_bar = 37.0 cm');
+assertCloseTo(ipstRow1.hypotenuseCm, 106.625, 0.1, 'IPST sample H2 Red hypotenuse sqrt(D²+x̄²) ≈ 106.6 cm');
+assertCloseTo(ipstRow1.sinTheta, 0.347, 0.005, 'IPST sample H2 Red sin(θ) ≈ 0.35');
+assertCloseTo(ipstRow1.wavelengthNm, 654.7, 5.0, 'IPST sample H2 Red calculated λ ≈ 655 nm (~6.6e-5 cm)');
+
+// Darkroom visibility check: faint H-delta line brighter in darkroom + black backdrop than bright room without screen
+const visDark = calculateLineVisibility(0.34, 0.05, true);
+const visBright = calculateLineVisibility(0.34, 0.95, false);
+assert(visDark > visBright * 2, 'Darkroom + black screen significantly increases visibility of faint H-delta violet line');
+
+// Continuous spectrum state for incandescent lamp
+const incState = computeLabSpectrumState({ sourceId: 'incandescent', powerOn: true, distanceCm: 100, gratingLinesPerCm: 5300 });
+assert(incState.spectrumType === 'continuous' && incState.continuousBand !== null, 'Incandescent bulb produces continuous spectrum band');
+
+// Manual calculation tolerance validation
+const manualPass = validateManualRowCalculation(
+  { xAvgCm: '37.0', hypotenuseCm: '106.6', sinTheta: '0.35', wavelengthNm: '655' },
+  ipstRow1
+);
+assert(manualPass.allCorrect === true, 'Manual calculation within documented tolerances accepted');
+
+const manualFail = validateManualRowCalculation(
+  { xAvgCm: '37.0', hypotenuseCm: '106.6', sinTheta: '0.35', wavelengthNm: '500' },
+  ipstRow1
+);
+assert(manualFail.allCorrect === false && manualFail.checks.wavelengthNm.status === 'incorrect', 'Incorrect manual wavelength rejected');
 
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);

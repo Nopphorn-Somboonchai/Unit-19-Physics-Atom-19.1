@@ -14,6 +14,7 @@ import {
   GROUND_STATE_ENERGY_EV
 } from './shared/constants.js';
 
+import { GasSpectrumLabSimulator } from './application/gas-spectrum-lab-simulator.js';
 import { BlackbodySimulator } from './application/blackbody-simulator.js';
 import { BohrAtomSimulator } from './application/bohr-atom-simulator.js';
 import { HydrogenSpectrumSimulator } from './application/hydrogen-spectrum-simulator.js';
@@ -33,6 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
   verifyKaTeXLoaded();
 
   try {
+    // 0. Initialize Activity 19.1 Virtual Lab Simulator (Hot Gas Spectrum)
+    const canvasGasLab = document.getElementById('canvas-gas-spectrum-lab');
+    let gasSpectrumLabSim = null;
+    if (canvasGasLab) {
+      gasSpectrumLabSim = new GasSpectrumLabSimulator(canvasGasLab);
+      ControlPanelAdapter.bindGasSpectrumLabControls(gasSpectrumLabSim);
+    }
+
     // 1. Initialize Simulator 19.1.1 (Blackbody Radiation & Planck Hypothesis)
     const canvasBlackbody = document.getElementById('canvas-blackbody');
     let blackbodySim = null;
@@ -59,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Initialize Section & Tab Navigation Adapter before ExamUIAdapter so recovery routing persists
     TabNavigatorAdapter.init({
+      gasSpectrumLabSim,
       blackbodySim,
       bohrSim,
       spectrumSim
