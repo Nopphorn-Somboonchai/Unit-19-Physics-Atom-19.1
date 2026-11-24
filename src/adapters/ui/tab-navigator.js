@@ -10,7 +10,7 @@ import { SimulatorLoader } from './simulator-loader.js';
 
 export class TabNavigatorAdapter {
   static currentSection = 'home';
-  static currentReviewTab = '19-0-gas-spectrum-lab';
+  static currentReviewTab = '19-1-blackbody';
   static isExamInProgress = false;
   static simulators = {};
 
@@ -62,12 +62,12 @@ export class TabNavigatorAdapter {
   }
 
   /**
-   * Switch between Review sub-tabs (Activity 19.1 Gas Spectrum Lab, 19.1.1 Blackbody, 19.1.2A Bohr, 19.1.2B Spectrum)
-   * @param {'19-0-gas-spectrum-lab'|'19-1-blackbody'|'19-2-bohr'|'19-3-spectrum'} tabId
+   * Switch between Review sub-tabs (19.1.1 Blackbody, Activity 19.1 Gas Spectrum Lab, 19.1.2A Bohr, 19.1.2B Spectrum)
+   * @param {'19-1-blackbody'|'19-0-gas-spectrum-lab'|'19-2-bohr'|'19-3-spectrum'} tabId
    */
   static switchReviewTab(tabId) {
     this.currentReviewTab = tabId;
-    const tabKeys = ['19-0-gas-spectrum-lab', '19-1-blackbody', '19-2-bohr', '19-3-spectrum'];
+    const tabKeys = ['19-1-blackbody', '19-0-gas-spectrum-lab', '19-2-bohr', '19-3-spectrum'];
 
     tabKeys.forEach((key) => {
       const btn = document.getElementById(`btn-tab-${key}`);

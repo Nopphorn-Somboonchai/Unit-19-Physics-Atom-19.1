@@ -9,6 +9,7 @@
 import { APP_CONFIG } from '../shared/config.js';
 import { CanvasRenderer } from '../adapters/canvas/canvas-renderer.js';
 import { GasSpectrumLabPlotter } from '../adapters/canvas/gas-spectrum-lab-plotter.js';
+import { downloadBlankLabWorksheetDocx } from '../adapters/export/gas-spectrum-worksheet-docx.js';
 import {
   GAS_SPECTRUM_LAB_DEFAULTS,
   IPST_SAMPLE_OBSERVATIONS,
@@ -670,6 +671,24 @@ export class GasSpectrumLabSimulator {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }
+  }
+
+  /**
+   * Download the blank Activity 19.1 printable Word (.docx) worksheet (A4 Landscape, 0.5" margins)
+   */
+  async downloadBlankWorksheetDocx() {
+    try {
+      await downloadBlankLabWorksheetDocx();
+      this.showSafetyMessage(
+        '📄 ดาวน์โหลด "ใบงานกิจกรรม-19-1-สเปกตรัมแก๊สร้อน.docx" เรียบร้อยแล้ว (กระดาษ A4 แนวนอน ขอบแคบ 0.5 นิ้ว)',
+        'safe'
+      );
+      return true;
+    } catch (err) {
+      console.error('[GasSpectrumLabSimulator] Failed to generate .docx worksheet:', err);
+      this.showSafetyMessage('⚠️ ไม่สามารถสร้างไฟล์ .docx ได้ กรุณาลองใหม่อีกครั้ง', 'warning');
+      return false;
     }
   }
 

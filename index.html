@@ -207,7 +207,7 @@
               class="fa-solid fa-arrow-right text-sm text-blue-500 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
           </h3>
           <p class="text-sm text-slate-500 leading-relaxed relative z-10">
-            กิจกรรม 19.1 ห้องทดลองสเปกตรัมแก๊สร้อนเสมือนจริง, สเปกตรัมการแผ่รังสีวัตถุดำ, แบบจำลองวงโคจรโบร์ และเส้นสเปกตรัมไฮโดรเจน
+            สเปกตรัมการแผ่รังสีวัตถุดำ, กิจกรรม 19.1 ห้องทดลองสเปกตรัมแก๊สร้อนเสมือนจริง, แบบจำลองวงโคจรโบร์ และเส้นสเปกตรัมไฮโดรเจน
           </p>
         </button>
 
@@ -453,7 +453,7 @@
             📖 ทบทวนบทเรียนและเครื่องมือจำลองฟิสิกส์เสมือนจริง
           </h2>
           <p class="text-sm text-slate-500">
-            กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อนเสมือนจริง, สเปกตรัมการแผ่รังสีวัตถุดำ, แบบจำลองโบร์ และเส้นสเปกตรัมไฮโดรเจน
+            จำลองสเปกตรัมการแผ่รังสีของวัตถุดำ, กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อนเสมือนจริง, แบบจำลองโบร์ และเส้นสเปกตรัมไฮโดรเจน
           </p>
         </div>
         <button onclick="showSection('home')"
@@ -464,13 +464,13 @@
 
       <!-- Sub-Tab Navigation Pills -->
       <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200 overflow-x-auto">
-        <button onclick="switchReviewTab('19-0-gas-spectrum-lab')" id="btn-tab-19-0-gas-spectrum-lab"
-          class="flex-1 min-w-[175px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer">
-          1. กิจกรรม 19.1 สเปกตรัมแก๊สร้อน (Lab)
-        </button>
         <button onclick="switchReviewTab('19-1-blackbody')" id="btn-tab-19-1-blackbody"
-          class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
-          2. การแผ่รังสีวัตถุดำ (19.1.1)
+          class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 bg-white text-blue-600 shadow-sm cursor-pointer">
+          1. การแผ่รังสีวัตถุดำ (19.1.1)
+        </button>
+        <button onclick="switchReviewTab('19-0-gas-spectrum-lab')" id="btn-tab-19-0-gas-spectrum-lab"
+          class="flex-1 min-w-[175px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
+          2. กิจกรรม 19.1 สเปกตรัมแก๊สร้อน (Lab)
         </button>
         <button onclick="switchReviewTab('19-2-bohr')" id="btn-tab-19-2-bohr"
           class="flex-1 min-w-[160px] text-center py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 cursor-pointer">
@@ -482,8 +482,8 @@
         </button>
       </div>
 
-      <!-- TAB 1: กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อน (Virtual Lab Simulator) -->
-      <div id="review-tab-19-0-gas-spectrum-lab" class="space-y-6">
+      <!-- TAB 2: กิจกรรม 19.1 การศึกษาสเปกตรัมของแก๊สร้อน (Virtual Lab Simulator) -->
+      <div id="review-tab-19-0-gas-spectrum-lab" class="hidden space-y-6">
         <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 space-y-5">
           <!-- Header & View Mode Switcher -->
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -513,6 +513,10 @@
                   มองผ่านเกรตติง
                 </button>
               </div>
+              <button type="button" id="btn-lab19-download-docx"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm cursor-pointer transition flex items-center gap-1.5">
+                <i class="fa-solid fa-file-word"></i> ดาวน์โหลดใบงานเปล่า (.docx)
+              </button>
               <button type="button" id="btn-lab19-teacher-mode"
                 class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-500 border border-slate-200 cursor-pointer transition flex items-center gap-1">
                 <i class="fa-solid fa-key"></i> โหมดสาธิตครู
@@ -746,6 +750,10 @@
                   class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-pointer transition flex items-center gap-1">
                   <i class="fa-solid fa-lock text-[10px]"></i> ตัวอย่างผล สสวท.
                 </button>
+                <button type="button" onclick="document.getElementById('btn-lab19-download-docx')?.click()"
+                  class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 cursor-pointer transition">
+                  <i class="fa-solid fa-file-word mr-1"></i> ใบงานเปล่า (.docx)
+                </button>
                 <button type="button" id="btn-lab19-export-csv"
                   class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer transition">
                   <i class="fa-solid fa-file-csv mr-1"></i> CSV
@@ -902,8 +910,8 @@
         </div>
       </div>
 
-      <!-- TAB 2: 19.1.1 แบบจำลองการแผ่รังสีของวัตถุดำ -->
-      <div id="review-tab-19-1-blackbody" class="hidden space-y-6">
+      <!-- TAB 1: 19.1.1 แบบจำลองการแผ่รังสีของวัตถุดำ -->
+      <div id="review-tab-19-1-blackbody" class="space-y-6">
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 text-cyan-600">
@@ -966,7 +974,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: 19.1.2 แบบจำลองอะตอมของโบร์ -->
+      <!-- TAB 3: 19.1.2 แบบจำลองอะตอมของโบร์ -->
       <div id="review-tab-19-2-bohr" class="hidden space-y-6">
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">

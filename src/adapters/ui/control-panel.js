@@ -20,6 +20,7 @@ export class ControlPanelAdapter {
     const btnRecord = document.getElementById('btn-lab19-record');
     const btnLoadSample = document.getElementById('btn-lab19-load-sample');
     const btnExportCsv = document.getElementById('btn-lab19-export-csv');
+    const btnDownloadDocx = document.getElementById('btn-lab19-download-docx');
     const btnClearTable = document.getElementById('btn-lab19-clear-table');
 
     if (btnPower) {
@@ -91,6 +92,10 @@ export class ControlPanelAdapter {
 
     if (btnExportCsv) {
       btnExportCsv.addEventListener('click', () => simulator.exportCSV());
+    }
+
+    if (btnDownloadDocx) {
+      btnDownloadDocx.addEventListener('click', () => simulator.downloadBlankWorksheetDocx());
     }
 
     if (btnClearTable) {
