@@ -26,6 +26,8 @@
     "@tailwindcss/cli": "^4.3.3",
     "docx": "^9.16.0",
     "katex": "^0.18.1",
+    "mathjax-full": "^3.2.1",
+    "mathml2omml": "^0.5.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {

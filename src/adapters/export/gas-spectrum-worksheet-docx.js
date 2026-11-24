@@ -2,6 +2,8 @@
  * @file gas-spectrum-worksheet-docx.js
  * @description Client-side Word (.docx) Blank Worksheet Generator for Activity 19.1:
  * Hot Gas Spectrum Experiment (A4 Landscape, 0.5-inch narrow margins).
+ * Renders all scientific formulas, fractions, radicals, overbars, and chemical/spectral symbols
+ * via LaTeX -> MathJax -> native Microsoft Word OMML (<m:oMath>) equations.
  * Conforms to Physics Learning Standard (v1.13.0) — UI/Export Adapter Layer.
  */
 
@@ -21,6 +23,7 @@ import {
   WidthType,
   convertInchesToTwip
 } from 'docx';
+import { latexToDocxMath } from '../formula/latex-to-omml.js';
 
 const THAI_FONT = 'TH SarabunPSK';
 const TEAL_HEX = '0F766E';
@@ -55,12 +58,23 @@ const ALL_TEAL_BORDERS = {
 };
 
 /**
- * Helper to create a Paragraph with Thai font defaults
+ * Helper to create a Paragraph mixing Thai text runs and native Word OMML equations.
+ * Item types:
+ *  - string -> Thai TextRun
+ *  - { latex: string, fontSizeHalfPts?: number, display?: boolean } -> native Word OMML <m:oMath>
+ *  - { text: string, ... } -> styled Thai TextRun
  */
-function thaiParagraph(runs, options = {}) {
-  const normalizedRuns = (Array.isArray(runs) ? runs : [runs]).map((item) => {
+function richParagraph(items, options = {}) {
+  const list = Array.isArray(items) ? items : [items];
+  const children = list.map((item) => {
     if (typeof item === 'string') {
       return new TextRun({ text: item, font: THAI_FONT, size: 28 });
+    }
+    if (item && typeof item.latex === 'string') {
+      return latexToDocxMath(item.latex, {
+        display: Boolean(item.display),
+        fontSizeHalfPts: item.fontSizeHalfPts || 22
+      });
     }
     return new TextRun({ font: THAI_FONT, size: 28, ...item });
   });
@@ -68,7 +82,7 @@ function thaiParagraph(runs, options = {}) {
   return new Paragraph({
     spacing: { before: 40, after: 40 },
     ...options,
-    children: normalizedRuns
+    children
   });
 }
 
@@ -97,56 +111,53 @@ function createCell(paragraphs, {
 }
 
 /**
- * Build the 10-column IPST Activity 19.1 Data Recording Table
+ * Build the 10-column IPST Activity 19.1 Data Recording Table with native OMML math headers
  */
 function buildObservationTable() {
   // Total width for A4 Landscape (11.69") with 0.5" margins on each side = 10.69" = 15,394 twips
-  const colWidths = [1650, 1550, 1250, 1250, 1250, 1250, 1650, 1850, 1850, 1840];
+  const colWidths = [1650, 1550, 1250, 1250, 1250, 1250, 1650, 1850, 1950, 1740];
 
   const headerRow1 = new TableRow({
     tableHeader: true,
     children: [
       createCell(
-        thaiParagraph([{ text: 'แหล่งกำเนิด', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
+        richParagraph([{ text: 'แหล่งกำเนิด', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
         { widthTwips: colWidths[0], rowSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
-        thaiParagraph([{ text: 'สีของเส้นสเปกตรัม', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
+        richParagraph([{ text: 'สีของเส้นสเปกตรัม', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
         { widthTwips: colWidths[1], rowSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
-        thaiParagraph([{ text: 'เส้นสเปกตรัมทางขวา', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
+        richParagraph([{ text: 'เส้นสเปกตรัมทางขวา', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
         { widthTwips: colWidths[2] + colWidths[3], columnSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
-        thaiParagraph([{ text: 'เส้นสเปกตรัมทางซ้าย', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
+        richParagraph([{ text: 'เส้นสเปกตรัมทางซ้าย', bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
         { widthTwips: colWidths[4] + colWidths[5], columnSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
         [
-          thaiParagraph([{ text: 'ระยะเฉลี่ย', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
-          thaiParagraph([{ text: 'x̄ (cm)', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
+          richParagraph([{ text: 'ระยะเฉลี่ย', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
+          richParagraph([{ latex: '\\bar{x}', fontSizeHalfPts: 21 }, { text: ' (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
         ],
         { widthTwips: colWidths[6], rowSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
         [
-          thaiParagraph([{ text: '√(D² + x̄²)', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
-          thaiParagraph([{ text: '(cm)', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
+          richParagraph([{ latex: '\\sqrt{D^2 + \\bar{x}^2}', fontSizeHalfPts: 21 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
+          richParagraph([{ text: '(cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
         ],
         { widthTwips: colWidths[7], rowSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
-        [
-          thaiParagraph([{ text: 'sin θ =', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
-          thaiParagraph([{ text: 'x̄ / √(D² + x̄²)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
-        ],
+        richParagraph([{ latex: '\\sin\\theta = \\frac{\\bar{x}}{\\sqrt{D^2 + \\bar{x}^2}}', fontSizeHalfPts: 20 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 20 } }),
         { widthTwips: colWidths[8], rowSpan: 2, shadingFill: HEADER_FILL }
       ),
       createCell(
         [
-          thaiParagraph([{ text: 'λ = d sin θ', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
-          thaiParagraph([{ text: '(cm / nm)', bold: true, size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
+          richParagraph([{ latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 21 }], { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 0 } }),
+          richParagraph([{ text: '(cm / nm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 20 } })
         ],
         { widthTwips: colWidths[9], rowSpan: 2, shadingFill: HEADER_FILL }
       )
@@ -156,34 +167,34 @@ function buildObservationTable() {
   const headerRow2 = new TableRow({
     tableHeader: true,
     children: [
-      createCell(thaiParagraph([{ text: 'ตำแหน่ง (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[2], shadingFill: SUBHEADER_FILL }),
-      createCell(thaiParagraph([{ text: 'ระยะ x (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[3], shadingFill: SUBHEADER_FILL }),
-      createCell(thaiParagraph([{ text: 'ตำแหน่ง (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[4], shadingFill: SUBHEADER_FILL }),
-      createCell(thaiParagraph([{ text: 'ระยะ x (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[5], shadingFill: SUBHEADER_FILL })
+      createCell(richParagraph([{ text: 'ตำแหน่ง (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[2], shadingFill: SUBHEADER_FILL }),
+      createCell(richParagraph([{ text: 'ระยะ ', bold: true, size: 24 }, { latex: 'x', fontSizeHalfPts: 20 }, { text: ' (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[3], shadingFill: SUBHEADER_FILL }),
+      createCell(richParagraph([{ text: 'ตำแหน่ง (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[4], shadingFill: SUBHEADER_FILL }),
+      createCell(richParagraph([{ text: 'ระยะ ', bold: true, size: 24 }, { latex: 'x', fontSizeHalfPts: 20 }, { text: ' (cm)', bold: true, size: 24 }], { alignment: AlignmentType.CENTER }), { widthTwips: colWidths[5], shadingFill: SUBHEADER_FILL })
     ]
   });
 
   const emptyCells = (count, startColIdx) =>
     Array.from({ length: count }, (_, idx) =>
       createCell(
-        thaiParagraph([{ text: '', size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 55, after: 55 } }),
+        richParagraph([{ text: '', size: 26 }], { alignment: AlignmentType.CENTER, spacing: { before: 55, after: 55 } }),
         { widthTwips: colWidths[startColIdx + idx] }
       )
     );
 
-  const buildDataRow = ({ sourceLabel = null, sourceRowSpan = 1, colorLabel = '' }) => {
+  const buildDataRow = ({ sourceItems = null, sourceRowSpan = 1, colorItems = [] }) => {
     const cells = [];
-    if (sourceLabel !== null) {
+    if (sourceItems !== null) {
       cells.push(
         createCell(
-          thaiParagraph([{ text: sourceLabel, bold: true, size: 26 }], { alignment: AlignmentType.CENTER }),
+          richParagraph(sourceItems, { alignment: AlignmentType.CENTER }),
           { widthTwips: colWidths[0], rowSpan: sourceRowSpan }
         )
       );
     }
     cells.push(
       createCell(
-        thaiParagraph([{ text: colorLabel, size: 26 }], { alignment: AlignmentType.LEFT, spacing: { before: 55, after: 55 } }),
+        richParagraph(colorItems, { alignment: AlignmentType.LEFT, spacing: { before: 55, after: 55 } }),
         { widthTwips: colWidths[1] }
       )
     );
@@ -194,15 +205,27 @@ function buildObservationTable() {
   const rows = [
     headerRow1,
     headerRow2,
-    buildDataRow({ sourceLabel: 'ไฮโดรเจน (H₂)*', sourceRowSpan: 4, colorLabel: 'สีแดง (Hα)' }),
-    buildDataRow({ colorLabel: 'สีฟ้า (Hβ)' }),
-    buildDataRow({ colorLabel: 'สีน้ำเงิน (Hγ)' }),
-    buildDataRow({ colorLabel: 'สีม่วง (Hδ)*' }),
-    buildDataRow({ sourceLabel: 'นีออน (Ne)', sourceRowSpan: 3, colorLabel: 'สีแดง' }),
-    buildDataRow({ colorLabel: 'สีส้ม' }),
-    buildDataRow({ colorLabel: 'สีเหลือง' }),
-    buildDataRow({ sourceLabel: 'หลอดอื่น ๆ / เสริม', sourceRowSpan: 2, colorLabel: '' }),
-    buildDataRow({ colorLabel: '' })
+    buildDataRow({
+      sourceItems: [{ text: 'ไฮโดรเจน (', bold: true, size: 26 }, { latex: '\\text{H}_2', fontSizeHalfPts: 20 }, { text: ')*', bold: true, size: 26 }],
+      sourceRowSpan: 4,
+      colorItems: [{ text: 'สีแดง (', size: 26 }, { latex: '\\text{H}_{\\alpha}', fontSizeHalfPts: 20 }, { text: ')', size: 26 }]
+    }),
+    buildDataRow({ colorItems: [{ text: 'สีฟ้า (', size: 26 }, { latex: '\\text{H}_{\\beta}', fontSizeHalfPts: 20 }, { text: ')', size: 26 }] }),
+    buildDataRow({ colorItems: [{ text: 'สีน้ำเงิน (', size: 26 }, { latex: '\\text{H}_{\\gamma}', fontSizeHalfPts: 20 }, { text: ')', size: 26 }] }),
+    buildDataRow({ colorItems: [{ text: 'สีม่วง (', size: 26 }, { latex: '\\text{H}_{\\delta}', fontSizeHalfPts: 20 }, { text: ')*', size: 26 }] }),
+    buildDataRow({
+      sourceItems: [{ text: 'นีออน (', bold: true, size: 26 }, { latex: '\\text{Ne}', fontSizeHalfPts: 20 }, { text: ')', bold: true, size: 26 }],
+      sourceRowSpan: 3,
+      colorItems: [{ text: 'สีแดง', size: 26 }]
+    }),
+    buildDataRow({ colorItems: [{ text: 'สีส้ม', size: 26 }] }),
+    buildDataRow({ colorItems: [{ text: 'สีเหลือง', size: 26 }] }),
+    buildDataRow({
+      sourceItems: [{ text: 'หลอดอื่น ๆ / เสริม', bold: true, size: 26 }],
+      sourceRowSpan: 2,
+      colorItems: [{ text: '', size: 26 }]
+    }),
+    buildDataRow({ colorItems: [{ text: '', size: 26 }] })
   ];
 
   return new Table({
@@ -213,6 +236,7 @@ function buildObservationTable() {
 
 /**
  * Build the Blank Activity 19.1 Worksheet Word Document (A4 Landscape, 0.5-inch margins)
+ * with LaTeX -> MathJax -> Native Word OMML equations
  * @returns {Document}
  */
 export function buildBlankLabWorksheetDocument() {
@@ -227,19 +251,19 @@ export function buildBlankLabWorksheetDocument() {
         children: [
           createCell(
             [
-              thaiParagraph(
+              richParagraph(
                 [
                   { text: 'ใบงานกิจกรรม 19.1 เรื่อง การศึกษาสเปกตรัมของแก๊สร้อน', bold: true, size: 36, color: TEAL_HEX }
                 ],
                 { alignment: AlignmentType.CENTER, spacing: { before: 20, after: 30 } }
               ),
-              thaiParagraph(
+              richParagraph(
                 [
                   { text: 'รายวิชา ว33206 ฟิสิกส์ 6 (ม.6)  |  โรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ  |  ผู้สอน : นายนพพร สมบูรณ์ชัย', bold: true, size: 26, color: '1E293B' }
                 ],
                 { alignment: AlignmentType.CENTER, spacing: { before: 0, after: 40 } }
               ),
-              thaiParagraph(
+              richParagraph(
                 [
                   { text: 'ชื่อผู้เรียน ............................................................................................   ชั้น ........................   เลขที่ ....................', bold: true, size: 28, color: '0F172A' }
                 ],
@@ -259,44 +283,56 @@ export function buildBlankLabWorksheetDocument() {
   });
 
   // 2. Learning Objectives
-  const objectivesTitle = thaiParagraph(
+  const objectivesTitle = richParagraph(
     [{ text: 'จุดประสงค์การเรียนรู้', bold: true, size: 30, color: TEAL_HEX }],
     { spacing: { before: 120, after: 30 } }
   );
-  const objective1 = thaiParagraph(
+  const objective1 = richParagraph(
     [{ text: '   1. ศึกษาและเปรียบเทียบลักษณะสเปกตรัมที่เกิดจากแก๊สร้อนกับหลอดไฟฟ้าทั่วไปได้', size: 28 }],
     { spacing: { before: 10, after: 10 } }
   );
-  const objective2 = thaiParagraph(
-    [{ text: '   2. วัดตำแหน่งเส้นสเปกตรัมผ่านเกรตติง และคำนวณหาความยาวคลื่นแสง (λ = d sin θ) ของแก๊สไฮโดรเจนและแก๊สนีออนได้', size: 28 }],
+  const objective2 = richParagraph(
+    [
+      { text: '   2. วัดตำแหน่งเส้นสเปกตรัมผ่านเกรตติง และคำนวณหาความยาวคลื่นแสง (', size: 28 },
+      { latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 22 },
+      { text: ') ของแก๊สไฮโดรเจนและแก๊สนีออนได้', size: 28 }
+    ],
     { spacing: { before: 10, after: 80 } }
   );
 
   // 3. Observation Table Header & Setup Params
-  const tableHeading = thaiParagraph(
+  const tableHeading = richParagraph(
     [{ text: 'ตารางบันทึกผลการทำกิจกรรม 19.1', bold: true, size: 30, color: TEAL_HEX }],
     { spacing: { before: 60, after: 20 } }
   );
-  const equipmentLine = thaiParagraph(
+  const equipmentLine = richParagraph(
     [
       { text: 'ค่าอุปกรณ์ที่ใช้ในการทดลอง: ', bold: true, size: 26 },
-      { text: 'เกรตติง N = .................. เส้น/ซม.   (d = 1/N = .......................... ซม.)   |   แถบสว่างกึ่งกลางที่ 50.0 ซม.   |   ระยะ D = ............ ซม.', size: 26 }
+      { text: 'เกรตติง ', size: 26 },
+      { latex: 'N', fontSizeHalfPts: 21 },
+      { text: ' = .................. เส้น/ซม.   (', size: 26 },
+      { latex: 'd = \\frac{1}{N}', fontSizeHalfPts: 20 },
+      { text: ' = .......................... ซม.)   |   แถบสว่างกึ่งกลางที่ 50.0 ซม.   |   ระยะ ', size: 26 },
+      { latex: 'D', fontSizeHalfPts: 21 },
+      { text: ' = ............ ซม.', size: 26 }
     ],
     { spacing: { before: 10, after: 60 } }
   );
 
   const observationTable = buildObservationTable();
 
-  const tableFootnote = thaiParagraph(
+  const tableFootnote = richParagraph(
     [
       { text: '*หมายเหตุ: ', bold: true, italics: true, size: 24, color: '475569' },
-      { text: 'แสงสีม่วง (Hδ) ของแก๊สไฮโดรเจนมีความสว่างน้อย ควรลดความสว่างห้องและใช้ฉากกระดาษดำกั้นด้านหลังหลอดเพื่อสังเกตให้ชัดเจน', italics: true, size: 24, color: '475569' }
+      { text: 'แสงสีม่วง (', italics: true, size: 24, color: '475569' },
+      { latex: '\\text{H}_{\\delta}', fontSizeHalfPts: 19 },
+      { text: ') ของแก๊สไฮโดรเจนมีความสว่างน้อย ควรลดความสว่างห้องและใช้ฉากกระดาษดำกั้นด้านหลังหลอดเพื่อสังเกตให้ชัดเจน', italics: true, size: 24, color: '475569' }
     ],
     { spacing: { before: 60, after: 40 } }
   );
 
   // Page 2: Sample Calculation Box (1 spectral line) + 3 Post-Lab Questions + Teacher Sign-off
-  const calcSectionTitle = thaiParagraph(
+  const calcSectionTitle = richParagraph(
     [{ text: 'แสดงวิธีทำตัวอย่างการคำนวณ 1 เส้นสี (เลือกจากผลในตารางด้านหน้า)', bold: true, size: 30, color: TEAL_HEX }],
     { pageBreakBefore: true, spacing: { before: 40, after: 60 } }
   );
@@ -308,27 +344,43 @@ export function buildBlankLabWorksheetDocument() {
         children: [
           createCell(
             [
-              thaiParagraph(
+              richParagraph(
                 [
                   { text: 'เลือกเส้นสเปกตรัมของแก๊ส ........................................  สี ..........................  (ตำแหน่งขวา = ............. cm , ตำแหน่งซ้าย = ............. cm)', size: 27 }
                 ],
-                { spacing: { before: 30, after: 50 } }
+                { spacing: { before: 30, after: 55 } }
               ),
-              thaiParagraph(
-                [{ text: '1) หาระยะเฉลี่ย   x̄ = (x_ขวา + x_ซ้าย) / 2 = .............................................................................................................................................. cm', size: 27 }],
-                { spacing: { before: 35, after: 45 } }
+              richParagraph(
+                [
+                  { text: '1) หาระยะเฉลี่ย   ', size: 27 },
+                  { latex: '\\bar{x} = \\frac{x_{\\text{ขวา}} + x_{\\text{ซ้าย}}}{2}', fontSizeHalfPts: 22 },
+                  { text: '  =  ........................................................................................................................................ cm', size: 27 }
+                ],
+                { spacing: { before: 40, after: 50 } }
               ),
-              thaiParagraph(
-                [{ text: '2) หาค่า   √(D² + x̄²) = ................................................................................................................................................................................ cm', size: 27 }],
-                { spacing: { before: 35, after: 45 } }
+              richParagraph(
+                [
+                  { text: '2) หาค่า   ', size: 27 },
+                  { latex: '\\sqrt{D^2 + \\bar{x}^2}', fontSizeHalfPts: 22 },
+                  { text: '  =  ............................................................................................................................................................. cm', size: 27 }
+                ],
+                { spacing: { before: 40, after: 50 } }
               ),
-              thaiParagraph(
-                [{ text: '3) หาค่า   sin θ = x̄ / √(D² + x̄²) = ...............................................................................................................................................................', size: 27 }],
-                { spacing: { before: 35, after: 45 } }
+              richParagraph(
+                [
+                  { text: '3) หาค่า   ', size: 27 },
+                  { latex: '\\sin\\theta = \\frac{\\bar{x}}{\\sqrt{D^2 + \\bar{x}^2}}', fontSizeHalfPts: 22 },
+                  { text: '  =  ..................................................................................................................................................', size: 27 }
+                ],
+                { spacing: { before: 40, after: 50 } }
               ),
-              thaiParagraph(
-                [{ text: '4) หาความยาวคลื่น   λ = d sin θ = .................................................................................................... cm  =  ........................................ nm', bold: true, size: 27 }],
-                { spacing: { before: 35, after: 30 } }
+              richParagraph(
+                [
+                  { text: '4) หาความยาวคลื่น   ', bold: true, size: 27 },
+                  { latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 22 },
+                  { text: '  =  ......................................................................................... cm  =  ........................................ nm', bold: true, size: 27 }
+                ],
+                { spacing: { before: 40, after: 35 } }
               )
             ],
             {
@@ -344,21 +396,21 @@ export function buildBlankLabWorksheetDocument() {
   });
 
   // 4. Post-Lab Questions (3 Questions matching the web portal)
-  const questionsHeading = thaiParagraph(
+  const questionsHeading = richParagraph(
     [{ text: 'คำถามท้ายกิจกรรม (ตอบคำถามจากการสังเกตและบันทึกผล)', bold: true, size: 30, color: TEAL_HEX }],
     { spacing: { before: 140, after: 50 } }
   );
 
   const buildQuestionBlock = (num, questionText) => [
-    thaiParagraph(
+    richParagraph(
       [{ text: `${num}. ${questionText}`, bold: true, size: 28, color: '0F172A' }],
       { spacing: { before: 70, after: 30 } }
     ),
-    thaiParagraph(
+    richParagraph(
       [{ text: 'แนวคำตอบ: .........................................................................................................................................................................................................................................', size: 26, color: '334155' }],
       { spacing: { before: 20, after: 25 } }
     ),
-    thaiParagraph(
+    richParagraph(
       [{ text: '............................................................................................................................................................................................................................................................', size: 26, color: '334155' }],
       { spacing: { before: 20, after: 40 } }
     )
@@ -377,7 +429,7 @@ export function buildBlankLabWorksheetDocument() {
     'สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจน ประกอบด้วยแสงที่มีความยาวคลื่นเท่าใดบ้าง?'
   );
 
-  const teacherFooter = thaiParagraph(
+  const teacherFooter = richParagraph(
     [
       { text: 'ชื่อผู้สอน : นายนพพร สมบูรณ์ชัย', bold: true, size: 26, color: '1E293B' },
       { text: '          ลงชื่อผู้ตรวจ ....................................................................          คะแนนที่ได้ ............ / ............', size: 26, color: '334155' }
