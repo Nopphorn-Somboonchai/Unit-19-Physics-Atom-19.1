@@ -5,6 +5,8 @@
  */
 
 import assert from 'node:assert';
+import fs from 'node:fs';
+import vm from 'node:vm';
 import zlib from 'node:zlib';
 import { latexToOmmlString } from '../src/adapters/formula/latex-to-omml.js';
 import { generateBlankLabWorksheetBuffer } from '../src/adapters/export/gas-spectrum-worksheet-docx.js';
@@ -78,7 +80,7 @@ assert(ommlSin.includes('<m:sSup>'), 'Squared terms rendered as native Word <m:s
 assert(!ommlSin.includes('<m:sub/>'), 'Malformed mathml2omml <m:sub/> wrapper inside <m:bar> is unwrapped cleanly');
 assert(!ommlSin.includes('\u2061'), 'Invisible U+2061 function application character stripped');
 assert(ommlSin.includes('Cambria Math'), 'Cambria Math font assigned for OMML math runs');
-console.log('✅ [PASS] LaTeX -> MathJax -> Sanitized Word OMML (<m:oMath>) verified');
+console.log('✅ [PASS] LaTeX -> KaTeX -> Sanitized Word OMML (<m:oMath>) verified');
 
 // Test Suite 2: Generated .docx binary archive & word/document.xml
 const rawBuf = Buffer.from(await generateBlankLabWorksheetBuffer());
@@ -128,6 +130,72 @@ for (const snippet of requiredTexts) {
   assert(docXml.includes(snippet), `Worksheet XML must contain "${snippet}"`);
 }
 console.log(`✅ [PASS] All ${requiredTexts.length} required Thai worksheet sections verified`);
+
+// Test Suite 3: Browser-Runtime Smoke Test for dist/bundle.js (No require/process/global)
+if (fs.existsSync('dist/bundle.js')) {
+  const bundleCode = fs.readFileSync('dist/bundle.js', 'utf8');
+  let domReadyCallback = null;
+  const fakeSandbox = {
+    console,
+    setTimeout,
+    clearTimeout,
+    setInterval,
+    clearInterval,
+    URL,
+    Blob,
+    TextEncoder,
+    TextDecoder,
+    Uint8Array,
+    ArrayBuffer,
+    DataView,
+    Map,
+    Set,
+    WeakMap,
+    WeakSet,
+    Promise,
+    Symbol,
+    Object,
+    Array,
+    Function,
+    Error,
+    TypeError,
+    RangeError,
+    RegExp,
+    Date,
+    Math,
+    JSON,
+    Number,
+    String,
+    Boolean,
+    parseInt,
+    parseFloat,
+    isNaN,
+    isFinite,
+    navigator: { userAgent: 'Mozilla/5.0' },
+    location: { href: 'http://localhost:8080/', protocol: 'http:' },
+    performance: { now: () => 0 },
+    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+    document: {
+      readyState: 'complete',
+      body: {},
+      getElementById: () => null,
+      querySelectorAll: () => [],
+      addEventListener: (evt, fn) => {
+        if (evt === 'DOMContentLoaded') domReadyCallback = fn;
+      }
+    }
+  };
+  fakeSandbox.window = fakeSandbox;
+  fakeSandbox.self = fakeSandbox;
+  fakeSandbox.addEventListener = () => {};
+
+  vm.runInNewContext(bundleCode, fakeSandbox, { filename: 'dist/bundle.js' });
+  assert(typeof domReadyCallback === 'function', 'dist/bundle.js registers DOMContentLoaded cleanly in browser sandbox');
+  domReadyCallback();
+  assert(typeof fakeSandbox.showSection === 'function', 'window.showSection initialized cleanly');
+  assert(typeof fakeSandbox.switchReviewTab === 'function', 'window.switchReviewTab initialized cleanly');
+  console.log('✅ [PASS] dist/bundle.js boots cleanly in strict browser sandbox (showSection & switchReviewTab ready)');
+}
 
 console.log('\n=======================================================');
 console.log('📊 WORKSHEET .DOCX & OMML TEST SUMMARY: ALL PASSED');

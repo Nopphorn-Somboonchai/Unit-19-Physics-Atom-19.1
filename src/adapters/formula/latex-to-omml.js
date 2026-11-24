@@ -1,61 +1,37 @@
 /**
  * @file latex-to-omml.js
  * @description Converts LaTeX expressions into native Microsoft Word Office Math Markup Language (OMML <m:oMath>)
- * using MathJax v3 (TeX -> Presentation MathML) + mathml2omml (MathML -> OMML) + docx ImportedXmlComponent.
- * Runs 100% client-side and offline with zero external network calls.
+ * using KaTeX (LaTeX -> Presentation MathML, 100% browser-safe) + mathml2omml (MathML -> OMML) + docx ImportedXmlComponent.
+ * Runs 100% client-side and offline with zero Node-only APIs or eval('require') calls.
  * Conforms to Physics Learning Standard (v1.13.0) — Formula Adapter Layer.
  */
 
-import { mathjax } from 'mathjax-full/js/mathjax.js';
-import { TeX } from 'mathjax-full/js/input/tex.js';
-import 'mathjax-full/js/input/tex/base/BaseConfiguration.js';
-import 'mathjax-full/js/input/tex/ams/AmsConfiguration.js';
-import { liteAdaptor } from 'mathjax-full/js/adaptors/liteAdaptor.js';
-import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html.js';
-import { SerializedMmlVisitor } from 'mathjax-full/js/core/MmlTree/SerializedMmlVisitor.js';
+import katex from 'katex';
 import { mml2omml } from 'mathml2omml';
 import { ImportedXmlComponent } from 'docx';
 
-let _mathJaxCtx = null;
-
-function getMathJaxContext() {
-  if (_mathJaxCtx) return _mathJaxCtx;
-
-  const adaptor = liteAdaptor();
-  RegisterHTMLHandler(adaptor);
-  const texInput = new TeX({ packages: ['base', 'ams'] });
-  const mathDoc = mathjax.document('', { InputJax: texInput });
-  const mmlVisitor = new SerializedMmlVisitor();
-
-  _mathJaxCtx = { mathDoc, mmlVisitor };
-  return _mathJaxCtx;
-}
-
 /**
  * Sanitize raw OMML produced by mathml2omml so Microsoft Word renders every construct cleanly:
- * 1. Strip invisible U+2061 (FUNCTION APPLICATION) characters emitted by MathJax.
- * 2. Unwrap mathml2omml's malformed <m:sSup>...<m:sub/></m:sSup> wrapper inside <m:bar>.
+ * 1. Strip invisible U+2061 (FUNCTION APPLICATION) characters.
+ * 2. Convert KaTeX modifier-macron accent (<m:acc><m:accPr><m:chr m:val="ˉ"/></m:accPr>...)
+ *    into Word's native top overbar (<m:bar><m:barPr><m:pos m:val="top"/></m:barPr>...) for crisp x-bar alignment.
  * 3. Inject Cambria Math (ASCII/HAnsi) + TH SarabunPSK (Complex Script Thai) run formatting into <m:r>.
  *
  * @param {string} rawOmml
- * @param {number} fontSizeHalfPts - Half-point size (e.g. 22 = 11pt, 24 = 12pt)
+ * @param {number} fontSizeHalfPts - Half-point size (e.g. 20 = 10pt, 22 = 11pt)
  * @returns {string} Clean <m:oMath> XML string
  */
 export function sanitizeOmml(rawOmml, fontSizeHalfPts = 22) {
   let clean = String(rawOmml || '');
 
-  // 1. Remove invisible function application U+2061 and redundant outer xmlns attributes
+  // 1. Strip invisible function application U+2061
   clean = clean.replace(/\u2061|&#x2061;/gi, '');
 
-  // 2. Fix mathml2omml v0.5.0 <mover> bug: <m:sSup><m:sSupPr><m:ctrlPr/></m:sSupPr><m:e>INNER</m:e><m:sub/></m:sSup>
-  let prev;
-  do {
-    prev = clean;
-    clean = clean.replace(
-      /<m:sSup><m:sSupPr><m:ctrlPr\/><\/m:sSupPr><m:e>((?:(?!<m:sSup>).)*?)<\/m:e><m:sub\/><\/m:sSup>/g,
-      '$1'
-    );
-  } while (clean !== prev);
+  // 2. Convert modifier-macron accent (ˉ / ¯) into native Word top overbar <m:bar>
+  clean = clean.replace(
+    /<m:acc><m:accPr><m:chr m:val="[ˉ¯\u0304]"\/><\/m:accPr><m:e>([\s\S]*?)<\/m:e><\/m:acc>/g,
+    '<m:bar><m:barPr><m:pos m:val="top"/></m:barPr><m:e>$1</m:e></m:bar>'
+  );
 
   // 3. Ensure every <m:r> specifies Cambria Math (Latin/Math) and TH SarabunPSK (Thai complex script)
   const wRPr = `<w:rPr><w:rFonts w:ascii="Cambria Math" w:hAnsi="Cambria Math" w:cs="TH SarabunPSK"/><w:sz w:val="${fontSizeHalfPts}"/><w:szCs w:val="${fontSizeHalfPts}"/></w:rPr>`;
@@ -65,15 +41,36 @@ export function sanitizeOmml(rawOmml, fontSizeHalfPts = 22) {
 }
 
 /**
+ * Convert a LaTeX math string to Presentation MathML via KaTeX
+ * @param {string} latex
+ * @param {boolean} [display=false]
+ * @returns {string}
+ */
+export function latexToMathML(latex, display = false) {
+  const rendered = katex.renderToString(latex, {
+    output: 'mathml',
+    displayMode: Boolean(display),
+    throwOnError: true,
+    strict: 'ignore'
+  });
+  const match = rendered.match(/<math[\s\S]*?<\/math>/);
+  if (!match) {
+    throw new Error(`[latexToMathML] KaTeX did not produce <math> markup for: ${latex}`);
+  }
+  // Remove <annotation encoding="application/x-tex"> so mathml2omml only converts Presentation MathML
+  return match[0]
+    .replace(/<annotation[\s\S]*?<\/annotation>/g, '')
+    .replace(/<\/?semantics>/g, '');
+}
+
+/**
  * Convert a LaTeX math string to sanitized Word OMML XML string (<m:oMath>...</m:oMath>)
  * @param {string} latex - LaTeX expression (without surrounding $ delimiters)
  * @param {{ display?: boolean, fontSizeHalfPts?: number }} [options]
  * @returns {string}
  */
 export function latexToOmmlString(latex, { display = false, fontSizeHalfPts = 22 } = {}) {
-  const { mathDoc, mmlVisitor } = getMathJaxContext();
-  const mmlNode = mathDoc.convert(latex, { display });
-  const mmlString = mmlVisitor.visitTree(mmlNode);
+  const mmlString = latexToMathML(latex, display);
   const rawOmml = mml2omml(mmlString);
   return sanitizeOmml(rawOmml, fontSizeHalfPts);
 }
