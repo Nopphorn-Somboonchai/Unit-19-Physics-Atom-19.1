@@ -14,6 +14,7 @@ import {
   Packer,
   PageOrientation,
   Paragraph,
+  SectionType,
   ShadingType,
   Table,
   TableCell,
@@ -229,23 +230,42 @@ function buildObservationTable() {
   ];
 
   return new Table({
+    alignment: AlignmentType.CENTER,
     width: { size: colWidths.reduce((a, b) => a + b, 0), type: WidthType.DXA },
     rows
   });
 }
 
 /**
- * Build the Blank Activity 19.1 Worksheet Word Document (A4 Landscape, 0.5-inch margins)
- * with LaTeX -> MathJax -> Native Word OMML equations
+ * Build the Blank Activity 19.1 Worksheet Word Document:
+ *  - Section 1 (Page 1): A4 Landscape, Narrow margins (0.5"), centered tables
+ *  - Section 2 (Page 2): A4 Portrait, Narrow margins (0.5"), calibrated widths & 3 lines/question
+ * with LaTeX -> KaTeX -> Native Word OMML equations.
  * @returns {Document}
  */
 export function buildBlankLabWorksheetDocument() {
-  const marginTwips = convertInchesToTwip(0.5);
-  const fullWidthTwips = convertInchesToTwip(10.69); // 11.69" A4 landscape - 1.0" margins
+  const marginTwips = convertInchesToTwip(0.5); // 720 twips = 0.5 inch = 1.27 cm ("แคบ" / Narrow)
+  const a4ShortTwips = convertInchesToTwip(8.27);
+  const a4LongTwips = convertInchesToTwip(11.69);
+  const landscapeWidthTwips = convertInchesToTwip(10.69); // 11.69" - 1.0" margins
+  const portraitWidthTwips = convertInchesToTwip(7.27);   // 8.27" - 1.0" margins
 
-  // 1. Header Banner Box (Title + Student Info + Teacher Name)
+  const narrowMargins = {
+    top: marginTwips,
+    bottom: marginTwips,
+    left: marginTwips,
+    right: marginTwips,
+    header: marginTwips,
+    footer: marginTwips,
+    gutter: 0
+  };
+
+  // =========================================================================
+  // SECTION 1 (PAGE 1): A4 LANDSCAPE — HEADER, OBJECTIVES & 10-COL TABLE
+  // =========================================================================
   const headerBanner = new Table({
-    width: { size: fullWidthTwips, type: WidthType.DXA },
+    alignment: AlignmentType.CENTER,
+    width: { size: landscapeWidthTwips, type: WidthType.DXA },
     rows: [
       new TableRow({
         children: [
@@ -271,10 +291,10 @@ export function buildBlankLabWorksheetDocument() {
               )
             ],
             {
-              widthTwips: fullWidthTwips,
+              widthTwips: landscapeWidthTwips,
               shadingFill: 'F0FDFA',
               borders: ALL_TEAL_BORDERS,
-              margins: { top: 100, bottom: 100, left: 140, right: 140 }
+              margins: { top: 90, bottom: 90, left: 140, right: 140 }
             }
           )
         ]
@@ -285,7 +305,7 @@ export function buildBlankLabWorksheetDocument() {
   // 2. Learning Objectives
   const objectivesTitle = richParagraph(
     [{ text: 'จุดประสงค์การเรียนรู้', bold: true, size: 30, color: TEAL_HEX }],
-    { spacing: { before: 120, after: 30 } }
+    { spacing: { before: 110, after: 25 } }
   );
   const objective1 = richParagraph(
     [{ text: '   1. ศึกษาและเปรียบเทียบลักษณะสเปกตรัมที่เกิดจากแก๊สร้อนกับหลอดไฟฟ้าทั่วไปได้', size: 28 }],
@@ -297,13 +317,13 @@ export function buildBlankLabWorksheetDocument() {
       { latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 22 },
       { text: ') ของแก๊สไฮโดรเจนและแก๊สนีออนได้', size: 28 }
     ],
-    { spacing: { before: 10, after: 80 } }
+    { spacing: { before: 10, after: 70 } }
   );
 
   // 3. Observation Table Header & Setup Params
   const tableHeading = richParagraph(
     [{ text: 'ตารางบันทึกผลการทำกิจกรรม 19.1', bold: true, size: 30, color: TEAL_HEX }],
-    { spacing: { before: 60, after: 20 } }
+    { spacing: { before: 50, after: 20 } }
   );
   const equipmentLine = richParagraph(
     [
@@ -316,7 +336,7 @@ export function buildBlankLabWorksheetDocument() {
       { latex: 'D', fontSizeHalfPts: 21 },
       { text: ' = ............ ซม.', size: 26 }
     ],
-    { spacing: { before: 10, after: 60 } }
+    { spacing: { before: 10, after: 55 } }
   );
 
   const observationTable = buildObservationTable();
@@ -328,17 +348,20 @@ export function buildBlankLabWorksheetDocument() {
       { latex: '\\text{H}_{\\delta}', fontSizeHalfPts: 19 },
       { text: ') ของแก๊สไฮโดรเจนมีความสว่างน้อย ควรลดความสว่างห้องและใช้ฉากกระดาษดำกั้นด้านหลังหลอดเพื่อสังเกตให้ชัดเจน', italics: true, size: 24, color: '475569' }
     ],
-    { spacing: { before: 60, after: 40 } }
+    { spacing: { before: 55, after: 20 } }
   );
 
-  // Page 2: Sample Calculation Box (1 spectral line) + 3 Post-Lab Questions + Teacher Sign-off
+  // =========================================================================
+  // SECTION 2 (PAGE 2): A4 PORTRAIT — SAMPLE CALCULATION + 3 QUESTIONS
+  // =========================================================================
   const calcSectionTitle = richParagraph(
-    [{ text: 'แสดงวิธีทำตัวอย่างการคำนวณ 1 เส้นสี (เลือกจากผลในตารางด้านหน้า)', bold: true, size: 30, color: TEAL_HEX }],
-    { pageBreakBefore: true, spacing: { before: 40, after: 60 } }
+    [{ text: 'แสดงวิธีทำตัวอย่างการคำนวณ 1 เส้นสี (เลือกจากผลในตารางหน้าแรก)', bold: true, size: 30, color: TEAL_HEX }],
+    { spacing: { before: 20, after: 60 } }
   );
 
   const sampleCalcBox = new Table({
-    width: { size: fullWidthTwips, type: WidthType.DXA },
+    alignment: AlignmentType.CENTER,
+    width: { size: portraitWidthTwips, type: WidthType.DXA },
     rows: [
       new TableRow({
         children: [
@@ -346,48 +369,48 @@ export function buildBlankLabWorksheetDocument() {
             [
               richParagraph(
                 [
-                  { text: 'เลือกเส้นสเปกตรัมของแก๊ส ........................................  สี ..........................  (ตำแหน่งขวา = ............. cm , ตำแหน่งซ้าย = ............. cm)', size: 27 }
+                  { text: 'เลือกแก๊ส ..................................  สี ....................  (ตำแหน่งขวา = .......... cm , ซ้าย = .......... cm)', size: 26 }
                 ],
                 { spacing: { before: 30, after: 55 } }
               ),
               richParagraph(
                 [
-                  { text: '1) หาระยะเฉลี่ย   ', size: 27 },
-                  { latex: '\\bar{x} = \\frac{x_{\\text{ขวา}} + x_{\\text{ซ้าย}}}{2}', fontSizeHalfPts: 22 },
-                  { text: '  =  ........................................................................................................................................ cm', size: 27 }
+                  { text: '1) หาระยะเฉลี่ย   ', size: 26 },
+                  { latex: '\\bar{x} = \\frac{x_{\\text{ขวา}} + x_{\\text{ซ้าย}}}{2}', fontSizeHalfPts: 21 },
+                  { text: '  =  ........................................................................... cm', size: 26 }
                 ],
-                { spacing: { before: 40, after: 50 } }
+                { spacing: { before: 45, after: 55 } }
               ),
               richParagraph(
                 [
-                  { text: '2) หาค่า   ', size: 27 },
-                  { latex: '\\sqrt{D^2 + \\bar{x}^2}', fontSizeHalfPts: 22 },
-                  { text: '  =  ............................................................................................................................................................. cm', size: 27 }
+                  { text: '2) หาค่า   ', size: 26 },
+                  { latex: '\\sqrt{D^2 + \\bar{x}^2}', fontSizeHalfPts: 21 },
+                  { text: '  =  ........................................................................................ cm', size: 26 }
                 ],
-                { spacing: { before: 40, after: 50 } }
+                { spacing: { before: 45, after: 55 } }
               ),
               richParagraph(
                 [
-                  { text: '3) หาค่า   ', size: 27 },
-                  { latex: '\\sin\\theta = \\frac{\\bar{x}}{\\sqrt{D^2 + \\bar{x}^2}}', fontSizeHalfPts: 22 },
-                  { text: '  =  ..................................................................................................................................................', size: 27 }
+                  { text: '3) หาค่า   ', size: 26 },
+                  { latex: '\\sin\\theta = \\frac{\\bar{x}}{\\sqrt{D^2 + \\bar{x}^2}}', fontSizeHalfPts: 21 },
+                  { text: '  =  ................................................................................', size: 26 }
                 ],
-                { spacing: { before: 40, after: 50 } }
+                { spacing: { before: 45, after: 55 } }
               ),
               richParagraph(
                 [
-                  { text: '4) หาความยาวคลื่น   ', bold: true, size: 27 },
-                  { latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 22 },
-                  { text: '  =  ......................................................................................... cm  =  ........................................ nm', bold: true, size: 27 }
+                  { text: '4) หาความยาวคลื่น   ', bold: true, size: 26 },
+                  { latex: '\\lambda = d\\sin\\theta', fontSizeHalfPts: 21 },
+                  { text: '  =  ................................................ cm  =  ........................... nm', bold: true, size: 26 }
                 ],
-                { spacing: { before: 40, after: 35 } }
+                { spacing: { before: 45, after: 40 } }
               )
             ],
             {
-              widthTwips: fullWidthTwips,
+              widthTwips: portraitWidthTwips,
               shadingFill: BOX_FILL,
               borders: ALL_THIN_BORDERS,
-              margins: { top: 90, bottom: 90, left: 130, right: 130 }
+              margins: { top: 90, bottom: 90, left: 120, right: 120 }
             }
           )
         ]
@@ -395,24 +418,31 @@ export function buildBlankLabWorksheetDocument() {
     ]
   });
 
-  // 4. Post-Lab Questions (3 Questions matching the web portal)
+  // 4. Post-Lab Questions (3 Questions, 3 full writing lines each calibrated to 7.27" Portrait width)
   const questionsHeading = richParagraph(
     [{ text: 'คำถามท้ายกิจกรรม (ตอบคำถามจากการสังเกตและบันทึกผล)', bold: true, size: 30, color: TEAL_HEX }],
-    { spacing: { before: 140, after: 50 } }
+    { spacing: { before: 160, after: 50 } }
   );
+
+  const portraitDottedLine =
+    '...................................................................................................................................................................';
 
   const buildQuestionBlock = (num, questionText) => [
     richParagraph(
       [{ text: `${num}. ${questionText}`, bold: true, size: 28, color: '0F172A' }],
-      { spacing: { before: 70, after: 30 } }
+      { spacing: { before: 90, after: 40 } }
     ),
     richParagraph(
-      [{ text: 'แนวคำตอบ: .........................................................................................................................................................................................................................................', size: 26, color: '334155' }],
-      { spacing: { before: 20, after: 25 } }
+      [{ text: 'คำตอบ: ....................................................................................................................................................................', size: 26, color: '334155' }],
+      { spacing: { before: 25, after: 35 } }
     ),
     richParagraph(
-      [{ text: '............................................................................................................................................................................................................................................................', size: 26, color: '334155' }],
-      { spacing: { before: 20, after: 40 } }
+      [{ text: portraitDottedLine, size: 26, color: '334155' }],
+      { spacing: { before: 25, after: 35 } }
+    ),
+    richParagraph(
+      [{ text: portraitDottedLine, size: 26, color: '334155' }],
+      { spacing: { before: 25, after: 50 } }
     )
   ];
 
@@ -432,9 +462,9 @@ export function buildBlankLabWorksheetDocument() {
   const teacherFooter = richParagraph(
     [
       { text: 'ชื่อผู้สอน : นายนพพร สมบูรณ์ชัย', bold: true, size: 26, color: '1E293B' },
-      { text: '          ลงชื่อผู้ตรวจ ....................................................................          คะแนนที่ได้ ............ / ............', size: 26, color: '334155' }
+      { text: '     ลงชื่อผู้ตรวจ .................................................     คะแนน .......... / ..........', size: 26, color: '334155' }
     ],
-    { alignment: AlignmentType.RIGHT, spacing: { before: 120, after: 20 } }
+    { alignment: AlignmentType.RIGHT, spacing: { before: 160, after: 20 } }
   );
 
   return new Document({
@@ -446,16 +476,11 @@ export function buildBlankLabWorksheetDocument() {
         properties: {
           page: {
             size: {
-              width: convertInchesToTwip(11.69),
-              height: convertInchesToTwip(8.27),
+              width: a4ShortTwips,
+              height: a4LongTwips,
               orientation: PageOrientation.LANDSCAPE
             },
-            margin: {
-              top: marginTwips,
-              bottom: marginTwips,
-              left: marginTwips,
-              right: marginTwips
-            }
+            margin: narrowMargins
           }
         },
         children: [
@@ -466,7 +491,22 @@ export function buildBlankLabWorksheetDocument() {
           tableHeading,
           equipmentLine,
           observationTable,
-          tableFootnote,
+          tableFootnote
+        ]
+      },
+      {
+        properties: {
+          type: SectionType.NEXT_PAGE,
+          page: {
+            size: {
+              width: a4ShortTwips,
+              height: a4LongTwips,
+              orientation: PageOrientation.PORTRAIT
+            },
+            margin: narrowMargins
+          }
+        },
+        children: [
           calcSectionTitle,
           sampleCalcBox,
           questionsHeading,

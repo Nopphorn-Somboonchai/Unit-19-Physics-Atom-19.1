@@ -681,7 +681,7 @@ export class GasSpectrumLabSimulator {
     try {
       await downloadBlankLabWorksheetDocx();
       this.showSafetyMessage(
-        '📄 ดาวน์โหลด "ใบงานกิจกรรม-19-1-สเปกตรัมแก๊สร้อน.docx" เรียบร้อยแล้ว (กระดาษ A4 แนวนอน ขอบแคบ 0.5 นิ้ว)',
+        '📄 ดาวน์โหลด "ใบงานกิจกรรม-19-1-สเปกตรัมแก๊สร้อน.docx" เรียบร้อยแล้ว (หน้า 1 แนวนอน / หน้า 2 แนวตั้ง ขอบแคบ 0.5 นิ้ว)',
         'safe'
       );
       return true;

@@ -91,16 +91,36 @@ console.log(`✅ [PASS] Generated valid .docx binary archive (${rawBuf.length} b
 const docXml = extractZipEntryText(rawBuf, 'word/document.xml');
 assert(docXml.length > 1000, 'word/document.xml extracted successfully');
 
-// Check Page Setup: A4 Landscape + 0.5 inch (720 twips) narrow margins
-assert(docXml.includes('w:orient="landscape"'), 'Page orientation is Landscape');
+// Check Page Setup: Section 1 = A4 Landscape, Section 2 = A4 Portrait, both Narrow (0.5" = 720 twips)
+const sectPrMatches = docXml.match(/<w:sectPr>[\s\S]*?<\/w:sectPr>/g) || [];
+assert.strictEqual(sectPrMatches.length, 2, `Expected exactly 2 sections (Page 1 Landscape + Page 2 Portrait), got ${sectPrMatches.length}`);
+
+const [sect1, sect2] = sectPrMatches;
+assert(sect1.includes('w:orient="landscape"'), 'Section 1 (Page 1) orientation is Landscape');
+assert(sect1.includes('w:w="16833"') && sect1.includes('w:h="11908"'), 'Section 1 (Page 1) dimensions are A4 Landscape (w > h)');
 assert(
-  docXml.includes('w:top="720"') &&
-    docXml.includes('w:bottom="720"') &&
-    docXml.includes('w:left="720"') &&
-    docXml.includes('w:right="720"'),
-  'Margins are set to 0.5 inch (720 twips)'
+  sect1.includes('w:top="720"') &&
+    sect1.includes('w:bottom="720"') &&
+    sect1.includes('w:left="720"') &&
+    sect1.includes('w:right="720"'),
+  'Section 1 margins are Narrow (0.5 inch = 720 twips)'
 );
-console.log('✅ [PASS] Page setup verified: A4 Landscape with 0.5-inch (720 twips) narrow margins');
+
+assert(sect2.includes('w:type w:val="nextPage"'), 'Section 2 starts cleanly on Next Page');
+assert(sect2.includes('w:orient="portrait"'), 'Section 2 (Page 2) orientation is Portrait');
+assert(sect2.includes('w:w="11908"') && sect2.includes('w:h="16833"'), 'Section 2 (Page 2) dimensions are A4 Portrait (w < h)');
+assert(
+  sect2.includes('w:top="720"') &&
+    sect2.includes('w:bottom="720"') &&
+    sect2.includes('w:left="720"') &&
+    sect2.includes('w:right="720"'),
+  'Section 2 margins are Narrow (0.5 inch = 720 twips)'
+);
+assert(!docXml.includes('<w:pageBreakBefore/>'), 'No redundant pageBreakBefore that would insert a blank page');
+
+const centeredTables = docXml.match(/<w:jc w:val="center"\/>/g) || [];
+assert(centeredTables.length >= 3, 'All worksheet tables (header, observation table, sample calc box) are horizontally centered');
+console.log('✅ [PASS] Page setup verified: Page 1 A4 Landscape + Page 2 A4 Portrait, Narrow margins (0.5"), centered tables');
 
 // Verify native Word OMML equations are embedded inside word/document.xml (and no broken <m:sub/> bug)
 const oMathMatches = docXml.match(/<m:oMath\b/g) || [];
