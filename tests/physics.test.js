@@ -32,6 +32,8 @@ import {
 } from '../src/physics/hydrogen-spectrum-solver.js';
 
 import {
+  GAS_SPECTRUM_LAB_DEFAULTS,
+  LAB_PROCEDURE_STEPS,
   getAllGasLightSources,
   IPST_SAMPLE_OBSERVATIONS
 } from '../src/physics/gas-spectrum-lab-model.js';
@@ -41,7 +43,11 @@ import {
   calculateLineVisibility,
   computeLabSpectrumState,
   calculateWavelengthFromMeasurement,
-  validateManualRowCalculation
+  validateManualRowCalculation,
+  areAllManualFieldsFilled,
+  getCalculationFieldHints,
+  evaluateRowRevealState,
+  evaluateLabProgress
 } from '../src/physics/gas-spectrum-lab-solver.js';
 
 let passed = 0;
@@ -227,6 +233,53 @@ const manualFail = validateManualRowCalculation(
   ipstRow1
 );
 assert(manualFail.allCorrect === false && manualFail.checks.wavelengthNm.status === 'incorrect', 'Incorrect manual wavelength rejected');
+
+// Inquiry-gated unlocks, defaults, field completeness & hints
+assert(GAS_SPECTRUM_LAB_DEFAULTS.tableMode === 'manual', 'Default tableMode is manual practice mode');
+assert(LAB_PROCEDURE_STEPS.length === 6, '6 step-by-step lab procedure stages defined');
+
+assert(areAllManualFieldsFilled({ xAvgCm: '37', hypotenuseCm: '', sinTheta: '0.35', wavelengthNm: '655' }) === false, 'Partial manual inputs rejected before counting attempt');
+assert(areAllManualFieldsFilled({ xAvgCm: '37', hypotenuseCm: '106.6', sinTheta: '0.35', wavelengthNm: '655' }) === true, 'Complete 4-field manual inputs accepted');
+
+const hints = getCalculationFieldHints(manualFail.checks, ipstRow1);
+assert(hints.length === 1 && hints[0].includes('λ (nm)'), 'Targeted formula hint generated only for failed wavelength field');
+
+assert(evaluateRowRevealState({ attempts: 0 }, false).canReveal === false, 'Row reveal locked at 0 attempts');
+assert(evaluateRowRevealState({ attempts: 1 }, false).canReveal === false, 'Row reveal locked at 1 attempt');
+assert(evaluateRowRevealState({ attempts: 2 }, false).canReveal === true, 'Row reveal unlocks after 2 full attempts');
+assert(evaluateRowRevealState({ attempts: 0 }, true).canReveal === true, 'Teacher Demo Mode unlocks row reveal');
+
+const initialProgress = evaluateLabProgress();
+assert(initialProgress.unlocks.autoMode === false && initialProgress.unlocks.ipstSample === false, 'Auto mode and IPST sample initially locked');
+assert(initialProgress.unlocks.question1 === false && initialProgress.unlocks.question2 === false && initialProgress.unlocks.question3 === false, 'Post-lab answers initially locked');
+
+const revealedRowsCheat = [
+  { sourceId: 'hydrogen', manualValidation: { allCorrect: true }, revealedByUser: true },
+  { sourceId: 'hydrogen', manualValidation: { allCorrect: true }, revealedByUser: true }
+];
+const cheatProgress = evaluateLabProgress({
+  observedSources: ['hydrogen', 'neon'],
+  recordedRows: revealedRowsCheat
+});
+assert(cheatProgress.unlocks.autoMode === false, 'Rows solved via Reveal button do NOT unlock Auto Mode');
+
+const earnedProgress = evaluateLabProgress({
+  ambientLight: 0.15,
+  useBlackBackdrop: true,
+  observedSources: ['hydrogen', 'neon', 'incandescent'],
+  recordedRows: [
+    { sourceId: 'hydrogen', manualValidation: { allCorrect: true }, revealedByUser: false },
+    { sourceId: 'hydrogen', manualValidation: { allCorrect: true }, revealedByUser: false }
+  ],
+  reflections: {
+    q1: 'หลอดแก๊สให้สเปกตรัมแบบเส้น ส่วนหลอดไส้ให้สเปกตรัมต่อเนื่อง',
+    q2: 'ไฮโดรเจนและนีออนมีเส้นสีและระยะ x ต่างกันตามชนิดธาตุ',
+    q3: 'วัดได้ความยาวคลื่นสีแดง 656 nm และสีฟ้า 486 nm'
+  }
+});
+assert(earnedProgress.completedCount === 6, 'All 6 procedure steps marked complete when experiment and reflections done');
+assert(earnedProgress.unlocks.autoMode === true && earnedProgress.unlocks.ipstSample === true, 'Earned 2 manual rows + observations unlock Auto Mode and IPST Sample');
+assert(earnedProgress.unlocks.question1 && earnedProgress.unlocks.question2 && earnedProgress.unlocks.question3, 'All 3 post-lab answers unlock after observations and reflections');
 
 console.log(`\n=======================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);

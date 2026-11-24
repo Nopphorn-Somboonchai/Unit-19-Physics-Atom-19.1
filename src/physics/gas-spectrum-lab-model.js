@@ -20,8 +20,55 @@ export const GAS_SPECTRUM_LAB_DEFAULTS = Object.freeze({
   powerOn: false,               // High-voltage supply starts OFF (Safety note #2)
   realisticNoiseEnabled: false, // Optional +/-0.5 cm human reading parallax simulation
   viewMode: 'split',            // 'setup' (3D+Top), 'eyepiece' (Through grating), 'split' (Both)
-  tableMode: 'auto'             // 'auto' | 'manual'
+  tableMode: 'manual'           // Default to 'manual' so learners calculate before unlocking 'auto'
 });
+
+/**
+ * Pedagogical gating rules to prevent skipping experiment & calculation steps
+ */
+export const LAB_UNLOCK_RULES = Object.freeze({
+  minAttemptsBeforeRowReveal: 2,
+  minManualSolvedForAutoMode: 2,
+  minManualSolvedForIpstSample: 2,
+  requiredSourcesForIpstSample: ['hydrogen', 'neon'],
+  minReflectionLength: 15
+});
+
+/**
+ * 6-Step Guided Procedure for Activity 19.1 (Hot Gas Spectrum Experiment)
+ */
+export const LAB_PROCEDURE_STEPS = Object.freeze([
+  {
+    step: 1,
+    titleTh: 'จัดห้องมืดและตรวจสอบอุปกรณ์',
+    instructionTh: 'ตรวจเกรตติง 5,300 เส้น/ซม. และระยะ D = 100 cm จากนั้นหรี่ความสว่างห้อง (≤ 25%) และเปิดกั้นฉากกระดาษดำ'
+  },
+  {
+    step: 2,
+    titleTh: 'เลือกหลอดไฮโดรเจนและเปิดสวิตช์',
+    instructionTh: 'ติดตั้งหลอดบรรจุแก๊สไฮโดรเจน (H₂) แล้วกด "เปิดสวิตช์ไฟแรงสูง" เพื่อเริ่มสังเกตแสงสเปกตรัม'
+  },
+  {
+    step: 3,
+    titleTh: 'มองผ่านเกรตติงและวัดตำแหน่งซ้าย–ขวา',
+    instructionTh: 'มองที่ 50.0 cm เป็นกึ่งกลาง แล้วคลิกบนไม้เมตรฝั่งขวา (> 50 cm) และฝั่งซ้าย (< 50 cm) ให้ตรงเส้นสเปกตรัม'
+  },
+  {
+    step: 4,
+    titleTh: 'บันทึกค่าและฝึกคำนวณด้วยตนเอง',
+    instructionTh: 'กด "บันทึกค่าลงตาราง" แล้วคำนวณ x̄, √(D²+x̄²), sin θ, λ เองและกด "ตรวจ" ให้ถูกอย่างน้อย 2 แถว'
+  },
+  {
+    step: 5,
+    titleTh: 'ปิดสวิตช์และเปลี่ยนหลอดเปรียบเทียบ',
+    instructionTh: 'ปิดสวิตช์ไฟแรงสูงก่อนทุกครั้ง แล้วสลับสังเกตหลอดนีออน (Ne) และหลอดไฟฟ้าทั่วไป (หลอดไส้)'
+  },
+  {
+    step: 6,
+    titleTh: 'สรุปผลและตอบคำถามท้ายกิจกรรม',
+    instructionTh: 'เขียนคำตอบท้ายกิจกรรมทั้ง 3 ข้อจากผลการสังเกต แล้วจึงเทียบกับแนวคำตอบ สสวท.'
+  }
+]);
 
 /**
  * Valid physical input ranges for constraints validation

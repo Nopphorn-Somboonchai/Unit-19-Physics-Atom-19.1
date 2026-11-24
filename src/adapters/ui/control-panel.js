@@ -97,6 +97,81 @@ export class ControlPanelAdapter {
       btnClearTable.addEventListener('click', () => simulator.clearRecordedTable());
     }
 
+    // Collapsible Step-by-Step Procedure Card
+    const btnToggleGuide = document.getElementById('btn-lab19-toggle-guide');
+    const elGuideBody = document.getElementById('lab19-procedure-body');
+    if (btnToggleGuide && elGuideBody) {
+      btnToggleGuide.addEventListener('click', () => {
+        const isHidden = elGuideBody.classList.toggle('hidden');
+        btnToggleGuide.innerHTML = isHidden
+          ? '<i class="fa-solid fa-chevron-down mr-1"></i> แสดงขั้นตอน'
+          : '<i class="fa-solid fa-chevron-up mr-1"></i> ซ่อนขั้นตอน';
+      });
+    }
+
+    // Teacher Presentation Demo Mode Controls
+    const btnTeacherMode = document.getElementById('btn-lab19-teacher-mode');
+    const panelTeacher = document.getElementById('lab19-teacher-panel');
+    const inputTeacherPin = document.getElementById('input-lab19-teacher-pin');
+    const btnTeacherUnlock = document.getElementById('btn-lab19-teacher-unlock');
+    const btnTeacherCancel = document.getElementById('btn-lab19-teacher-cancel');
+    const elTeacherErr = document.getElementById('lab19-teacher-error');
+
+    if (btnTeacherMode) {
+      btnTeacherMode.addEventListener('click', () => {
+        if (simulator.teacherDemoMode) {
+          simulator.deactivateTeacherDemoMode();
+          if (panelTeacher) panelTeacher.classList.add('hidden');
+        } else if (panelTeacher) {
+          panelTeacher.classList.toggle('hidden');
+          if (elTeacherErr) elTeacherErr.classList.add('hidden');
+          if (inputTeacherPin && !panelTeacher.classList.contains('hidden')) {
+            inputTeacherPin.value = '';
+            inputTeacherPin.focus();
+          }
+        }
+      });
+    }
+
+    if (btnTeacherCancel && panelTeacher) {
+      btnTeacherCancel.addEventListener('click', () => {
+        panelTeacher.classList.add('hidden');
+      });
+    }
+
+    const submitTeacherPin = () => {
+      if (!inputTeacherPin) return;
+      const ok = simulator.activateTeacherDemoMode(inputTeacherPin.value);
+      if (ok) {
+        if (panelTeacher) panelTeacher.classList.add('hidden');
+        if (elTeacherErr) elTeacherErr.classList.add('hidden');
+        inputTeacherPin.value = '';
+      } else if (elTeacherErr) {
+        elTeacherErr.classList.remove('hidden');
+      }
+    };
+
+    if (btnTeacherUnlock) {
+      btnTeacherUnlock.addEventListener('click', submitTeacherPin);
+    }
+    if (inputTeacherPin) {
+      inputTeacherPin.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitTeacherPin();
+      });
+    }
+
+    // Post-Lab Discussion Questions (Reflection inputs + Reveal triggers)
+    ['q1', 'q2', 'q3'].forEach((qKey) => {
+      const textarea = document.getElementById(`lab19-reflect-${qKey}`);
+      const btnReveal = document.getElementById(`btn-lab19-reveal-${qKey}`);
+      if (textarea) {
+        textarea.addEventListener('input', (e) => simulator.updateReflection(qKey, e.target.value));
+      }
+      if (btnReveal) {
+        btnReveal.addEventListener('click', () => simulator.revealPostLabAnswer(qKey));
+      }
+    });
+
     if (typeof window !== 'undefined') {
       window.forceSwapLabTube = (srcId) => simulator.selectLightSource(srcId, true);
       window.aimLabSpectralLine = (lineId) => simulator.aimAtSpectralLine(lineId);

@@ -27,6 +27,10 @@ export const APP_CONFIG = {
     tolerancePercent: 3.0 // 3% tolerance for numeric responses
   },
 
+  gasSpectrumLab: {
+    teacherDemoPasscode: 'admin1234'
+  },
+
   storageKeys: {
     examResult: 'u19_exam_latest_result',
     examSession: 'u19_exam_active_session',

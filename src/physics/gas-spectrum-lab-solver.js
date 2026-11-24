@@ -9,6 +9,7 @@
 import {
   GAS_SPECTRUM_LAB_BOUNDS,
   GAS_SPECTRUM_LAB_DEFAULTS,
+  LAB_UNLOCK_RULES,
   getGasLightSource
 } from './gas-spectrum-lab-model.js';
 
@@ -369,4 +370,152 @@ export function validateManualRowCalculation(studentInputs, expectedCalc) {
     checks.wavelengthNm.valid;
 
   return { allCorrect, checks };
+}
+
+/**
+ * Check whether all 4 manual calculation fields contain valid finite numbers.
+ * Prevents students from clicking "Check" with empty boxes to bypass attempt gates.
+ *
+ * @param {object} studentInputs
+ * @returns {boolean}
+ */
+export function areAllManualFieldsFilled(studentInputs) {
+  if (!studentInputs) return false;
+  const required = ['xAvgCm', 'hypotenuseCm', 'sinTheta', 'wavelengthNm'];
+  return required.every((key) => {
+    const raw = studentInputs[key];
+    if (raw === null || raw === undefined || String(raw).trim() === '') return false;
+    return Number.isFinite(Number(raw));
+  });
+}
+
+/**
+ * Generate targeted formula hints for incorrect fields without spoiling the numeric answer.
+ *
+ * @param {object} checks - Validation checks from validateManualRowCalculation()
+ * @param {object} calc - Row calculation object (contains distanceCm, dCm, xRightCm, xLeftCm)
+ * @returns {Array<string>} List of Thai formula hints
+ */
+export function getCalculationFieldHints(checks, calc) {
+  if (!checks || !calc) return [];
+  const hints = [];
+
+  if (!checks.xAvgCm?.valid) {
+    hints.push(
+      `• ช่อง x̄: นำระยะทางขวาและซ้ายมาเฉลี่ย → x̄ = (${calc.xRightCm.toFixed(1)} + ${calc.xLeftCm.toFixed(1)}) / 2`
+    );
+  }
+  if (!checks.hypotenuseCm?.valid) {
+    hints.push(
+      `• ช่อง √(D²+x̄²): ใช้ทฤษฎีบทพีทาโกรัส → √(${calc.distanceCm.toFixed(0)}² + x̄²)`
+    );
+  }
+  if (!checks.sinTheta?.valid) {
+    hints.push('• ช่อง sin θ: อัตราส่วนตรีโกณมิติ → sin θ = x̄ / √(D²+x̄²)');
+  }
+  if (!checks.wavelengthNm?.valid) {
+    hints.push(
+      `• ช่อง λ (nm): คำนวณ λ(cm) = d·sin θ แล้วคูณ 10⁷ เพื่อแปลงเป็น nm (d = ${(calc.dCm * 1e4).toFixed(3)}×10⁻⁴ cm)`
+    );
+  }
+
+  return hints;
+}
+
+/**
+ * Evaluate whether a specific manual calculation row can unlock its step-by-step solution reveal.
+ *
+ * @param {object} row
+ * @param {boolean} [teacherDemoMode=false]
+ * @returns {{ canReveal: boolean, attemptsUsed: number, requiredAttempts: number }}
+ */
+export function evaluateRowRevealState(row, teacherDemoMode = false) {
+  const requiredAttempts = LAB_UNLOCK_RULES.minAttemptsBeforeRowReveal;
+  const attemptsUsed = Math.max(0, Number(row?.attempts) || 0);
+  const canReveal = Boolean(teacherDemoMode) || attemptsUsed >= requiredAttempts;
+
+  return {
+    canReveal,
+    attemptsUsed,
+    requiredAttempts
+  };
+}
+
+/**
+ * Evaluate overall lab procedure checklist (6 steps) and inquiry-gated feature unlocks.
+ * Pure deterministic function operating on serialized lab state.
+ *
+ * @param {object} params
+ * @returns {object} Procedure step completion and unlock permissions
+ */
+export function evaluateLabProgress({
+  ambientLight = 0.15,
+  useBlackBackdrop = true,
+  powerOn = false,
+  sourceId = 'hydrogen',
+  measuredRightCm = null,
+  measuredLeftCm = null,
+  observedSources = [],
+  recordedRows = [],
+  reflections = { q1: '', q2: '', q3: '' },
+  teacherDemoMode = false
+} = {}) {
+  const obsSet = new Set(observedSources || []);
+  const rows = Array.isArray(recordedRows) ? recordedRows : [];
+
+  // Count only rows that the learner solved accurately without clicking reveal
+  const manualSolvedRows = rows.filter(
+    (r) => r.manualValidation?.allCorrect === true && !r.revealedByUser
+  );
+  const manualSolvedCount = manualSolvedRows.length;
+  const hydrogenSolvedCount = manualSolvedRows.filter((r) => r.sourceId === 'hydrogen').length;
+
+  const minReflect = LAB_UNLOCK_RULES.minReflectionLength;
+  const q1Len = String(reflections?.q1 || '').trim().length;
+  const q2Len = String(reflections?.q2 || '').trim().length;
+  const q3Len = String(reflections?.q3 || '').trim().length;
+
+  const hasObservedH2 = obsSet.has('hydrogen');
+  const hasObservedNe = obsSet.has('neon');
+  const hasObservedIncandescent = obsSet.has('incandescent');
+  const hasObservedAnyGas = ['hydrogen', 'neon', 'helium', 'mercury'].some((id) => obsSet.has(id));
+
+  const step1Done = ambientLight <= 0.25 && Boolean(useBlackBackdrop);
+  const step2Done = hasObservedH2 || (Boolean(powerOn) && sourceId === 'hydrogen');
+  const step3Done =
+    (measuredRightCm !== null && measuredLeftCm !== null) || rows.length > 0;
+  const step4Done = manualSolvedCount >= LAB_UNLOCK_RULES.minManualSolvedForAutoMode;
+  const step5Done = hasObservedH2 && hasObservedNe && hasObservedIncandescent;
+  const step6Done = q1Len >= minReflect && q2Len >= minReflect && q3Len >= minReflect;
+
+  const stepStatus = [step1Done, step2Done, step3Done, step4Done, step5Done, step6Done];
+  const completedCount = stepStatus.filter(Boolean).length;
+
+  const autoModeUnlocked =
+    Boolean(teacherDemoMode) || manualSolvedCount >= LAB_UNLOCK_RULES.minManualSolvedForAutoMode;
+  const ipstSampleUnlocked =
+    Boolean(teacherDemoMode) ||
+    (manualSolvedCount >= LAB_UNLOCK_RULES.minManualSolvedForIpstSample &&
+      hasObservedH2 &&
+      hasObservedNe);
+
+  return {
+    stepStatus,
+    completedCount,
+    totalSteps: 6,
+    manualSolvedCount,
+    hydrogenSolvedCount,
+    observedCount: obsSet.size,
+    unlocks: {
+      autoMode: autoModeUnlocked,
+      ipstSample: ipstSampleUnlocked,
+      question1:
+        Boolean(teacherDemoMode) ||
+        (hasObservedAnyGas && hasObservedIncandescent && q1Len >= minReflect),
+      question2:
+        Boolean(teacherDemoMode) || (hasObservedH2 && hasObservedNe && q2Len >= minReflect),
+      question3:
+        Boolean(teacherDemoMode) || (hydrogenSolvedCount >= 2 && q3Len >= minReflect)
+    }
+  };
 }

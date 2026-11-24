@@ -513,6 +513,57 @@
                   มองผ่านเกรตติง
                 </button>
               </div>
+              <button type="button" id="btn-lab19-teacher-mode"
+                class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-500 border border-slate-200 cursor-pointer transition flex items-center gap-1">
+                <i class="fa-solid fa-key"></i> โหมดสาธิตครู
+              </button>
+            </div>
+          </div>
+
+          <!-- Inline Teacher Demo Mode Passcode Panel (Hidden by default) -->
+          <div id="lab19-teacher-panel"
+            class="hidden bg-amber-50 border border-amber-300 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2 text-amber-900 font-semibold">
+              <i class="fa-solid fa-chalkboard-user text-amber-600"></i>
+              <span>โหมดสาธิตครู (สำหรับเปิดสอนหน้าชั้นเรียน — ปลดล็อกทุกโหมดและเฉลย):</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <input type="password" id="input-lab19-teacher-pin" placeholder="กรอกรหัสผ่านครู"
+                class="px-2.5 py-1 rounded-lg border border-amber-300 bg-white text-slate-800 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <button type="button" id="btn-lab19-teacher-unlock"
+                class="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold cursor-pointer transition">
+                ปลดล็อก
+              </button>
+              <button type="button" id="btn-lab19-teacher-cancel"
+                class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 cursor-pointer transition">
+                ยกเลิก
+              </button>
+              <span id="lab19-teacher-error" class="hidden text-red-600 font-bold">รหัสผ่านไม่ถูกต้อง</span>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Experiment Procedure Card (Interactive Checklist) -->
+          <div id="lab19-procedure-card" class="bg-indigo-50/40 border border-indigo-200 rounded-2xl p-4 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-list-ol"></i>
+                </span>
+                <div>
+                  <h4 class="text-sm font-bold text-indigo-950">ขั้นตอนการทำการทดลอง (ทำตามทีละขั้น)</h4>
+                  <p id="lab19-progress-label" class="text-[11px] font-semibold text-indigo-700">ความคืบหน้า: 0 / 6 ขั้นตอน (0%)</p>
+                </div>
+              </div>
+              <button type="button" id="btn-lab19-toggle-guide"
+                class="self-start sm:self-auto px-3 py-1 rounded-lg text-xs font-semibold bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 cursor-pointer transition">
+                <i class="fa-solid fa-chevron-up mr-1"></i> ซ่อนขั้นตอน
+              </button>
+            </div>
+            <div class="w-full bg-indigo-100 h-2 rounded-full overflow-hidden">
+              <div id="lab19-progress-bar" class="bg-gradient-to-r from-indigo-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="lab19-procedure-body">
+              <div id="lab19-procedure-steps" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
             </div>
           </div>
 
@@ -679,21 +730,21 @@
                   <i class="fa-solid fa-table text-teal-600"></i> ตารางบันทึกผลการทำกิจกรรม 19.1 (ตามคู่มือ สสวท.)
                 </h4>
                 <p class="text-[11px] text-slate-500">
-                  จัดอุปกรณ์ให้แถบสว่างกึ่งกลางอยู่ที่ระยะ 50.0 cm | เลือกโหมดคำนวณอัตโนมัติ หรือโหมดฝึกคำนวณด้วยตนเองพร้อมตรวจคำตอบ
+                  จัดอุปกรณ์ให้แถบสว่างกึ่งกลางอยู่ที่ระยะ 50.0 cm | เริ่มจากฝึกคำนวณเองเพื่อปลดล็อกโหมดคำนวณอัตโนมัติและตัวอย่างผล สสวท.
                 </p>
               </div>
               <div class="flex items-center gap-1.5 flex-wrap">
-                <button type="button" id="btn-lab19-tmode-auto"
-                  class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm cursor-pointer transition">
-                  โหมดคำนวณอัตโนมัติ
-                </button>
                 <button type="button" id="btn-lab19-tmode-manual"
-                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer transition">
+                  class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm cursor-pointer transition">
                   โหมดฝึกคำนวณเอง (ตรวจคำตอบ)
                 </button>
+                <button type="button" id="btn-lab19-tmode-auto"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-pointer transition flex items-center gap-1">
+                  <i class="fa-solid fa-lock text-[10px]"></i> โหมดคำนวณอัตโนมัติ (0/2)
+                </button>
                 <button type="button" id="btn-lab19-load-sample"
-                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 cursor-pointer transition">
-                  <i class="fa-solid fa-book-bookmark mr-1"></i> โหลดตัวอย่างผล สสวท.
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-pointer transition flex items-center gap-1">
+                  <i class="fa-solid fa-lock text-[10px]"></i> ตัวอย่างผล สสวท.
                 </button>
                 <button type="button" id="btn-lab19-export-csv"
                   class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer transition">
@@ -704,6 +755,11 @@
                   ล้างตาราง
                 </button>
               </div>
+            </div>
+
+            <div id="lab19-table-gate-hint"
+              class="text-[11px] text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
+              🔒 เกณฑ์ปลดล็อก: คำนวณเองถูก 0/2 แถว (ปลดล็อกโหมดอัตโนมัติ) | สังเกตหลอด ○ H₂, ○ Ne + ถูก 2 แถว (ปลดล็อกตัวอย่างผล สสวท.)
             </div>
 
             <div class="overflow-x-auto rounded-xl border border-teal-200 shadow-xs">
@@ -737,42 +793,86 @@
 
           <!-- Post-Lab Discussion Questions & Bohr Model Bridge (IPST Images 3-5) -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-3 border-t border-slate-200">
-            <div class="lg:col-span-2 bg-teal-50/50 rounded-xl p-4 border border-teal-200 space-y-3">
-              <h4 class="text-sm font-bold text-teal-900 flex items-center gap-2">
-                <i class="fa-solid fa-circle-question text-teal-600"></i> คำถามท้ายกิจกรรม 19.1 (คลิกดูแนวคำตอบ)
-              </h4>
+            <div id="lab19-postlab-questions" class="lg:col-span-2 bg-teal-50/50 rounded-xl p-4 border border-teal-200 space-y-3">
+              <div>
+                <h4 class="text-sm font-bold text-teal-900 flex items-center gap-2">
+                  <i class="fa-solid fa-circle-question text-teal-600"></i> คำถามท้ายกิจกรรม 19.1 (เขียนคำตอบก่อนเทียบแนวคำตอบ)
+                </h4>
+                <p class="text-[11px] text-slate-600">
+                  บันทึกข้อสังเกตจากการทดลองของตนเองก่อน จึงจะสามารถปลดล็อกปุ่มเทียบแนวคำตอบ สสวท. ได้
+                </p>
+              </div>
 
-              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
-                <summary class="font-bold text-slate-800 cursor-pointer">
+              <!-- Question 1 -->
+              <div class="bg-white rounded-lg border border-teal-100 p-3 text-xs space-y-2">
+                <div class="font-bold text-slate-800">
                   1. สเปกตรัมจากหลอดบรรจุแก๊สมีลักษณะเหมือนกับสเปกตรัมจากหลอดไฟฟ้าทั่วไปหรือไม่ อย่างไร?
-                </summary>
-                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
-                  <strong class="text-teal-700">แนวคำตอบ:</strong> แตกต่างกัน โดยสเปกตรัมจากหลอดบรรจุแก๊สเป็น
+                </div>
+                <textarea id="lab19-reflect-q1" rows="2"
+                  placeholder="พิมพ์คำตอบจากการสังเกตของคุณ (เช่น สเปกตรัมจากหลอดแก๊สเป็น... ส่วนหลอดไฟฟ้าทั่วไปเป็น...)"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span id="lab19-q1-status" class="text-[10px] text-slate-500">
+                    เงื่อนไข: เปิดไฟสังเกตทั้งหลอดแก๊ส + หลอดไฟฟ้าทั่วไป และพิมพ์คำตอบของตนเอง ≥ 15 ตัวอักษร
+                  </span>
+                  <button type="button" id="btn-lab19-reveal-q1"
+                    class="px-3 py-1 rounded-lg text-[11px] font-semibold bg-slate-200 text-slate-500 cursor-pointer transition flex items-center gap-1">
+                    <i class="fa-solid fa-lock"></i> เทียบแนวคำตอบ สสวท.
+                  </button>
+                </div>
+                <p id="lab19-answer-q1" class="hidden text-slate-600 leading-relaxed border-t border-teal-100 pt-2 bg-teal-50/40 p-2 rounded">
+                  <strong class="text-teal-700">แนวคำตอบ สสวท.:</strong> แตกต่างกัน โดยสเปกตรัมจากหลอดบรรจุแก๊สเป็น
                   <strong>สเปกตรัมแบบเส้น (Line Spectrum)</strong> แยกออกจากกันเป็นเส้นชัดเจน แต่สเปกตรัมจากหลอดไฟฟ้าทั่วไป (หลอดไส้) เป็น
                   <strong>สเปกตรัมต่อเนื่อง (Continuous Spectrum)</strong> เรียงแถบสีติดกัน
                 </p>
-              </details>
+              </div>
 
-              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
-                <summary class="font-bold text-slate-800 cursor-pointer">
+              <!-- Question 2 -->
+              <div class="bg-white rounded-lg border border-teal-100 p-3 text-xs space-y-2">
+                <div class="font-bold text-slate-800">
                   2. สเปกตรัมจากหลอดบรรจุแก๊สแต่ละชนิดมีลักษณะเหมือนและต่างกันอย่างไร?
-                </summary>
-                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
-                  <strong class="text-teal-700">แนวคำตอบ:</strong> สเปกตรัมของแสงจากหลอดบรรจุแก๊สไฮโดรเจนกับนีออน (รวมถึงฮีเลียมและปรอท)
+                </div>
+                <textarea id="lab19-reflect-q2" rows="2"
+                  placeholder="พิมพ์คำตอบจากการเปรียบเทียบหลอดไฮโดรเจนและนีออน..."
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span id="lab19-q2-status" class="text-[10px] text-slate-500">
+                    เงื่อนไข: เปิดไฟสังเกตทั้งหลอดไฮโดรเจน (H₂) + นีออน (Ne) และพิมพ์คำตอบของตนเอง ≥ 15 ตัวอักษร
+                  </span>
+                  <button type="button" id="btn-lab19-reveal-q2"
+                    class="px-3 py-1 rounded-lg text-[11px] font-semibold bg-slate-200 text-slate-500 cursor-pointer transition flex items-center gap-1">
+                    <i class="fa-solid fa-lock"></i> เทียบแนวคำตอบ สสวท.
+                  </button>
+                </div>
+                <p id="lab19-answer-q2" class="hidden text-slate-600 leading-relaxed border-t border-teal-100 pt-2 bg-teal-50/40 p-2 rounded">
+                  <strong class="text-teal-700">แนวคำตอบ สสวท.:</strong> สเปกตรัมของแสงจากหลอดบรรจุแก๊สไฮโดรเจนกับนีออน (รวมถึงฮีเลียมและปรอท)
                   มีลักษณะเป็นสเปกตรัมแบบเส้นเหมือนกัน แต่แตกต่างกันที่ <strong>จำนวนเส้น แสงสี และระยะห่าง \(x\) จากหลอดแก๊ส</strong>
                   ซึ่งเป็นสมบัติเฉพาะตัวของธาตุแต่ละชนิด (เช่น ไฮโดรเจนเห็นแดง ฟ้า น้ำเงิน นีออนเห็นแดง ส้ม เหลือง)
                 </p>
-              </details>
+              </div>
 
-              <details class="bg-white rounded-lg border border-teal-100 p-3 text-xs">
-                <summary class="font-bold text-slate-800 cursor-pointer">
+              <!-- Question 3 -->
+              <div class="bg-white rounded-lg border border-teal-100 p-3 text-xs space-y-2">
+                <div class="font-bold text-slate-800">
                   3. สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจน ประกอบด้วยแสงที่มีความยาวคลื่นเท่าใดบ้าง?
-                </summary>
-                <p class="mt-2 text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
-                  <strong class="text-teal-700">แนวคำตอบ:</strong> สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจนประกอบด้วยแสงที่มีความยาวคลื่นประมาณ
+                </div>
+                <textarea id="lab19-reflect-q3" rows="2"
+                  placeholder="ระบุสีและความยาวคลื่น (nm) ที่คุณคำนวณได้จากตาราง..."
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span id="lab19-q3-status" class="text-[10px] text-slate-500">
+                    เงื่อนไข: คำนวณไฮโดรเจนถูกต้องด้วยตนเอง ≥ 2 แถว และพิมพ์คำตอบของตนเอง ≥ 15 ตัวอักษร
+                  </span>
+                  <button type="button" id="btn-lab19-reveal-q3"
+                    class="px-3 py-1 rounded-lg text-[11px] font-semibold bg-slate-200 text-slate-500 cursor-pointer transition flex items-center gap-1">
+                    <i class="fa-solid fa-lock"></i> เทียบแนวคำตอบ สสวท.
+                  </button>
+                </div>
+                <p id="lab19-answer-q3" class="hidden text-slate-600 leading-relaxed border-t border-teal-100 pt-2 bg-teal-50/40 p-2 rounded">
+                  <strong class="text-teal-700">แนวคำตอบ สสวท.:</strong> สเปกตรัมจากหลอดบรรจุแก๊สไฮโดรเจนประกอบด้วยแสงที่มีความยาวคลื่นประมาณ
                   <strong>430, 490 และ 660 นาโนเมตร</strong> (ค่าทฤษฎีบัลเมอร์คือ 434.0, 486.1, 656.3 nm และเส้นสีม่วงจาง ๆ ที่ 410.2 nm)
                 </p>
-              </details>
+              </div>
             </div>
 
             <!-- Bridge to Bohr Atomic Model -->
